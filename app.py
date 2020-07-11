@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
-import pymysql.cursors
+
 
 DB_USER = 'cs340_willarke'
 DB_PASS = '9661'
@@ -11,10 +11,13 @@ DATABASE = 'cs340_willarke'
 
 # Set up flask app to connect to db
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8mb4'.format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+    'mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8mb4'.\
+    format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
 
 # initialize database
 db = SQLAlchemy(app)
+
 
 # Create models
 class Sitters(db.Model):    
