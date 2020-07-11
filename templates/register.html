@@ -7,10 +7,6 @@
 {% block body %}
 <h1>Dog's Dream!</h1>
 <form action = '/register'method='POST'>
-    <select id='reg_type' name='reg_type' placeholder='Registration type'>
-        <option value='sitter'>Sitter</option>
-        <option value='owner'>Owner</option>
-    </select>       
     <input type='text' id='fname' name='fname' placeholder='First Name' maxlength='256'>
     <input type='text' id='lname' name='lname' placeholder='Last Name' maxlength='256'>
     <input type="number" id='phone' name='phone' placeholder='Phone number' maxlength='10'>
@@ -70,6 +66,14 @@
         <option value="WY">WY</option>
     </select>
     <input type='number' id='zip' name='zip' placeholder='ZIP Code' maxlength='5'>
+    <br>
+    <br>
+    <select id='reg_type' name='reg_type' placeholder='Registration type'>
+        <option value='sitter'>Sitter</option>
+        <option value='owner'>Owner</option>
+    </select> 
+    <br>
+    <br>
     <input type="submit" value='Submit'>
 </form>
 {% endblock %}
