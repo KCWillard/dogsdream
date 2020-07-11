@@ -24,16 +24,21 @@ class Sitters(db.Model):
     sitterId = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(256), nullable=False)
     lastName = db.Column(db.String(256), nullable=False)
-    phoneNumber = db.Column(db.Integer(10), nullable=False)
+    phoneNumber = db.Column(db.Integer, nullable=False)
     streetAddress = db.Column(db.String(256), nullable=False)
     city = db.Column(db.String(128), nullable=False)
-    state = db.Column(db.String(2), nullable=False)
-    zipCode = db.Column(db.Integer(5), nullable=False)
+    state = db.Column(db.String, nullable=False)
+    zipCode = db.Column(db.Integer, nullable=False)
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
 
 if __name__ == '__main__':
