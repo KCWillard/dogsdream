@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<h1>Dog's Dream!</h1>
+<h3>Choose a date to pick up a job</h3>
+<form action='/sitter/sitter' method='POST'>
+    <input type="date" id='date' placeholder='Pick a date'>
+    <br>
+    <input type="submit" value="Submit">
+</form>
+<br>
+<div class='view-jobs'>
+    <a href="/sitter/view-job">Or view your already scheduled jobs</a>
+</div>
+
+{% endblock %}

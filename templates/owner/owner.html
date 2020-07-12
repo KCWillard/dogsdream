@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Dog's Dream - Owner</title>
+{% endblock %}
+
+{% block body %}
+<h1>Dog's Dream!</h1>
+<br></br>
+<h3>Would you like to...</h3>
+<form action='/owner' method='GET'>
+    <select id='option' name='option' placeholder='Please select an option'>
+        <option value='schedule'>Schedule and appointment</option>
+        <option value='view'>View your appointments</option>
+    </select>
+    <br>
+    <input type='submit' value='Submit'>
+</form>
+{% endblock %}
