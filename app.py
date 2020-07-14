@@ -6,15 +6,17 @@ DB_USER = 'dogsdream'
 DB_PASS = 'group3osu'
 DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
 DB_PORT = '3306'
-DATABASE = 'dogsdream'
+DATABASE = 'dogsdream$dogsdream'
 
 
 # Set up flask app to connect to db
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8mb4'.\
+    'mysql://{}:{}@{}:{}/{}'.\
     format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
 app.config["DEBUG"] = True
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # initialize database
 db = SQLAlchemy(app)
@@ -29,7 +31,7 @@ class Sitters(db.Model):
     phoneNumber = db.Column(db.Integer, nullable=False)
     streetAddress = db.Column(db.String(256), nullable=False)
     city = db.Column(db.String(128), nullable=False)
-    state = db.Column(db.String, nullable=False)
+    state = db.Column(db.String(2), nullable=False)
     zipCode = db.Column(db.Integer, nullable=False)
 
 
