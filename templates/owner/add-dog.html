@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<h1>Dog's Dream!</h1>
+
+<form action='/owner/add-dog'method='POST'>
+    <input type="text" id='name' name='name' maxlength='256' placeholder='Name'>
+    <input type="number" id='age' name='age' maxlength='2' placeholder='Age'>
+    <select id='size' name='size' placeholder='Size'>
+        <option value='1'>Very Small(&lt; 10lbs)</option>
+        <option value='2'>Small(11-20lbs)</option>
+        <option value='3'>Medium(21-50lbs)</option>
+        <option value='4'>Large(51-80lbs)</option>
+        <option value='5'>Extra Large(81+lbs)</option>
+    </select>
+    <br>
+    <input type='submit' value='Submit'>
+</form>
+{% endblock %}
