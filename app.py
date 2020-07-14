@@ -2,18 +2,21 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 
-DB_USER = 'cs340_willarke'
-DB_PASS = '9661'
-DB_HOST = 'classmysql.engr.oregonstate.edu'
+DB_USER = 'dogsdream'
+DB_PASS = 'group3osu'
+DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
 DB_PORT = '3306'
-DATABASE = 'cs340_willarke'
+DATABASE = 'dogsdream$dogsdream'
 
 
 # Set up flask app to connect to db
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8mb4'.\
+    'mysql://{}:{}@{}:{}/{}'.\
     format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
+app.config["DEBUG"] = True
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # initialize database
 db = SQLAlchemy(app)
@@ -21,19 +24,35 @@ db = SQLAlchemy(app)
 
 # Create models
 class Sitters(db.Model):
+    __tablename__ = "Sitters"
     sitterId = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(256), nullable=False)
     lastName = db.Column(db.String(256), nullable=False)
     phoneNumber = db.Column(db.Integer, nullable=False)
     streetAddress = db.Column(db.String(256), nullable=False)
     city = db.Column(db.String(128), nullable=False)
-    state = db.Column(db.String, nullable=False)
+    state = db.Column(db.String(2), nullable=False)
     zipCode = db.Column(db.Integer, nullable=False)
 
 
+class Persons(db.Model):
+    __tablename__ = "Persons"
+    ID = db.Column(db.Integer, primary_key=True)
+    LastName = db.Column(db.String(256), nullable=False)
+
+    def __repr__(self):
+        return '<ID %r>' % self.ID
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+   return 'Hello, World!'
+
+@app.route('/testdb')
+def testdb():
+    person = Persons(ID=3, LastName="Gosia")
+    db.session.add(person)
+    db.session.commit()
+    return 'Testing db connection'
 
 
 @app.route('/register')
@@ -71,5 +90,5 @@ def view_job():
     return render_template('sitter/view-job.html')
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
