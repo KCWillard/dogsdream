@@ -1,5 +1,5 @@
 from flask_bootstrap import Bootstrap
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -59,9 +59,19 @@ def testdb():
     db.session.commit()
     return 'Testing db connection'
 
-@app.route('/register')
-def register():
-    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            if request.form['profiles'] == 'sitter':
+                return redirect(url_for('sitter'))
+            else:
+                return redirect(url_for('owner'))
+    return render_template('login.html', error=error)
 
 
 @app.route('/owner/')
@@ -79,7 +89,7 @@ def add_dog():
     return render_template('owner/add-dog.html')
 
 
-@app.route('/sitter/')
+@app.route('/sitter')
 def sitter():
     return render_template('sitter/sitter.html')
 
