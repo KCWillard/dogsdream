@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 
+
 DB_USER = 'dogsdream'
 DB_PASS = 'group3osu'
 DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
@@ -49,14 +50,14 @@ class PetOwners(db.Model):
     zipCode = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(256), nullable=False)
     password = db.Column(db.String(256), nullable=False)
-    dogs = db.Relationship('Dogs')
+    dogs = db.relationship('Dogs')
 
 
 class DogSizes(db.Model):
     __tablename__ = "DogSizes"
     id = db.Column(db.Integer, primary_key=True)
     size = db.Column(db.String(256), nullable=False)
-    dog = db.Relationships('Dogs')
+    dog = db.relationship('Dogs')
 
 
 class Dogs(db.Model):
@@ -67,12 +68,6 @@ class Dogs(db.Model):
     sizeId = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
     petOwnerId = db.Column(db.Integer,
                            db.ForeignKey(PetOwners.id), nullable=False)
-
-
-
-
-
-
 
 
 class Persons(db.Model):
