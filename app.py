@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 
-
 DB_USER = 'dogsdream'
 DB_PASS = 'group3osu'
 DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
