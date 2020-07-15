@@ -1,3 +1,4 @@
+from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
@@ -11,6 +12,7 @@ DATABASE = 'dogsdream$dogsdream'
 
 # Set up flask app to connect to db
 app = Flask(__name__)
+Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'mysql://{}:{}@{}:{}/{}'.\
     format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
@@ -43,9 +45,11 @@ class Persons(db.Model):
     def __repr__(self):
         return '<ID %r>' % self.ID
 
+
 @app.route('/')
 def index():
-   return 'Hello, World!'
+    return render_template('index.html')
+
 
 @app.route('/testdb')
 def testdb():
@@ -53,7 +57,6 @@ def testdb():
     db.session.add(person)
     db.session.commit()
     return 'Testing db connection'
-
 
 @app.route('/register')
 def register():
@@ -90,5 +93,5 @@ def view_job():
     return render_template('sitter/view-job.html')
 
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
