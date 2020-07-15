@@ -24,66 +24,61 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-# Create models
-class Sitters(db.Model):
-    __tablename__ = "Sitters"
-    id = db.Column(db.Integer, primary_key=True)
-    firstName = db.Column(db.String(256), nullable=False)
-    lastName = db.Column(db.String(256), nullable=False)
-    phoneNumber = db.Column(db.Integer, nullable=False)
-    streetAddress = db.Column(db.String(256), nullable=False)
-    city = db.Column(db.String(128), nullable=False)
-    state = db.Column(db.String(2), nullable=False)
-    zipCode = db.Column(db.Integer, nullable=False)
-
-
-class PetOwners(db.Model):
-    __tablename__ = "PetOwners"
-    id = db.Column(db.Integer, primary_key=True)
-    firstName = db.Column(db.String(256), nullable=False)
-    lastName = db.Column(db.String(256), nullable=False)
-    phoneNumber = db.Column(db.Integer, nullable=False)
-    streetAddress = db.Column(db.String(256), nullable=False)
-    city = db.Column(db.String(128), nullable=False)
-    state = db.Column(db.String(2), nullable=False)
-    zipCode = db.Column(db.Integer, nullable=False)
-    email = db.Column(db.String(256), nullable=False)
-    password = db.Column(db.String(256), nullable=False)
-    dogs = db.Relationship('Dogs')
-
-
-class DogSizes(db.Model):
-    __tablename__ = "DogSizes"
-    id = db.Column(db.Integer, primary_key=True)
-    size = db.Column(db.String(256), nullable=False)
-    dog = db.Relationships('Dogs')
-
-
-class Dogs(db.Model):
-    __tablename__ = "Dogs"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-    age = db.Column(db.Integer, nullable=False)
-    sizeId = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
-    petOwnerId = db.Column(db.Integer,
-                           db.ForeignKey(PetOwners.id), nullable=False)
-
-
-
-
-
-
-
-
-class Persons(db.Model):
-    __tablename__ = "Persons"
-    ID = db.Column(db.Integer, primary_key=True)
-    LastName = db.Column(db.String(256), nullable=False)
-
-    def __repr__(self):
-        return '<ID %r>' % self.ID
-
-
+# # Create models
+# class Sitters(db.Model):
+#     __tablename__ = "Sitters"
+#     id = db.Column(db.Integer, primary_key=True)
+#     firstName = db.Column(db.String(256), nullable=False)
+#     lastName = db.Column(db.String(256), nullable=False)
+#     phoneNumber = db.Column(db.Integer, nullable=False)
+#     streetAddress = db.Column(db.String(256), nullable=False)
+#     city = db.Column(db.String(128), nullable=False)
+#     state = db.Column(db.String(2), nullable=False)
+#     zipCode = db.Column(db.Integer, nullable=False)
+#
+#
+# class PetOwners(db.Model):
+#     __tablename__ = "PetOwners"
+#     id = db.Column(db.Integer, primary_key=True)
+#     firstName = db.Column(db.String(256), nullable=False)
+#     lastName = db.Column(db.String(256), nullable=False)
+#     phoneNumber = db.Column(db.Integer, nullable=False)
+#     streetAddress = db.Column(db.String(256), nullable=False)
+#     city = db.Column(db.String(128), nullable=False)
+#     state = db.Column(db.String(2), nullable=False)
+#     zipCode = db.Column(db.Integer, nullable=False)
+#     email = db.Column(db.String(256), nullable=False)
+#     password = db.Column(db.String(256), nullable=False)
+#     dogs = db.Relationship('Dogs')
+#
+#
+# class DogSizes(db.Model):
+#     __tablename__ = "DogSizes"
+#     id = db.Column(db.Integer, primary_key=True)
+#     size = db.Column(db.String(256), nullable=False)
+#     dog = db.Relationships('Dogs')
+#
+#
+# class Dogs(db.Model):
+#     __tablename__ = "Dogs"
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(256), nullable=False)
+#     age = db.Column(db.Integer, nullable=False)
+#     sizeId = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
+#     petOwnerId = db.Column(db.Integer,
+#                            db.ForeignKey(PetOwners.id), nullable=False)
+#
+#
+#
+# class Persons(db.Model):
+#     __tablename__ = "Persons"
+#     ID = db.Column(db.Integer, primary_key=True)
+#     LastName = db.Column(db.String(256), nullable=False)
+#
+#     def __repr__(self):
+#         return '<ID %r>' % self.ID
+#
+#
 
 @app.route('/')
 def index():
