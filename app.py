@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask_bootstrap import Bootstrap
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -11,6 +12,7 @@ DATABASE = 'dogsdream$dogsdream'
 
 # Set up flask app to connect to db
 app = Flask(__name__)
+Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'mysql://{}:{}@{}:{}/{}'.\
     format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
@@ -82,10 +84,10 @@ class Persons(db.Model):
         return '<ID %r>' % self.ID
 
 
+
 @app.route('/')
 def index():
-    return 'Hello, World!'
-
+    return render_template('index.html')
 
 @app.route('/testdb')
 def testdb():
@@ -95,9 +97,32 @@ def testdb():
     return 'Testing db connection'
 
 
-@app.route('/register')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            if request.form['profiles'] == 'sitter':
+                return redirect(url_for('sitter'))
+            else:
+                return redirect(url_for('owner'))
+    return render_template('login.html', error=error)
+
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            if request.form['profiles'] == 'sitter':
+                return redirect(url_for('sitter'))
+            else:
+                return redirect(url_for('owner'))
+    return render_template('register.html', error=error)
 
 
 @app.route('/owner/')
@@ -115,7 +140,7 @@ def add_dog():
     return render_template('owner/add-dog.html')
 
 
-@app.route('/sitter/')
+@app.route('/sitter')
 def sitter():
     return render_template('sitter/sitter.html')
 
@@ -130,5 +155,5 @@ def view_job():
     return render_template('sitter/view-job.html')
 
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)

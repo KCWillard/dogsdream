@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content  %}
+    <div class="container">
+      <h1>Please login</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+         <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+          <br>
+          <label for="profiles">Choose a profile:</label>
+          <select name="profiles" id="profiles">
+              <option value="sitter">Sitter</option>
+              <option value="owner">Owner</option>
+          </select>
+          <br>
+          <input class="btn btn-default" type="submit" value="Login">
+      </form>
+    <a href="register">Register</a>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+{% endblock %}
