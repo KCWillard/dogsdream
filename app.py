@@ -84,12 +84,18 @@ db = SQLAlchemy(app)
 def index():
     return render_template('index.html')
 
-@app.route('/testdb')
-def testdb():
-    person = Persons(ID=3, LastName="Gosia")
-    db.session.add(person)
-    db.session.commit()
-    return 'Testing db connection'
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
+# @app.route('/testdb')
+# def testdb():
+#     person = Persons(ID=3, LastName="Gosia")
+#     db.session.add(person)
+#     db.session.commit()
+#     return 'Testing db connection'
 
 
 @app.route('/login', methods=['GET', 'POST'])
