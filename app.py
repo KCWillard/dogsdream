@@ -82,6 +82,7 @@ def register():
             error = 'Invalid Credentials. Please try again.'
         else:
             if request.form['profiles'] == 'sitter':
+                return redirect(url_for('sitter'))
             else:
                 return redirect(url_for('owner'))
     return render_template('register.html', error=error)
