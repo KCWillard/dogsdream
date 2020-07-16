@@ -2,7 +2,7 @@ from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
-
+# DB login info to connect to pythonanywhere db
 DB_USER = 'dogsdream'
 DB_PASS = 'group3osu'
 DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
@@ -24,7 +24,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-# Create models
+# SQLAlchemy models for all tables in app
 class Sitters(db.Model):
     __tablename__ = "Sitters"
     id = db.Column(db.Integer, primary_key=True)
@@ -51,6 +51,9 @@ class PetOwners(db.Model):
     password = db.Column(db.String(256), nullable=False)
     dogs = db.relationship('Dogs')
 
+    def __repr__(self):
+        return '<Dogs %r>' % self.id
+
 
 class DogSizes(db.Model):
     __tablename__ = "DogSizes"
@@ -66,9 +69,30 @@ class Dogs(db.Model):
     age = db.Column(db.Integer, nullable=False)
     size = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
     petOwner = db.Column(db.Integer,
-                           db.ForeignKey(PetOwners.id), nullable=False)
+                         db.ForeignKey(PetOwners.id), nullable=False)
+
     def __repr__(self):
         return '<Dogs %r>' % self.id
+
+
+class Services(db.Model):
+    __tablename__ = "Services"
+    id = db.Column(db.Integer, primary_key=True)
+    startDate = db.Column(db.DateTime, nullable=False)
+    time = db.Column(db.DateTime, nullable=False)
+    endDate = db.Column(db.DateTime, nullable=False)
+    serviceType = db.Column(db.Integer,
+                            db.ForeignKey(ServiceTypes.id),
+                            nullable=False)
+    frequency = db.Column(db.Integer,
+                          db.ForeignKey(FrequencyOfServices.id),
+                          nullable=False)
+    sitter = db.Column(db.Integer,
+                       db.ForeignKey(Sitters.id),
+                       nullable=False)
+    dog = db.Column(db.Integer,
+                    db.ForeignKey(Dogs.id),
+                    nullable=False)
 
 
 class Persons(db.Model):
@@ -102,7 +126,8 @@ def about():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        if request.form['username'] != 'admin' or \
+           request.form['password'] != 'admin':
             error = 'Invalid Credentials. Please try again.'
         else:
             if request.form['profiles'] == 'sitter':
@@ -116,11 +141,15 @@ def login():
 def register():
     error = None
     if request.method == 'POST':
-        if request.form['email'] != 'a' or request.form['password'] != 'a' \
-                or request.form['fname'] != 'a' or request.form['lname'] != 'a' \
-                or request.form['phone'] != '1' or request.form['address'] != 'a' \
-                or request.form['city'] != 'a' or request.form['state'] != 'AL' \
-                or request.form['zip'] != '1':
+        if request.form['email'] != 'a' or \
+           request.form['password'] != 'a' \
+           or request.form['fname'] != 'a' \
+           or request.form['lname'] != 'a' \
+           or request.form['phone'] != '1' \
+           or request.form['address'] != 'a' \
+           or request.form['city'] != 'a' \
+           or request.form['state'] != 'AL' \
+           or request.form['zip'] != '1':
             error = 'Invalid Credentials. Please try again.'
         else:
             if request.form['reg_type'] == 'sitter':
@@ -130,27 +159,53 @@ def register():
     return render_template('register.html', error=error)
 
 
-@app.route('/owner/')
+@app.route('/owner/profile', methods=['POST', 'GET'])
 def owner():
-    return render_template('owner/owner.html')
+    if request.method == 'POST':
+        print(request.form)
+        if request.form == 'schedule':
+            return render_template('owner/add_jobs.html')
+        elif request.form == 'view_appointments':
+            return render_template('owner/view_appointments.html')
+        elif request.form == 'add_dogs':
+            return render_template('owner/add_dogs.html')
+        elif request.form == 'view_dogs':
+            return render_template('owner/view_dogs.html')
+    else:
+        # Fake person to make sure person can be displayed
+        kc = PetOwners(id='1', firstName='KC', lastName='Willard',
+                       phoneNumber='(111)111-1111',
+                       streetAddress='123 dog lane', city='Portland',
+                       state='OR', zipCode='97266',
+                       email='willarke@oregonstate.edu',
+                       password='******',
+                       dogs=[Dogs(name='Arya'), Dogs(name='Fluffy')])
+        #arya = Dogs(id='0', name='Arya',
+        #            age='8', size=DogSizes(id=1),
+        #            petOwner=PetOwners(id='1'))
+        #fluffy = Dogs(id='0', name='Fluffy',
+        #              age='3', size=DogSizes(id=1),
+        #              petOwner=PetOwners(id='0'))
+        #dogs = Dogs.query.filter_by(petOwner == kc.id).all()
+        jobs = 
+        return render_template('owner/profile.html', owners=kc, dogs=kc.dogs,)
 
 
-@app.route('/owner/view', methods=['POST', 'GET'])
+@app.route('/owner/view_appointments', methods=['POST', 'GET'])
 def view():
-    return render_template('owner/view.html')
+    return render_template('owner/view_appointments.html')
 
 
-@app.route('/owner/add-dog', methods=['POST', 'GET'])
+@app.route('/owner/add_dogs', methods=['POST', 'GET'])
 def add_dog():
-    ##if request.method == 'POST':
-    ##    dog_name = request.form['name']
-    ##    dog_age = request.form['age']
-    ##    dog_size = request.form['size']
-    ##    dog_owner = 'Admin'
-    ##    new_dog = Dogs(name = dog_name,age=dog_age,petOwner=dog_owner)
+    # if request.method == 'POST':
+    #    dog_name = request.form['name']
+    #    dog_age = request.form['age']
+    #    dog_size = request.form['size']
+    #    dog_owner = 'Admin'
+    #    new_dog = Dogs(name = dog_name,age=dog_age,petOwner=dog_owner)
 
-
-    return render_template('owner/add-dog.html')
+    return render_template('owner/add_dogs.html')
 
 
 @app.route('/sitter/view_jobs', methods=['GET'])
