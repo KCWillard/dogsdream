@@ -4,25 +4,25 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 # DB login info to connect to pythonanywhere db
-# DB_USER = 'dogsdream'
-# DB_PASS = 'group3osu'
-# DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
-# DB_PORT = '3306'
-# DATABASE = 'dogsdream$dogsdream'
+DB_USER = 'dogsdream'
+DB_PASS = 'group3osu'
+DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
+DB_PORT = '3306'
+DATABASE = 'dogsdream$dogsdream'
 
-DB_USER = 'root'
-DB_PASS = '1234'
-DB_HOST = '127.0.0.1'
+# DB_USER = 'root'
+# DB_PASS = '1234'
+# DB_HOST = '127.0.0.1'
 # DB_PORT = '3306'
-DATABASE = 'dogsdream'
+# DATABASE = 'dogsdream'
 
 
 # Set up flask app to connect to db
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'mysql+pymysql://{}:{}@{}/{}'.\
-    format(DB_USER, DB_PASS, DB_HOST, DATABASE)
+    'mysql://{}:{}@{}/{}'.\
+    format(DB_USER, DB_PASS, DB_HOST, DB_PORT DATABASE)
 app.config["DEBUG"] = True
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
