@@ -64,9 +64,11 @@ class Dogs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    sizeId = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
-    petOwnerId = db.Column(db.Integer,
+    size = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
+    petOwner = db.Column(db.Integer,
                            db.ForeignKey(PetOwners.id), nullable=False)
+    def __repr__(self):
+        return '<Dogs %r>' % self.id
 
 
 class Persons(db.Model):
@@ -131,6 +133,14 @@ def view():
 
 @app.route('/owner/add-dog', methods=['POST', 'GET'])
 def add_dog():
+    ##if request.method == 'POST':
+    ##    dog_name = request.form['name']
+    ##    dog_age = request.form['age']
+    ##    dog_size = request.form['size']
+    ##    dog_owner = 'Admin'
+    ##    new_dog = Dogs(name = dog_name,age=dog_age,petOwner=dog_owner)
+
+
     return render_template('owner/add-dog.html')
 
 
