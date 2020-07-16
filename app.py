@@ -22,7 +22,7 @@ app = Flask(__name__)
 Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'mysql://{}:{}@{}:{}/{}'.\
-    format(DB_USER, DB_PASS, DB_HOST, DB_PORT DATABASE)
+    format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
 app.config["DEBUG"] = True
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
