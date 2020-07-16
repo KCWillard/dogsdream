@@ -260,6 +260,18 @@ def add_dog():
     return render_template('owner/add_dogs.html')
 
 
+@app.route('/owner/view_dogs', methods=['GET'])
+def view_dogs():
+    arya = Dogs(id='0', name='Arya',
+                age='8', size='Medium',
+                petOwner='KC')
+    fluffy = Dogs(id='0', name='Fluffy',
+                  age='3', size='Very Small',
+                  petOwner='KC')
+    dogs = [arya, fluffy]
+            
+    return render_template('owner/view_dogs.html', dogs=dogs)
+
 @app.route('/sitter/view_jobs', methods=['GET'])
 def view_jobs():
     return render_template('sitter/view_jobs.html')

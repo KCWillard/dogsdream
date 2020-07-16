@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Your Registered Dogs </h1>
+
+<table border="1px solid black">
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Size</th>
+        <th>Owner</th>        
+        <th>Remove?</th>
+
+    </tr>
+    {% for dog in dogs %}
+    <tr>
+        <td>{{dog.name}}</td>
+        <td>{{dog.age}}</td>
+        <td>{{dog.size}}</td>
+        <td>{{dog.petOwner}}</td>
+        <td><a href="">Remove dog</a>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

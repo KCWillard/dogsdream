@@ -14,15 +14,17 @@
         <th>Cancel?</th>
 
     </tr>
+    {% for job in jobs %}
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
+        <td>{ job.service}}</td>
+        <td>{ job.owner}}</td>
+        <td>{ job.sitter}}</td>
+        <td>{ job.startDate}}</td>
+        <td>{ job.endDate}}</td>        
+        <td> 
+            <a href="">Cancel</a>
         </td>
     </tr>
+    {% endfor %}
 </table>
 {% endblock %}

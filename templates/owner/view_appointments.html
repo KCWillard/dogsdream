@@ -15,18 +15,19 @@
         <th>Recurring?</th>
         <th>Actions</th>
     </tr>
+    {% for appointment in appointments %}
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{appointment.dog}}</td>
+        <td>{{appointment.service}}</td>
+        <td>{{appointment.sitter}}</td>
+        <td>{{appointment.startDate}}</td>
+        <td>{{appointment.endDate}}</td>        
         <td>
             <a href="">Update</a>
             <br>
             <a href="">Cancel</a>
         </td>
     </tr>
+    {% endfor %}
 </table>
 {% endblock %}

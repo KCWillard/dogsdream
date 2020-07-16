@@ -7,12 +7,12 @@
     <tr>
         <th>Name</th>
 
-        <th>Date of The Certification</th>
+        <th>Date of The Vaccine</th>
     </tr>
-    {% for certification in certifications %}
+    {% for vaccine in vaccines %}
     <tr>
-        <td>{{certification.name}}</td>
-        <td>{{certification.date}}</td>        
+        <td>{{vaccine.name}}</td>
+        <td>{{vaccine.date}}</td>        
     </tr>
     {% endfor %}
 </table>
