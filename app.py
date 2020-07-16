@@ -78,10 +78,10 @@ class Persons(db.Model):
         return '<ID %r>' % self.ID
 
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/testdb')
 def testdb():
