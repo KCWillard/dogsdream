@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content  %}
+<h1>Sitter Profile </h1>
+
+<table border="1px solid black">
+    <tr>
+        <th>Name</th>
+        <th>Last Name</th>
+        <th>Phone number</th>
+        <th>Street Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip Code</th>
+        <th>email</th>
+        <th>password</th>
+        <th><a href="certification">Certifications</a> </th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+        </td>
+    </tr>
+</table>
+
+    <h5>Pick Jobs</h5>
+    <form action='/sitter/pickup_job' method='POST'>
+        <input type="date" id='date' placeholder='Pick a date'>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    <br>
+    <div class='view-jobs'>
+        <a href="/sitter/view_jobs">View Jobs</a>
+    </div>
+
+    <a href="">Update Profile</a>
+    <br>
+    <a href="">Delete profile</a>
+{% endblock %}
