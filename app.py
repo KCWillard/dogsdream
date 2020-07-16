@@ -21,7 +21,7 @@ DATABASE = 'dogsdream$dogsdream'
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'mysql://{}:{}@{}/{}'.\
+    'mysql://{}:{}@{}:{}/{}'.\
     format(DB_USER, DB_PASS, DB_HOST, DB_PORT DATABASE)
 app.config["DEBUG"] = True
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
