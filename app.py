@@ -168,6 +168,11 @@ def sitter_profile():
     return render_template('sitter/profile.html')
 
 
+@app.route('/sitter/profile_update', methods=['POST', 'GET'])
+def profile_update():
+    return render_template('sitter/profile_update.html')
+
+
 @app.route('/sitter/certification', methods=['POST', 'GET'])
 def certification():
     return render_template('sitter/certification.html')
