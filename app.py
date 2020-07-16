@@ -2,7 +2,7 @@ from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
-
+# DB login info to connect to pythonanywhere db
 DB_USER = 'dogsdream'
 DB_PASS = 'group3osu'
 DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
@@ -24,7 +24,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-# Create models
+# SQLAlchemy models for all tables in app
 class Sitters(db.Model):
     __tablename__ = "Sitters"
     id = db.Column(db.Integer, primary_key=True)
@@ -70,7 +70,7 @@ class Dogs(db.Model):
     size = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
     petOwner = db.Column(db.Integer,
                          db.ForeignKey(PetOwners.id), nullable=False)
-    
+
     def __repr__(self):
         return '<Dogs %r>' % self.id
 
@@ -106,7 +106,8 @@ def about():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        if request.form['username'] != 'admin' or \
+           request.form['password'] != 'admin':
             error = 'Invalid Credentials. Please try again.'
         else:
             if request.form['profiles'] == 'sitter':
@@ -120,11 +121,15 @@ def login():
 def register():
     error = None
     if request.method == 'POST':
-        if request.form['email'] != 'a' or request.form['password'] != 'a' \
-                or request.form['fname'] != 'a' or request.form['lname'] != 'a' \
-                or request.form['phone'] != '1' or request.form['address'] != 'a' \
-                or request.form['city'] != 'a' or request.form['state'] != 'AL' \
-                or request.form['zip'] != '1':
+        if request.form['email'] != 'a' or \
+           request.form['password'] != 'a' \
+           or request.form['fname'] != 'a' \
+           or request.form['lname'] != 'a' \
+           or request.form['phone'] != '1' \
+           or request.form['address'] != 'a' \
+           or request.form['city'] != 'a' \
+           or request.form['state'] != 'AL' \
+           or request.form['zip'] != '1':
             error = 'Invalid Credentials. Please try again.'
         else:
             if request.form['reg_type'] == 'sitter':
@@ -147,7 +152,7 @@ def owner():
         elif request.form == 'view_dogs':
             return render_template('owner/view_dogs.html')
     else:
-        #Fake person to make sure person can be displayed
+        # Fake person to make sure person can be displayed
         kc = PetOwners(id='1', firstName='KC', lastName='Willard',
                        phoneNumber='(111)111-1111',
                        streetAddress='123 dog lane', city='Portland',
@@ -165,12 +170,12 @@ def view():
 
 @app.route('/owner/add_dogs', methods=['POST', 'GET'])
 def add_dog():
-    ##if request.method == 'POST':
-    ##    dog_name = request.form['name']
-    ##    dog_age = request.form['age']
-    ##    dog_size = request.form['size']
-    ##    dog_owner = 'Admin'
-    ##    new_dog = Dogs(name = dog_name,age=dog_age,petOwner=dog_owner)
+    # if request.method == 'POST':
+    #    dog_name = request.form['name']
+    #    dog_age = request.form['age']
+    #    dog_size = request.form['size']
+    #    dog_owner = 'Admin'
+    #    new_dog = Dogs(name = dog_name,age=dog_age,petOwner=dog_owner)
 
     return render_template('owner/add_dogs.html')
 
