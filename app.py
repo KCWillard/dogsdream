@@ -212,7 +212,7 @@ def register():
 
 
 @app.route('/owner/profile', methods=['POST', 'GET'])
-def owner():
+def owner_profile():
     if request.method == 'POST':
         print(request.form)
         if request.form == 'schedule':
