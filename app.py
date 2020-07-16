@@ -1,27 +1,38 @@
 from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, request, redirect, url_for
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 # DB login info to connect to pythonanywhere db
-DB_USER = 'dogsdream'
-DB_PASS = 'group3osu'
-DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
-DB_PORT = '3306'
-DATABASE = 'dogsdream$dogsdream'
+# DB_USER = 'dogsdream'
+# DB_PASS = 'group3osu'
+# DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
+# DB_PORT = '3306'
+# DATABASE = 'dogsdream$dogsdream'
+
+DB_USER = 'root'
+DB_PASS = '1234'
+DB_HOST = '127.0.0.1'
+# DB_PORT = '3306'
+DATABASE = 'dogsdream'
 
 
 # Set up flask app to connect to db
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'mysql://{}:{}@{}:{}/{}'.\
-    format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
+    'mysql+pymysql://{}:{}@{}/{}'.\
+    format(DB_USER, DB_PASS, DB_HOST, DATABASE)
 app.config["DEBUG"] = True
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+
 # initialize database
 db = SQLAlchemy(app)
+
+# initialize migrate object to allow for easily updating dbs with models
+migrate = Migrate(app, db)
 
 
 # SQLAlchemy models for all tables in app
@@ -35,6 +46,8 @@ class Sitters(db.Model):
     city = db.Column(db.String(128), nullable=False)
     state = db.Column(db.String(2), nullable=False)
     zipCode = db.Column(db.Integer, nullable=False)
+    email = db.Column(db.String(256), nullable=False)
+    password = db.Column(db.String(256), nullable=False)
 
 
 class PetOwners(db.Model):
@@ -61,6 +74,9 @@ class DogSizes(db.Model):
     size = db.Column(db.String(256), nullable=False)
     dog = db.relationship('Dogs')
 
+    def __repr__(self):
+        return'<DogSizes %r>' % self.id
+
 
 class Dogs(db.Model):
     __tablename__ = "Dogs"
@@ -70,9 +86,39 @@ class Dogs(db.Model):
     size = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
     petOwner = db.Column(db.Integer,
                          db.ForeignKey(PetOwners.id), nullable=False)
+    service = db.relationship('Services')
 
     def __repr__(self):
         return '<Dogs %r>' % self.id
+
+
+class ServiceTypes(db.Model):
+    __tablename__ = "ServiceTypes"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+    service = db.relationship('Services')
+
+    def __repr__(self):
+        return '<ServiceTypes %r>' % self.id
+
+
+class FrequencyOfServices(db.Model):
+    __tablename__ = "FrequencyOfServices"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+    service = db.relationship('Services')
+
+    def __repr__(self):
+        return '<FrequencyOfServices %r>' % self.id
+
+
+class Certifications(db.Model):
+    __tablename__ = "Certifications"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+
+    def __repr__(self):
+        return '<Certifications %r>' % self.id
 
 
 class Services(db.Model):
@@ -92,7 +138,13 @@ class Services(db.Model):
                        nullable=False)
     dog = db.Column(db.Integer,
                     db.ForeignKey(Dogs.id),
-                    nullable=False)
+                    nullable=False)    
+    
+    def __repr__(self):
+        return '<Services %r>' % self.id
+
+
+# Set up route endpoints to serve webpages
 
 
 class Persons(db.Model):
@@ -187,7 +239,7 @@ def owner():
         #              age='3', size=DogSizes(id=1),
         #              petOwner=PetOwners(id='0'))
         #dogs = Dogs.query.filter_by(petOwner == kc.id).all()
-        jobs = 
+        
         return render_template('owner/profile.html', owners=kc, dogs=kc.dogs,)
 
 

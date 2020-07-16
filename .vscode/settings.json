@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\airma\\.virtualenvs\\dogsdream-XFx7ePeI",
+    "python.pythonPath": "C:\\Users\\airma\\.virtualenvs\\dogsdream-XFx7ePeI\\Scripts\\python.exe",
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true
