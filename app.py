@@ -105,9 +105,9 @@ def login():
             error = 'Invalid Credentials. Please try again.'
         else:
             if request.form['profiles'] == 'sitter':
-                return redirect(url_for('sitter'))
+                return redirect(url_for('sitter_profile'))
             else:
-                return redirect(url_for('owner'))
+                return redirect(url_for('owner_profile'))
     return render_template('login.html', error=error)
 
 
@@ -115,13 +115,17 @@ def login():
 def register():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        if request.form['email'] != 'a' or request.form['password'] != 'a' \
+                or request.form['fname'] != 'a' or request.form['lname'] != 'a' \
+                or request.form['phone'] != '1' or request.form['address'] != 'a' \
+                or request.form['city'] != 'a' or request.form['state'] != 'AL' \
+                or request.form['zip'] != '1':
             error = 'Invalid Credentials. Please try again.'
         else:
-            if request.form['profiles'] == 'sitter':
-                return redirect(url_for('sitter'))
+            if request.form['reg_type'] == 'sitter':
+                return redirect(url_for('sitter_profile'))
             else:
-                return redirect(url_for('owner'))
+                return redirect(url_for('owner_profile'))
     return render_template('register.html', error=error)
 
 
@@ -140,19 +144,24 @@ def add_dog():
     return render_template('owner/add-dog.html')
 
 
-@app.route('/sitter')
-def sitter():
-    return render_template('sitter/sitter.html')
+@app.route('/sitter/view_jobs', methods=['GET'])
+def view_jobs():
+    return render_template('sitter/view_jobs.html')
 
 
-@app.route('/sitter/add-job')
-def add_job():
-    return render_template('sitter/add-job.html')
+@app.route('/sitter/pickup_job', methods=['POST', 'GET'])
+def pickup_job():
+    return render_template('sitter/pickup_job.html')
 
 
-@app.route('/sitter/view-job')
-def view_job():
-    return render_template('sitter/view-job.html')
+@app.route('/sitter/profile', methods=['POST', 'GET'])
+def sitter_profile():
+    return render_template('sitter/profile.html')
+
+
+@app.route('/sitter/certification', methods=['POST', 'GET'])
+def certification():
+    return render_template('sitter/certification.html')
 
 
 if __name__ == '__main__':
