@@ -51,6 +51,9 @@ class PetOwners(db.Model):
     password = db.Column(db.String(256), nullable=False)
     dogs = db.relationship('Dogs')
 
+    def __repr__(self):
+        return '<Dogs %r>' % self.id
+
 
 class DogSizes(db.Model):
     __tablename__ = "DogSizes"
@@ -66,7 +69,8 @@ class Dogs(db.Model):
     age = db.Column(db.Integer, nullable=False)
     size = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
     petOwner = db.Column(db.Integer,
-                           db.ForeignKey(PetOwners.id), nullable=False)
+                         db.ForeignKey(PetOwners.id), nullable=False)
+    
     def __repr__(self):
         return '<Dogs %r>' % self.id
 
@@ -130,17 +134,36 @@ def register():
     return render_template('register.html', error=error)
 
 
-@app.route('/owner/')
+@app.route('/owner/profile', methods=['POST', 'GET'])
 def owner():
-    return render_template('owner/owner.html')
+    if request.method == 'POST':
+        print(request.form)
+        if request.form == 'schedule':
+            return render_template('owner/add_jobs.html')
+        elif request.form == 'view_appointments':
+            return render_template('owner/view_appointments.html')
+        elif request.form == 'add_dogs':
+            return render_template('owner/add_dogs.html')
+        elif request.form == 'view_dogs':
+            return render_template('owner/view_dogs.html')
+    else:
+        #Fake person to make sure person can be displayed
+        kc = PetOwners(id='1', firstName='KC', lastName='Willard',
+                       phoneNumber='(111)111-1111',
+                       streetAddress='123 dog lane', city='Portland',
+                       state='OR', zipCode='97266',
+                       email='willarke@oregonstate.edu',
+                       password='******',
+                       dogs=[Dogs(name='Arya'), Dogs(name='Fluffy')])
+        return render_template('owner/profile.html', owners=kc, dogs=kc.dogs)
 
 
-@app.route('/owner/view', methods=['POST', 'GET'])
+@app.route('/owner/view_appointments', methods=['POST', 'GET'])
 def view():
-    return render_template('owner/view.html')
+    return render_template('owner/view_appointments.html')
 
 
-@app.route('/owner/add-dog', methods=['POST', 'GET'])
+@app.route('/owner/add_dogs', methods=['POST', 'GET'])
 def add_dog():
     ##if request.method == 'POST':
     ##    dog_name = request.form['name']
@@ -149,8 +172,7 @@ def add_dog():
     ##    dog_owner = 'Admin'
     ##    new_dog = Dogs(name = dog_name,age=dog_age,petOwner=dog_owner)
 
-
-    return render_template('owner/add-dog.html')
+    return render_template('owner/add_dogs.html')
 
 
 @app.route('/sitter/view_jobs', methods=['GET'])
