@@ -75,6 +75,26 @@ class Dogs(db.Model):
         return '<Dogs %r>' % self.id
 
 
+class Services(db.Model):
+    __tablename__ = "Services"
+    id = db.Column(db.Integer, primary_key=True)
+    startDate = db.Column(db.DateTime, nullable=False)
+    time = db.Column(db.DateTime, nullable=False)
+    endDate = db.Column(db.DateTime, nullable=False)
+    serviceType = db.Column(db.Integer,
+                            db.ForeignKey(ServiceTypes.id),
+                            nullable=False)
+    frequency = db.Column(db.Integer,
+                          db.ForeignKey(FrequencyOfServices.id),
+                          nullable=False)
+    sitter = db.Column(db.Integer,
+                       db.ForeignKey(Sitters.id),
+                       nullable=False)
+    dog = db.Column(db.Integer,
+                    db.ForeignKey(Dogs.id),
+                    nullable=False)
+
+
 class Persons(db.Model):
     __tablename__ = "Persons"
     ID = db.Column(db.Integer, primary_key=True)
@@ -160,7 +180,15 @@ def owner():
                        email='willarke@oregonstate.edu',
                        password='******',
                        dogs=[Dogs(name='Arya'), Dogs(name='Fluffy')])
-        return render_template('owner/profile.html', owners=kc, dogs=kc.dogs)
+        #arya = Dogs(id='0', name='Arya',
+        #            age='8', size=DogSizes(id=1),
+        #            petOwner=PetOwners(id='1'))
+        #fluffy = Dogs(id='0', name='Fluffy',
+        #              age='3', size=DogSizes(id=1),
+        #              petOwner=PetOwners(id='0'))
+        #dogs = Dogs.query.filter_by(petOwner == kc.id).all()
+        jobs = 
+        return render_template('owner/profile.html', owners=kc, dogs=kc.dogs,)
 
 
 @app.route('/owner/view_appointments', methods=['POST', 'GET'])
