@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Vaccines</h1>
+<h1>Certification:</h1>
 
 <table>
     <tr>
-        <th>Vaccines to add</th>
+        <th>Certifications to add</th>
         <th>Action</th>
     </tr>
-    {% for vaccine in vaccines %}
+    {% for certification in certifications %}
     <tr>
-        <td>{{vaccine.name}}</td>
+        <td>{{certification.name}}</td>
         <td><button type="button" class="btn btn-add">Add</button></td>
     </tr>
     {% endfor %}

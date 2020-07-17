@@ -116,9 +116,20 @@ class Certifications(db.Model):
     __tablename__ = "Certifications"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
         return '<Certifications %r>' % self.id
+
+
+class Vaccines(db.Model):
+    __tablename__ = "Vaccines"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
+
+    def __repr__(self):
+        return '<Vaccines %r>' % self.id
 
 
 class Services(db.Model):
@@ -138,7 +149,9 @@ class Services(db.Model):
                        nullable=False)
     dog = db.Column(db.Integer,
                     db.ForeignKey(Dogs.id),
-                    nullable=False)    
+                    nullable=False)
+    # Pet owner will be fetched from Dog id but this is used for HTML testing
+    owner = db.Column(db.Integer, nullable=False)    
     
     def __repr__(self):
         return '<Services %r>' % self.id
@@ -232,20 +245,21 @@ def owner_profile():
                        email='willarke@oregonstate.edu',
                        password='******',
                        dogs=[Dogs(name='Arya'), Dogs(name='Fluffy')])
-        #arya = Dogs(id='0', name='Arya',
-        #            age='8', size=DogSizes(id=1),
-        #            petOwner=PetOwners(id='1'))
-        #fluffy = Dogs(id='0', name='Fluffy',
-        #              age='3', size=DogSizes(id=1),
-        #              petOwner=PetOwners(id='0'))
-        #dogs = Dogs.query.filter_by(petOwner == kc.id).all()
         
         return render_template('owner/profile.html', owners=kc, dogs=kc.dogs,)
 
 
 @app.route('/owner/view_appointments', methods=['POST', 'GET'])
 def view():
-    return render_template('owner/view_appointments.html')
+    app1 = Services(startDate='1/1/2020', time='12:00:00', endDate='1/2/2020',
+                    serviceType='Walk', frequency='Weekly', 
+                    sitter='Jake', dog='Arya')
+    app2 = Services(startDate='5/22/2020', time='19:00:00', endDate='5/25/2020',
+                    serviceType='Watch', frequency='Once', 
+                    sitter='Jake', dog='Fluffy')
+    apps = [app1, app2]
+    
+    return render_template('owner/view_appointments.html', appointments=apps)
 
 
 @app.route('/owner/add_dogs', methods=['POST', 'GET'])
@@ -272,9 +286,25 @@ def view_dogs():
             
     return render_template('owner/view_dogs.html', dogs=dogs)
 
+@app.route('/owner/vaccines', methods=['POST', 'GET'])
+def vaccines():
+    vacc1 = Vaccines(id='0', name='Rabies')
+    vacc2 = Vaccines(id='1', name='AIDS')
+    vacc3 = Vaccines(id='1', name='Distemper')
+
+    vaccs = [vacc1, vacc2, vacc3]
+    return render_template('owner/vaccines.html', vaccines=vaccs)
+
 @app.route('/sitter/view_jobs', methods=['GET'])
 def view_jobs():
-    return render_template('sitter/view_jobs.html')
+    job1 = Services(startDate='1/1/2020', time='12:00:00', endDate='1/2/2020',
+                    serviceType='Walk', frequency='Weekly', 
+                    sitter='Jake', dog='Arya', owner='KC')
+    job2 = Services(startDate='5/22/2020', time='19:00:00', endDate='5/25/2020',
+                    serviceType='Watch', frequency='Once', 
+                    sitter='Jake', dog='Fluffy', owner='Gosia')
+    jobs = [job1, job2]
+    return render_template('sitter/view_jobs.html', jobs=jobs)
 
 
 @app.route('/sitter/pickup_job', methods=['POST', 'GET'])
@@ -287,9 +317,14 @@ def sitter_profile():
     return render_template('sitter/profile.html')
 
 
-@app.route('/sitter/certification', methods=['POST', 'GET'])
-def certification():
-    return render_template('sitter/certification.html')
+@app.route('/sitter/certifications', methods=['POST', 'GET'])
+def certifications():
+    cert1 = Certifications(id='0', name='Pro Walker')
+    cert2 = Certifications(id='1', name='Pro Watcher')
+    cert3 = Certifications(id='1', name='Pro Trainer')
+
+    certs = [cert1, cert2, cert3]
+    return render_template('sitter/certifications.html', certifications=certs)
 
 
 if __name__ == '__main__':
