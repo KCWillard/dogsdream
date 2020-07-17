@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Frequency - page visible only for administrator</h1>
+<table border="1px solid black">
+    <tr>
+        <th>Frequency</th>
+        <th>Action</th>
+    </tr>
+    <tr>
+        <td>daily</td>
+        <td><button type="button">Delete</button><button type="button">Update</button></td>
+
+    </tr>
+<tr>
+        <td>weekly</td>
+    <td><button type="button">Delete</button><button type="button">Update</button></td>
+    </tr>
+<tr>
+        <td>monthly</td>
+    <td><button type="button">Delete</button><button type="button">Update</button></td>
+    </tr>
+
+<button type="button">Add new frequency</button>
+</table>
+{% endblock %}

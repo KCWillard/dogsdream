@@ -5,28 +5,34 @@
 {% block content %}
 <h1>Dog's Dream!</h1>
 
-<table>
-    <tr>
-        <th>Dog</th>
-        <th>Service</th>
-        <th>Sitter</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Recurring?</th>
-        <th>Actions</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-            <a href="">Update</a>
-            <br>
-            <a href="">Cancel</a>
-        </td>
-    </tr>
+<table class='table table-hover'>
+    <thead>
+        <tr>
+            <th scope='col'>Dog</th>
+            <th scope='col'>Service</th>
+            <th scope='col'>Sitter</th>
+            <th scope='col'>Start Date</th>
+            <th scope='col'>End Date</th>
+            <th scope='col'>Recurring?</th>
+            <th scope='col'>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+        <tr>
+            <td>{{appointment.dog}}</td>
+            <td>{{appointment.serviceType}}</td>
+            <td>{{appointment.sitter}}</td>
+            <td>{{appointment.startDate}}</td>
+            <td>{{appointment.endDate}}</td>
+            <td>{{appointment.frequency}}</td>
+            <td>
+                <a href="">Update</a>
+                <br>
+                <a href="">Cancel</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

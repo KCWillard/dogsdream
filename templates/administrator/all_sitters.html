@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content  %}
+<h1>Sitters Data Base - view for administrator </h1>
+
+<table border="1px solid black">
+    <tr>
+        <th>Name</th>
+        <th>Last Name</th>
+        <th>Phone number</th>
+        <th>Street Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip Code</th>
+        <th>email</th>
+        <th>password</th>
+        <th>Certifications</th>
+        <th>Action</th>
+    </tr>
+    <tr>
+        <td>Anna</td>
+        <td>Smith</td>
+        <td>12345676</td>
+        <td>Lamp 34</td>
+        <td>San Jose</td>
+        <td>CA</td>
+        <td>12345</td>
+        <td>anna@smith.com</td>
+        <td>annasmith</td>
+        <td><a href="../sitter/certifications">Certifications</a></td>
+        <td><button type="update">Update</button><button type="button">Delete</button></td>
+    </tr>
+<tr>
+        <td>Anna</td>
+        <td>Smith</td>
+        <td>12345676</td>
+        <td>Lamp 34</td>
+        <td>San Jose</td>
+        <td>CA</td>
+        <td>12345</td>
+        <td>anna@smith.com</td>
+        <td>annasmith</td>
+    <td><a href="../sitter/certifications">Certifications</a></td>
+    <td><button type="update">Update</button><button type="button">Delete</button></td>
+    </tr>
+</table>
+    <button type="add"><a href="../register">Add new sitter</a></button>
+
+{% endblock %}

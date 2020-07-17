@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Certification </h1>
+<table border="1px solid black">
+    <tr>
+        <th>Name</th>
+    </tr>
+    <tr>
+        <td>Certification 1</td>
+        <td><button type="button">Delete</button></td>
+
+    </tr>
+<tr>
+        <td>Certification 2</td>
+    <td><button type="button">Delete</button></td>
+    </tr>
+<tr>
+        <td>Certification 3</td>
+    <td><button type="button">Delete</button></td>
+    </tr>
+</table>
+    <br>
+    <form action='/sitter/certifications' method='POST'>
+        <select class='custom-select' placeholder='Please select an option'>
+            <option value='schedule' name='schedule'>Certification 4</option>
+            <option value='view_appointments' name='view_appointments'>Certification 5</option>
+            <option value='add_dogs' name='add_dogs'>Certification 6</option>
+        </select>
+        <input type='submit' value='Add'>
+    </form>
+
+
+{% endblock %}
