@@ -1,23 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Vaccines</h1>
+<h1>Vaccines </h1>
+<table border="1px solid black">
+    <tr>
+        <th>Name</th>
+    </tr>
+    <tr>
+        <td>Vaccine 1</td>
+        <td><button type="button">Delete</button></td>
 
-<table class='table table-hover'>
-    <thead>
-        <tr>
-            <th scope='col'>vaccines to add</th>
-            <th scope='col'>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for vaccine in vaccines %}
-        <tr>
-            <td>{{vaccine.name}}</td>
-            <td><button type="button" class="btn btn-add">Add</button></td>
-        </tr>
-        {% endfor %}
-    </tbody>
+    </tr>
+<tr>
+        <td>Vaccine 2</td>
+    <td><button type="button">Delete</button></td>
+    </tr>
+<tr>
+        <td>Vaccine 3</td>
+    <td><button type="button">Delete</button></td>
+    </tr>
 </table>
-</table>
+    <br>
+    <form action='/owner/vaccines' method='POST'>
+        <select class='custom-select' placeholder='Please select an option'>
+            <option value='new vaccine' name='new vaccine'>Vaccine 4</option>
+            <option value='new vaccine' name='new vaccine'>Vaccine 5</option>
+            <option value='new vaccine' name='new vaccine'>Vaccine 6</option>
+        </select>
+        <input type='submit' value='Add'>
+    </form>
+
+
 {% endblock %}

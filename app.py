@@ -191,9 +191,9 @@ def about():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or \
-           request.form['password'] != 'admin':
-            error = 'Invalid Credentials. Please try again.'
+        if request.form['username'] == 'admin' and \
+           request.form['password'] == 'admin':
+            return redirect(url_for('administrator'))
         else:
             if request.form['profiles'] == 'sitter':
                 return redirect(url_for('sitter_profile'))
@@ -226,40 +226,37 @@ def register():
 
 @app.route('/owner/profile', methods=['POST', 'GET'])
 def owner_profile():
-    if request.method == 'POST':
-        print(request.form)
-        if request.form.get('name') == 'schedule':
-            return render_template('owner/add_jobs.html')
-        elif request.form == 'view_appointments':
-            return render_template('owner/view_appointments.html')
-        elif request.form == 'add_dogs':
-            return render_template('owner/add_dogs.html')
-        elif request.form == 'view_dogs':
-            return render_template('owner/view_dogs.html')
-    else:
-        # Fake person to make sure person can be displayed
-        kc = PetOwners(id='1', firstName='KC', lastName='Willard',
-                       phoneNumber='(111)111-1111',
-                       streetAddress='123 dog lane', city='Portland',
-                       state='OR', zipCode='97266',
-                       email='willarke@oregonstate.edu',
-                       password='******',
-                       dogs=[Dogs(name='Arya'), Dogs(name='Fluffy')])
-        
-        return render_template('owner/profile.html', owners=kc, dogs=kc.dogs,)
+    # if request.method == 'POST':
+    #     print(request.form)
+    #     if request.form.get('name') == 'schedule':
+    #         return render_template('owner/add_jobs.html')
+    #     elif request.form == 'view_appointments':
+    #         return render_template('owner/view_appointments.html')
+    #     elif request.form == 'add_dogs':
+    #         return render_template('owner/add_dogs.html')
+    #     elif request.form == 'view_dogs':
+    #         return render_template('owner/view_dogs.html')
+    # else:
+    #     # Fake person to make sure person can be displayed
+    #     kc = PetOwners(id='1', firstName='KC', lastName='Willard',
+    #                    phoneNumber='(111)111-1111',
+    #                    streetAddress='123 dog lane', city='Portland',
+    #                    state='OR', zipCode='97266',
+    #                    email='willarke@oregonstate.edu',
+    #                    password='******',
+    #                    dogs=[Dogs(name='Arya'), Dogs(name='Fluffy')])
+    #
+        return render_template('owner/profile.html')
 
 
 @app.route('/owner/view_appointments', methods=['POST', 'GET'])
-def view():
-    app1 = Services(startDate='1/1/2020', time='12:00:00', endDate='1/2/2020',
-                    serviceType='Walk', frequency='Weekly', 
-                    sitter='Jake', dog='Arya')
-    app2 = Services(startDate='5/22/2020', time='19:00:00', endDate='5/25/2020',
-                    serviceType='Watch', frequency='Once', 
-                    sitter='Jake', dog='Fluffy')
-    apps = [app1, app2]
-    
-    return render_template('owner/view_appointments.html', appointments=apps)
+def view_appointments():
+    return render_template('owner/view_appointments.html')
+
+
+@app.route('/owner/dogs', methods=['POST', 'GET'])
+def dogs():
+    return render_template('owner/dogs.html')
 
 
 @app.route('/owner/add_dogs', methods=['POST', 'GET'])
@@ -288,12 +285,8 @@ def view_dogs():
 
 @app.route('/owner/vaccines', methods=['POST', 'GET'])
 def vaccines():
-    vacc1 = Vaccines(id='0', name='Rabies')
-    vacc2 = Vaccines(id='1', name='AIDS')
-    vacc3 = Vaccines(id='1', name='Distemper')
 
-    vaccs = [vacc1, vacc2, vacc3]
-    return render_template('owner/vaccines.html', vaccines=vaccs)
+    return render_template('owner/vaccines.html')
 
 @app.route('/sitter/view_jobs', methods=['GET'])
 def view_jobs():
@@ -327,12 +320,68 @@ def certifications():
     return render_template('sitter/certifications.html', certifications=certs)
 
 
+@app.route('/sitter/delete', methods=['GET'])
+def delete_sitter():
+    # delete this sitter from database
+    return redirect(url_for('index'))
+
+
 @app.route('/sitter/profile_update', methods=['POST', 'GET'])
 def profile_update():
     return render_template('sitter/profile_update.html')
 
+@app.route('/owner/profile_update', methods=['POST', 'GET'])
+def profile_update2():
+    return render_template('owner/profile_update.html')
 
 
+
+@app.route('/administrator/administrator', methods=['POST', 'GET'])
+def administrator():
+    return render_template('administrator/administrator.html')
+
+
+@app.route('/administrator/all_sitters', methods=['POST', 'GET'])
+def all_sitters():
+    return render_template('administrator/all_sitters.html')
+
+
+@app.route('/administrator/full_certifications', methods=['POST', 'GET'])
+def full_certifications():
+    return render_template('administrator/full_certifications.html')
+
+
+@app.route('/administrator/all_jobs', methods=['POST', 'GET'])
+def all_jobs():
+    return render_template('administrator/all_jobs.html')
+
+
+@app.route('/administrator/frequency', methods=['POST', 'GET'])
+def frequency():
+    return render_template('administrator/frequency.html')
+
+
+@app.route('/administrator/types', methods=['POST', 'GET'])
+def types():
+    return render_template('administrator/types.html')
+
+
+@app.route('/administrator/dog_sizes', methods=['POST', 'GET'])
+def dog_sizes():
+    return render_template('administrator/dog_sizes.html')
+
+@app.route('/administrator/all_vaccines', methods=['POST', 'GET'])
+def all_vaccines():
+    return render_template('administrator/all_vaccines.html')
+
+
+@app.route('/administrator/all_dogs', methods=['POST', 'GET'])
+def all_dogs():
+    return render_template('administrator/all_dogs.html')
+
+@app.route('/administrator/all_owners', methods=['POST', 'GET'])
+def all_owners():
+    return render_template('administrator/all_owners.html')
 
 
 if __name__ == '__main__':
