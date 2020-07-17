@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Certification:</h1>
+
+<table class='table table-hover'>
+    <thead>
+        <tr>
+            <th scope='col'>Certifications to add</th>
+            <th scope='col'>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for certification in certifications %}
+        <tr>
+            <td>{{certification.name}}</td>
+            <td><button type="button" class="btn btn-add">Add</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
