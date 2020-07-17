@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content  %}
+<h1>Dogs Data Base </h1>
+
+<table border="1px solid black">
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Dog Size</th>
+        <th>Vaccines</th>
+        <th>Action</th>
+    </tr>
+    <tr>
+        <td>Bark</td>
+        <td>2</td>
+        <td>small</td>
+        <td><a href="vaccines">Vaccines</a></td>
+        <td><button type="update">Update</button><button type="button">Delete</button></td>
+    </tr>
+<tr>
+        <td>Bone</td>
+        <td>0</td>
+        <td>big</td>
+    <td><a href="vaccines">Vaccines</a></td>
+    <td><button type="update">Update</button><button type="button">Delete</button></td>
+    </tr>
+</table>
+    <button type="add"><a href="">Add new dog</a></button>
+
+{% endblock %}

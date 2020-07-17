@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 
-
-
 {% block content %}
-<h1>Available jobs:  </h1>
+<h1>Available jobs </h1>
 
 <table border="1 px solid black">
     <tr>
@@ -16,13 +14,23 @@
         <th>Actions</th>
     </tr>
     <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-
+        <td>Sam</td>
+        <td>Walking</td>
+        <td>Anna</td>
+        <td>2020-01-01</td>
+        <td>2021-01-01</td>
+        <td>weekly</td>
+        <td><button type="button">Pickup</button></td>
+    </tr>
+    <tr>
+        <td>Anna</td>
+        <td>Boarding</td>
+        <td>Sam</td>
+        <td>2020-01-01</td>
+        <td>2021-01-01</td>
+        <td>monthly</td>
+        <td><button type="button">Pickup</button></td>
     </tr>
 </table>
+
 {% endblock %}

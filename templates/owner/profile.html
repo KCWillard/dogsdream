@@ -2,31 +2,54 @@
 
 
 {% block content %}
-<h1>Dog's Dream!</h1>
-<br></br>
+<h1>Owners Profile</h1>
+<br>
 
-<h3>Welcome: {{ owners.firstName }} <h3>
+<table border="1px solid black">
+    <tr>
+        <th>Name</th>
+        <th>Last Name</th>
+        <th>Phone number</th>
+        <th>Street Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip Code</th>
+        <th>email</th>
+        <th>password</th>
+    </tr>
+    <tr>
+        <td>Anna</td>
+        <td>Smith</td>
+        <td>12345</td>
+        <td>Street 45</td>
+        <td>Almadena</td>
+        <td>CA</td>
+        <td>12345</td>
+        <td>anna@smith.pl</td>
+        <td>annasmith</td>
+    </tr>
+<tr>
+        <td>Anna2</td>
+        <td>Smith2</td>
+        <td>12345</td>
+        <td>Street 45</td>
+        <td>Almadena</td>
+        <td>CA</td>
+        <td>12345</td>
+        <td>anna@smith.pl</td>
+        <td>annasmith</td>
+    </tr>
+</table>
+     <a href="dogs">My Dogs</a>
+    <br>
+    <div class='view-appointments'>
+        <a href="/owner/view_appointments">View Your Requests</a>
+    </div>
 
-<h4>Dogs:</h4>
+    <a href="/owner/profile_update">Update Profile</a>
+    <br>
+    <a href="">Delete profile</a>
 
-    <table>
-        {% for dog in dogs %}
-        <tr>
-            <td>{{ dog.name }}</td>
-        </tr>
-        {% endfor %}
-    </table>
 
-    <h3>Would you like to...</h3>
-    <form action='/owner/profile' method='POST'>
-        <select class='custom-select' placeholder='Please select an option'>
-            <option value='schedule' name='schedule'>Schedule an appointment</option>
-            <option value='view_appointments' name='view_appointments'>View your appointments</option>
-            <option value='add_dogs' name='add_dogs'>Add a dog</option>
-            <option value='view_dogs' name='view_dogs'>View your dogs</option>
-        </select>
-        <br>
-        <input type='submit' value='Submit'>
-    </form>
 
 {% endblock %}
