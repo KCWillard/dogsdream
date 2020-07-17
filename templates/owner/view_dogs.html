@@ -3,23 +3,28 @@
 {% block content %}
 <h1>Your Registered Dogs </h1>
 
-<table border="1px solid black">
-    <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Size</th>
-        <th>Owner</th>        
-        <th>Remove?</th>
+<table class='table table-hover'>
+    <thead>
+        <tr>
+            <th scope='col'>Name</th>
+            <th scope='col'>Age</th>
+            <th scope='col'>Size</th>
+            <th scope='col'>Owner</th>        
+            <th scope='col'>Remove?</th>
 
-    </tr>
+        </tr>
+    </thead>
+    <tbody>
     {% for dog in dogs %}
-    <tr>
-        <td>{{dog.name}}</td>
-        <td>{{dog.age}}</td>
-        <td>{{dog.size}}</td>
-        <td>{{dog.petOwner}}</td>
-        <td><a href="">Remove dog</a>
-    </tr>
-    {% endfor %}
+        <tr>
+            
+            <td>{{dog.name}}</td>
+            <td>{{dog.age}}</td>
+            <td>{{dog.size}}</td>
+            <td>{{dog.petOwner}}</td>
+            <td><a href="">Remove dog</a>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

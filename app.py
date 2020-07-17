@@ -228,7 +228,7 @@ def register():
 def owner_profile():
     if request.method == 'POST':
         print(request.form)
-        if request.form == 'schedule':
+        if request.form.get('name') == 'schedule':
             return render_template('owner/add_jobs.html')
         elif request.form == 'view_appointments':
             return render_template('owner/view_appointments.html')

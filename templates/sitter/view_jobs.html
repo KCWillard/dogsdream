@@ -3,31 +3,34 @@
 {% block content %}
 <h1>You are currently assigned to below jobs: </h1>
 
-<table border="1px solid black">
-    <tr>
-        <th>Dog</th>
-        <th>Service</th>
-        <th>Owner</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Frequency</th>
-        <th>Cancel?</th>
-
-    </tr>
-    {% for job in jobs %}
-    <tr>
-        <td>{{job.dog}}</td>
-        <td>{{job.serviceType}}</td>
-        <td>{{job.owner}}</td>
-        <td>{{job.startDate}}</td>
-        <td>{{job.endDate}}</td>
-        <td>{{job.frequency}}</td>        
-        <td>
-            <a href="">Update</a>
-            <br>
-            <a href="">Cancel</a>
-        </td>
-    </tr>
-    {% endfor %}
+<table class='table table-hover'>
+    <thead>
+        <tr>
+            <th scope='col'>Dog</th>
+            <th scope='col'>Service</th>
+            <th scope='col'>Owner</th>
+            <th scope='col'>Start Date</th>
+            <th scope='col'>End Date</th>
+            <th scope='col'>Recurring?</th>
+            <th scope='col'>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td>{{job.dog}}</td>
+            <td>{{job.serviceType}}</td>
+            <td>{{job.owner}}</td>
+            <td>{{job.startDate}}</td>
+            <td>{{job.endDate}}</td>
+            <td>{{job.frequency}}</td>        
+            <td>
+                <a href="">Update</a>
+                <br>
+                <a href="">Cancel</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

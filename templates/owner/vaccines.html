@@ -3,16 +3,21 @@
 {% block content %}
 <h1>Vaccines</h1>
 
-<table>
-    <tr>
-        <th>Vaccines to add</th>
-        <th>Action</th>
-    </tr>
-    {% for vaccine in vaccines %}
-    <tr>
-        <td>{{vaccine.name}}</td>
-        <td><button type="button" class="btn btn-add">Add</button></td>
-    </tr>
-    {% endfor %}
+<table class='table table-hover'>
+    <thead>
+        <tr>
+            <th scope='col'>vaccines to add</th>
+            <th scope='col'>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vaccine in vaccines %}
+        <tr>
+            <td>{{vaccine.name}}</td>
+            <td><button type="button" class="btn btn-add">Add</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </table>
 {% endblock %}

@@ -5,9 +5,13 @@
 <h1>Dog's Dream!</h1>
 
 <form action='/owner/add-dog'method='POST'>
-    <input type="text" id='name' name='name' maxlength='256' placeholder='Name'>
-    <input type="number" id='age' name='age' maxlength='2' placeholder='Age'>
-    <select id='size' name='size' placeholder='Size'>
+    <div class='form-group'>
+        <input type="text" class='form-control' id='name' name='name' maxlength='256' placeholder='Name'>
+    </div>
+    <div class='form-group'>
+        <input type="number" class='form-control' id='age' name='age' maxlength='2' placeholder='Age'>
+    </div>
+    <select id='size' class='custom-select' name='size' placeholder='Size'>
         <option value='1'>Very Small(&lt; 10lbs)</option>
         <option value='2'>Small(11-20lbs)</option>
         <option value='3'>Medium(21-50lbs)</option>
