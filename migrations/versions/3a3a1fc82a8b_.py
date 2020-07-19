@@ -100,7 +100,7 @@ def upgrade():
     op.drop_table('events_waits_summary_by_user_by_event_name', schema='performance_schema')
     op.drop_table('events_waits_history_long', schema='performance_schema')
     op.drop_table('memory_summary_global_by_event_name', schema='performance_schema')
-    op.drop_table('gtid_slave_pos', schema='mysql')
+    op.drop_table('gtid_subordinate_pos', schema='mysql')
     op.drop_table('column_stats', schema='mysql')
     op.drop_table('time_zone', schema='mysql')
     op.drop_table('events_transactions_summary_by_thread_by_event_name', schema='performance_schema')
@@ -2149,15 +2149,15 @@ def downgrade():
     mysql_default_charset='utf8',
     mysql_engine='Aria'
     )
-    op.create_table('gtid_slave_pos',
+    op.create_table('gtid_subordinate_pos',
     sa.Column('domain_id', mysql.INTEGER(display_width=10, unsigned=True), autoincrement=False, nullable=False),
     sa.Column('sub_id', mysql.BIGINT(display_width=20, unsigned=True), autoincrement=False, nullable=False),
     sa.Column('server_id', mysql.INTEGER(display_width=10, unsigned=True), autoincrement=False, nullable=False),
     sa.Column('seq_no', mysql.BIGINT(display_width=20, unsigned=True), autoincrement=False, nullable=False),
     sa.PrimaryKeyConstraint('domain_id', 'sub_id'),
     schema='mysql',
-    comment='Replication slave GTID position',
-    mysql_comment='Replication slave GTID position',
+    comment='Replication subordinate GTID position',
+    mysql_comment='Replication subordinate GTID position',
     mysql_default_charset='latin1',
     mysql_engine='InnoDB'
     )
