@@ -1,6 +1,5 @@
 from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, request, redirect, url_for
-from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 # DB login info to connect to pythonanywhere db
