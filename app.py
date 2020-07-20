@@ -31,130 +31,130 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # initialize database
 db = SQLAlchemy(app)
 
-# initialize migrate object to allow for easily updating dbs with models
-migrate = Migrate(app, db)
-
-
-# SQLAlchemy models for all tables in app
-class Sitters(db.Model):
-    __tablename__ = "Sitters"
-    id = db.Column(db.Integer, primary_key=True)
-    firstName = db.Column(db.String(256), nullable=False)
-    lastName = db.Column(db.String(256), nullable=False)
-    phoneNumber = db.Column(db.Integer, nullable=False)
-    streetAddress = db.Column(db.String(256), nullable=False)
-    city = db.Column(db.String(128), nullable=False)
-    state = db.Column(db.String(2), nullable=False)
-    zipCode = db.Column(db.Integer, nullable=False)
-    email = db.Column(db.String(256), nullable=False)
-    password = db.Column(db.String(256), nullable=False)
-
-
-class PetOwners(db.Model):
-    __tablename__ = "PetOwners"
-    id = db.Column(db.Integer, primary_key=True)
-    firstName = db.Column(db.String(256), nullable=False)
-    lastName = db.Column(db.String(256), nullable=False)
-    phoneNumber = db.Column(db.Integer, nullable=False)
-    streetAddress = db.Column(db.String(256), nullable=False)
-    city = db.Column(db.String(128), nullable=False)
-    state = db.Column(db.String(2), nullable=False)
-    zipCode = db.Column(db.Integer, nullable=False)
-    email = db.Column(db.String(256), nullable=False)
-    password = db.Column(db.String(256), nullable=False)
-    dogs = db.relationship('Dogs')
-
-    def __repr__(self):
-        return '<Dogs %r>' % self.id
-
-
-class DogSizes(db.Model):
-    __tablename__ = "DogSizes"
-    id = db.Column(db.Integer, primary_key=True)
-    size = db.Column(db.String(256), nullable=False)
-    dog = db.relationship('Dogs')
-
-    def __repr__(self):
-        return'<DogSizes %r>' % self.id
-
-
-class Dogs(db.Model):
-    __tablename__ = "Dogs"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-    age = db.Column(db.Integer, nullable=False)
-    size = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
-    petOwner = db.Column(db.Integer,
-                         db.ForeignKey(PetOwners.id), nullable=False)
-    service = db.relationship('Services')
-
-    def __repr__(self):
-        return '<Dogs %r>' % self.id
-
-
-class ServiceTypes(db.Model):
-    __tablename__ = "ServiceTypes"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-    service = db.relationship('Services')
-
-    def __repr__(self):
-        return '<ServiceTypes %r>' % self.id
-
-
-class FrequencyOfServices(db.Model):
-    __tablename__ = "FrequencyOfServices"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-    service = db.relationship('Services')
-
-    def __repr__(self):
-        return '<FrequencyOfServices %r>' % self.id
-
-
-class Certifications(db.Model):
-    __tablename__ = "Certifications"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
-
-    def __repr__(self):
-        return '<Certifications %r>' % self.id
-
-
-class Vaccines(db.Model):
-    __tablename__ = "Vaccines"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
-
-    def __repr__(self):
-        return '<Vaccines %r>' % self.id
-
-
-class Services(db.Model):
-    __tablename__ = "Services"
-    id = db.Column(db.Integer, primary_key=True)
-    startDate = db.Column(db.DateTime, nullable=False)
-    time = db.Column(db.DateTime, nullable=False)
-    endDate = db.Column(db.DateTime, nullable=False)
-    serviceType = db.Column(db.Integer,
-                            db.ForeignKey(ServiceTypes.id),
-                            nullable=False)
-    frequency = db.Column(db.Integer,
-                          db.ForeignKey(FrequencyOfServices.id),
-                          nullable=False)
-    sitter = db.Column(db.Integer,
-                       db.ForeignKey(Sitters.id),
-                       nullable=False)
-    dog = db.Column(db.Integer,
-                    db.ForeignKey(Dogs.id),
-                    nullable=False)
-    # Pet owner will be fetched from Dog id but this is used for HTML testing
-    owner = db.Column(db.Integer, nullable=False)    
-    
-    def __repr__(self):
-        return '<Services %r>' % self.id
+# # initialize migrate object to allow for easily updating dbs with models
+# migrate = Migrate(app, db)
+#
+#
+# # SQLAlchemy models for all tables in app
+# class Sitters(db.Model):
+#     __tablename__ = "Sitters"
+#     id = db.Column(db.Integer, primary_key=True)
+#     firstName = db.Column(db.String(256), nullable=False)
+#     lastName = db.Column(db.String(256), nullable=False)
+#     phoneNumber = db.Column(db.Integer, nullable=False)
+#     streetAddress = db.Column(db.String(256), nullable=False)
+#     city = db.Column(db.String(128), nullable=False)
+#     state = db.Column(db.String(2), nullable=False)
+#     zipCode = db.Column(db.Integer, nullable=False)
+#     email = db.Column(db.String(256), nullable=False)
+#     password = db.Column(db.String(256), nullable=False)
+#
+#
+# class PetOwners(db.Model):
+#     __tablename__ = "PetOwners"
+#     id = db.Column(db.Integer, primary_key=True)
+#     firstName = db.Column(db.String(256), nullable=False)
+#     lastName = db.Column(db.String(256), nullable=False)
+#     phoneNumber = db.Column(db.Integer, nullable=False)
+#     streetAddress = db.Column(db.String(256), nullable=False)
+#     city = db.Column(db.String(128), nullable=False)
+#     state = db.Column(db.String(2), nullable=False)
+#     zipCode = db.Column(db.Integer, nullable=False)
+#     email = db.Column(db.String(256), nullable=False)
+#     password = db.Column(db.String(256), nullable=False)
+#     dogs = db.relationship('Dogs')
+#
+#     def __repr__(self):
+#         return '<Dogs %r>' % self.id
+#
+#
+# class DogSizes(db.Model):
+#     __tablename__ = "DogSizes"
+#     id = db.Column(db.Integer, primary_key=True)
+#     size = db.Column(db.String(256), nullable=False)
+#     dog = db.relationship('Dogs')
+#
+#     def __repr__(self):
+#         return'<DogSizes %r>' % self.id
+#
+#
+# class Dogs(db.Model):
+#     __tablename__ = "Dogs"
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(256), nullable=False)
+#     age = db.Column(db.Integer, nullable=False)
+#     size = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
+#     petOwner = db.Column(db.Integer,
+#                          db.ForeignKey(PetOwners.id), nullable=False)
+#     service = db.relationship('Services')
+#
+#     def __repr__(self):
+#         return '<Dogs %r>' % self.id
+#
+#
+# class ServiceTypes(db.Model):
+#     __tablename__ = "ServiceTypes"
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(256), nullable=False)
+#     service = db.relationship('Services')
+#
+#     def __repr__(self):
+#         return '<ServiceTypes %r>' % self.id
+#
+#
+# class FrequencyOfServices(db.Model):
+#     __tablename__ = "FrequencyOfServices"
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(256), nullable=False)
+#     service = db.relationship('Services')
+#
+#     def __repr__(self):
+#         return '<FrequencyOfServices %r>' % self.id
+#
+#
+# class Certifications(db.Model):
+#     __tablename__ = "Certifications"
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(256), nullable=False)
+#     date = db.Column(db.DateTime, nullable=False)
+#
+#     def __repr__(self):
+#         return '<Certifications %r>' % self.id
+#
+#
+# class Vaccines(db.Model):
+#     __tablename__ = "Vaccines"
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(256), nullable=False)
+#     date = db.Column(db.DateTime, nullable=False)
+#
+#     def __repr__(self):
+#         return '<Vaccines %r>' % self.id
+#
+#
+# class Services(db.Model):
+#     __tablename__ = "Services"
+#     id = db.Column(db.Integer, primary_key=True)
+#     startDate = db.Column(db.DateTime, nullable=False)
+#     time = db.Column(db.DateTime, nullable=False)
+#     endDate = db.Column(db.DateTime, nullable=False)
+#     serviceType = db.Column(db.Integer,
+#                             db.ForeignKey(ServiceTypes.id),
+#                             nullable=False)
+#     frequency = db.Column(db.Integer,
+#                           db.ForeignKey(FrequencyOfServices.id),
+#                           nullable=False)
+#     sitter = db.Column(db.Integer,
+#                        db.ForeignKey(Sitters.id),
+#                        nullable=False)
+#     dog = db.Column(db.Integer,
+#                     db.ForeignKey(Dogs.id),
+#                     nullable=False)
+#     # Pet owner will be fetched from Dog id but this is used for HTML testing
+#     owner = db.Column(db.Integer, nullable=False)
+#
+#     def __repr__(self):
+#         return '<Services %r>' % self.id
 
 
 @app.route('/')
