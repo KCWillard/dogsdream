@@ -266,15 +266,15 @@ def add_dog():
 
 @app.route('/owner/view_dogs', methods=['GET'])
 def view_dogs():
-    arya = Dogs(id='0', name='Arya',
-                age='8', size='Medium',
-                petOwner='KC')
-    fluffy = Dogs(id='0', name='Fluffy',
-                  age='3', size='Very Small',
-                  petOwner='KC')
-    dogs = [arya, fluffy]
+    # arya = Dogs(id='0', name='Arya',
+    #             age='8', size='Medium',
+    #             petOwner='KC')
+    # fluffy = Dogs(id='0', name='Fluffy',
+    #               age='3', size='Very Small',
+    #               petOwner='KC')
+    # dogs = [arya, fluffy]
             
-    return render_template('owner/view_dogs.html', dogs=dogs)
+    return render_template('owner/view_dogs.html')
 
 @app.route('/owner/vaccines', methods=['POST', 'GET'])
 def vaccines():
@@ -283,14 +283,14 @@ def vaccines():
 
 @app.route('/sitter/view_jobs', methods=['GET'])
 def view_jobs():
-    job1 = Services(startDate='1/1/2020', time='12:00:00', endDate='1/2/2020',
-                    serviceType='Walk', frequency='Weekly', 
-                    sitter='Jake', dog='Arya', owner='KC')
-    job2 = Services(startDate='5/22/2020', time='19:00:00', endDate='5/25/2020',
-                    serviceType='Watch', frequency='Once', 
-                    sitter='Jake', dog='Fluffy', owner='Gosia')
-    jobs = [job1, job2]
-    return render_template('sitter/view_jobs.html', jobs=jobs)
+    # job1 = Services(startDate='1/1/2020', time='12:00:00', endDate='1/2/2020',
+    #                 serviceType='Walk', frequency='Weekly',
+    #                 sitter='Jake', dog='Arya', owner='KC')
+    # job2 = Services(startDate='5/22/2020', time='19:00:00', endDate='5/25/2020',
+    #                 serviceType='Watch', frequency='Once',
+    #                 sitter='Jake', dog='Fluffy', owner='Gosia')
+    # jobs = [job1, job2]
+    return render_template('sitter/view_jobs.html')
 
 
 @app.route('/sitter/pickup_job', methods=['POST', 'GET'])
@@ -305,12 +305,12 @@ def sitter_profile():
 
 @app.route('/sitter/certifications', methods=['POST', 'GET'])
 def certifications():
-    cert1 = Certifications(id='0', name='Pro Walker')
-    cert2 = Certifications(id='1', name='Pro Watcher')
-    cert3 = Certifications(id='1', name='Pro Trainer')
-
-    certs = [cert1, cert2, cert3]
-    return render_template('sitter/certifications.html', certifications=certs)
+    # cert1 = Certifications(id='0', name='Pro Walker')
+    # cert2 = Certifications(id='1', name='Pro Watcher')
+    # cert3 = Certifications(id='1', name='Pro Trainer')
+    #
+    # certs = [cert1, cert2, cert3]
+    return render_template('sitter/certifications.html')
 
 
 @app.route('/sitter/delete', methods=['GET'])
