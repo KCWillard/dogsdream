@@ -157,18 +157,6 @@ class Services(db.Model):
         return '<Services %r>' % self.id
 
 
-# Set up route endpoints to serve webpages
-
-
-class Persons(db.Model):
-    __tablename__ = "Persons"
-    ID = db.Column(db.Integer, primary_key=True)
-    LastName = db.Column(db.String(256), nullable=False)
-
-    def __repr__(self):
-        return '<ID %r>' % self.ID
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
