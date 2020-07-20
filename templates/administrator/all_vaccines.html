@@ -1,26 +1,31 @@
 {% extends 'base.html' %}
-
-{% block content %}
-<h1>Vaccines Data Base - page visible only for administrator</h1>
-<table border="1px solid black">
+{% block content  %}
+<div class="container-fluid">
+        <h1 class="mt-4">Vaccines Table</h1>
+<table class="table">
+  <thead>
     <tr>
-        <th>Name</th>
-        <th>Action</th>
+        <th scope="col">Name</th>
+        <th scope="col">Action</th>
     </tr>
+  </thead>
+  <tbody>
     <tr>
         <td>Vaccines 1</td>
-        <td><button type="button">Delete</button><button type="button">Update</button></td>
-
+        <td>
+            <a href="/vaccines/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/vaccines/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
-<tr>
+    <tr>
         <td>Vaccines 2</td>
-    <td><button type="button">Delete</button><button type="button">Update</button></td>
+        <td>
+            <a href="/vaccines/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/vaccines/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
-<tr>
-        <td>Vaccines 3</td>
-    <td><button type="button">Delete</button><button type="button">Update</button></td>
-    </tr>
-
-<button type="button">Add new Vaccines</button>
+  </tbody>
 </table>
+    <a href="/vaccines/add"><button type="button" class="btn btn-primary">Add Vaccine</button></a>
+</div>
 {% endblock %}

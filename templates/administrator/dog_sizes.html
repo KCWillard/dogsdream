@@ -1,26 +1,38 @@
 {% extends 'base.html' %}
-
-{% block content %}
-<h1>Dog Sizes - page visible only for administrator</h1>
-<table border="1px solid black">
+{% block content  %}
+<div class="container-fluid">
+        <h1 class="mt-4">Dog Size Table</h1>
+<table class="table">
+  <thead>
     <tr>
-        <th>Size</th>
-        <th>Action</th>
+        <th scope="col">Size</th>
+        <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <td>Small</td>
+        <td>
+            <a href="/sizes/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/sizes/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
     <tr>
-        <td>Smal</td>
-        <td><button type="button">Delete</button><button type="button">Update</button></td>
-
-    </tr>
-<tr>
         <td>Medium</td>
-    <td><button type="button">Delete</button><button type="button">Update</button></td>
+        <td>
+            <a href="/sizes/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/sizes/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
-<tr>
+    <tr>
         <td>Big</td>
-    <td><button type="button">Delete</button><button type="button">Update</button></td>
+        <td>
+            <a href="/sizes/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/sizes/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
-
-<button type="button">Add new size</button>
+  </tbody>
 </table>
+    <a href="/sizes/add"><button type="button" class="btn btn-primary">Add Dog Size</button></a>
+</div>
 {% endblock %}

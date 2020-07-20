@@ -181,7 +181,7 @@ def contact():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] == 'admin' and \
+        if request.form['username'] == 'admin@admin.com' and \
            request.form['password'] == 'admin':
             return redirect(url_for('administrator'))
         # else:
@@ -194,29 +194,16 @@ def login():
     return render_template('login.html', error=error)
 
 
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    return render_template('administrator/add_user.html')
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    error = None
-    if request.method == 'POST':
-        if request.form['email'] != 'a' or \
-           request.form['password'] != 'a' \
-           or request.form['fname'] != 'a' \
-           or request.form['lname'] != 'a' \
-           or request.form['phone'] != '1' \
-           or request.form['address'] != 'a' \
-           or request.form['city'] != 'a' \
-           or request.form['state'] != 'AL' \
-           or request.form['zip'] != '1':
-            error = 'Invalid Credentials. Please try again.'
-        else:
-            if request.form['reg_type'] == 'sitter':
-                return redirect(url_for('sitter_profile'))
-            else:
-                return redirect(url_for('owner_profile'))
-    return render_template('register.html', error=error)
+    return render_template('register.html')
 
 
-@app.route('/owner/profile', methods=['POST', 'GET'])
+@app.route('/owner', methods=['POST', 'GET'])
 def owner_profile():
     # if request.method == 'POST':
     #     print(request.form)
@@ -238,12 +225,12 @@ def owner_profile():
     #                    password='******',
     #                    dogs=[Dogs(name='Arya'), Dogs(name='Fluffy')])
     #
-        return render_template('owner/profile.html')
+        return render_template('administrator/all_owners.html')
 
 
-@app.route('/owner/view_appointments', methods=['POST', 'GET'])
-def view_appointments():
-    return render_template('owner/view_appointments.html')
+# @app.route('/owner/view_appointments', methods=['POST', 'GET'])
+# def view_appointments():
+#     return render_template('owner/view_appointments.html')
 
 
 @app.route('/owner/dogs', methods=['POST', 'GET'])
@@ -274,6 +261,23 @@ def view_dogs():
     # dogs = [arya, fluffy]
             
     return render_template('owner/view_dogs.html')
+
+
+@app.route('/owner/update', methods=['GET', 'POST'])
+def owner_update():
+    return render_template('owner/profile_update.html')
+
+@app.route('/owner/delete', methods=['GET', 'POST'])
+def owner_delete():
+    return render_template('administrator/all_owners.html')
+
+@app.route('/dogs/update', methods=['GET', 'POST'])
+def owner_dogs_update():
+    return render_template('owner/add_dogs.html')
+
+@app.route('/dogs/delete', methods=['GET', 'POST'])
+def owner_dogs_delete():
+    return render_template('administrator/all_dogs.html')
 
 @app.route('/owner/vaccines', methods=['POST', 'GET'])
 def vaccines():
@@ -315,10 +319,10 @@ def certifications():
 @app.route('/sitter/delete', methods=['GET'])
 def delete_sitter():
     # delete this sitter from database
-    return redirect(url_for('index'))
+    return render_template('administrator/all_sitters.html')
 
 
-@app.route('/sitter/profile_update', methods=['POST', 'GET'])
+@app.route('/sitter/update', methods=['POST', 'GET'])
 def profile_update():
     return render_template('sitter/profile_update.html')
 
@@ -333,37 +337,117 @@ def administrator():
     return render_template('administrator/administrator.html')
 
 
-@app.route('/administrator/all_sitters', methods=['POST', 'GET'])
+@app.route('/sitter', methods=['POST', 'GET'])
 def all_sitters():
     return render_template('administrator/all_sitters.html')
 
 
-@app.route('/administrator/full_certifications', methods=['POST', 'GET'])
+@app.route('/certifications', methods=['POST', 'GET'])
 def full_certifications():
     return render_template('administrator/full_certifications.html')
 
 
-@app.route('/administrator/all_jobs', methods=['POST', 'GET'])
+@app.route('/certification/delete', methods=['POST', 'GET'])
+def certification_delete():
+    return render_template('administrator/full_certifications.html')
+
+@app.route('/certification/update', methods=['POST', 'GET'])
+def certification_update():
+    return render_template('administrator/update_certification.html')
+
+@app.route('/certification/add', methods=['POST', 'GET'])
+def certification_add():
+    return render_template('administrator/add_certification.html')
+
+@app.route('/jobs', methods=['POST', 'GET'])
 def all_jobs():
     return render_template('administrator/all_jobs.html')
 
+@app.route('/jobs/delete', methods=['POST', 'GET'])
+def jobs_delete():
+    return render_template('administrator/all_jobs.html')
 
-@app.route('/administrator/frequency', methods=['POST', 'GET'])
+@app.route('/jobs/update', methods=['POST', 'GET'])
+def jobs_update():
+    return render_template('administrator/all_jobs.html')
+
+@app.route('/jobs/add', methods=['POST', 'GET'])
+def jobs_add():
+    return render_template('administrator/add_service.html')
+
+@app.route('/jobs/filter', methods=['POST', 'GET'])
+def jobs_filter():
+    return render_template('administrator/all_jobs.html')
+
+
+@app.route('/service_frequency', methods=['POST', 'GET'])
 def frequency():
     return render_template('administrator/frequency.html')
 
+@app.route('/service_frequency/delete', methods=['POST', 'GET'])
+def frequency_delete():
+    return render_template('administrator/frequency.html')
 
-@app.route('/administrator/types', methods=['POST', 'GET'])
+@app.route('/service_frequency/update', methods=['POST', 'GET'])
+def frequency_update():
+    return render_template('administrator/update_service_frequency.html')
+
+@app.route('/service_frequency/add', methods=['POST', 'GET'])
+def frequency_add():
+    return render_template('administrator/add_service_frequency.html')
+
+
+@app.route('/service_type', methods=['POST', 'GET'])
 def types():
     return render_template('administrator/types.html')
 
+@app.route('/service_type/delete', methods=['POST', 'GET'])
+def service_delete():
+    return render_template('administrator/types.html')
 
-@app.route('/administrator/dog_sizes', methods=['POST', 'GET'])
+@app.route('/service_type/update', methods=['POST', 'GET'])
+def service_update():
+    return render_template('administrator/update_service_type.html')
+
+@app.route('/service_type/add', methods=['POST', 'GET'])
+def service_add():
+    return render_template('administrator/add_service_type.html')
+
+
+@app.route('/sizes', methods=['POST', 'GET'])
 def dog_sizes():
     return render_template('administrator/dog_sizes.html')
 
-@app.route('/administrator/all_vaccines', methods=['POST', 'GET'])
+@app.route('/sizes/delete', methods=['POST', 'GET'])
+def sizes_delete():
+    return render_template('administrator/dog_sizes.html')
+
+@app.route('/sizes/update', methods=['POST', 'GET'])
+def sizes_update():
+    return render_template('administrator/update_dog_size.html')
+
+@app.route('/sizes/add', methods=['POST', 'GET'])
+def sizes_add():
+    return render_template('administrator/add_dog_size.html')
+
+@app.route('/vaccines', methods=['POST', 'GET'])
 def all_vaccines():
+    return render_template('administrator/all_vaccines.html')
+
+@app.route('/vaccines/add', methods=['POST', 'GET'])
+def add_vaccines():
+    return render_template('administrator/add_vaccines.html')
+
+@app.route('/vaccines/delete', methods=['POST', 'GET'])
+def vaccines_delete():
+    return render_template('administrator/all_vaccines.html')
+
+@app.route('/vaccines/update', methods=['POST', 'GET'])
+def vaccines_update():
+    return render_template('administrator/update_vaccines.html')
+
+@app.route('/vaccines/add', methods=['POST', 'GET'])
+def vaccines_add():
     return render_template('administrator/all_vaccines.html')
 
 

@@ -1,23 +1,26 @@
 {% extends 'base.html' %}
 {% block content  %}
-<h1>Sitters Data Base - view for administrator </h1>
-
-<table border="1px solid black">
+<div class="container-fluid">
+        <h1 class="mt-4">Sitter Table</h1>
+<table class="table">
+  <thead>
     <tr>
-        <th>Name</th>
-        <th>Last Name</th>
-        <th>Phone number</th>
-        <th>Street Address</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Zip Code</th>
-        <th>email</th>
-        <th>password</th>
-        <th>Certifications</th>
-        <th>Action</th>
+        <th scope="col">Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Phone number</th>
+        <th scope="col">Street Address</th>
+        <th scope="col">City</th>
+        <th scope="col">State</th>
+        <th scope="col">Zip Code</th>
+        <th scope="col">email</th>
+        <th scope="col">password</th>
+        <th scope="col">Certification</th>
+        <th scope="col">Action</th>
     </tr>
+  </thead>
+  <tbody>
     <tr>
-        <td>Anna</td>
+<td>Anna</td>
         <td>Smith</td>
         <td>12345676</td>
         <td>Lamp 34</td>
@@ -27,10 +30,13 @@
         <td>anna@smith.com</td>
         <td>annasmith</td>
         <td><a href="../sitter/certifications">Certifications</a></td>
-        <td><a href="/sitter/profile_update">Update</a> &nbsp; <a href="/sitter/delete"> Delete</a> </td>
+        <td>
+            <a href="/sitter/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/sitter/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
-<tr>
-        <td>Anna</td>
+    <tr>
+<td>Anna</td>
         <td>Smith</td>
         <td>12345676</td>
         <td>Lamp 34</td>
@@ -39,10 +45,14 @@
         <td>12345</td>
         <td>anna@smith.com</td>
         <td>annasmith</td>
-    <td><a href="../sitter/certifications">Certifications</a></td>
-    <td><a href="/sitter/profile_update">Update</a> &nbsp; <a href="/sitter/delete"> Delete</a> </td>
+        <td><a href="../sitter/certifications">Certifications</a></td>
+        <td>
+            <a href="/sitter/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/sitter/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
+  </tbody>
 </table>
-    <button type="add"><a href="../register">Add new sitter</a></button>
-
+    <a href="/add_user"><button type="button" class="btn btn-primary">Add Sitter</button></a>
+</div>
 {% endblock %}
