@@ -184,13 +184,13 @@ def login():
         if request.form['username'] == 'admin' and \
            request.form['password'] == 'admin':
             return redirect(url_for('administrator'))
-        else:
-            if request.form['username'] == 'sitter' and \
-                    request.form['password'] == 'sitter' and request.form['profiles'] == 'sitter':
-                return redirect(url_for('sitter_profile'))
-            elif request.form['username'] == 'owner' and \
-                    request.form['password'] == 'owner' and request.form['profiles'] == 'owner':
-                return redirect(url_for('owner_profile'))
+        # else:
+        #     if request.form['username'] == 'sitter' and \
+        #             request.form['password'] == 'sitter' and request.form['profiles'] == 'sitter':
+        #         return redirect(url_for('sitter_profile'))
+        #     elif request.form['username'] == 'owner' and \
+        #             request.form['password'] == 'owner' and request.form['profiles'] == 'owner':
+        #         return redirect(url_for('owner_profile'))
     return render_template('login.html', error=error)
 
 
