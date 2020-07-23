@@ -184,7 +184,7 @@ VALUES
         return 'Initialized tables'
     except Exception as e:
         print("Problem inserting into db: " + str(e))
-        return False
+        return 'Failed to init'
 
 @app.route('/')
 def index():
