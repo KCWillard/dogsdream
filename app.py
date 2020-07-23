@@ -13,140 +13,6 @@ mysql = MySQL(app)
 Bootstrap(app)
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] =\
-#     'mysql://{}:{}@{}:{}/{}'.\
-#     format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
-# app.config["DEBUG"] = True
-# app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
-# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-
-# # initialize migrate object to allow for easily updating dbs with models
-# migrate = Migrate(app, db)
-#
-#
-# # SQLAlchemy models for all tables in app
-# class Sitters(db.Model):
-#     __tablename__ = "Sitters"
-#     id = db.Column(db.Integer, primary_key=True)
-#     firstName = db.Column(db.String(256), nullable=False)
-#     lastName = db.Column(db.String(256), nullable=False)
-#     phoneNumber = db.Column(db.Integer, nullable=False)
-#     streetAddress = db.Column(db.String(256), nullable=False)
-#     city = db.Column(db.String(128), nullable=False)
-#     state = db.Column(db.String(2), nullable=False)
-#     zipCode = db.Column(db.Integer, nullable=False)
-#     email = db.Column(db.String(256), nullable=False)
-#     password = db.Column(db.String(256), nullable=False)
-#
-#
-# class PetOwners(db.Model):
-#     __tablename__ = "PetOwners"
-#     id = db.Column(db.Integer, primary_key=True)
-#     firstName = db.Column(db.String(256), nullable=False)
-#     lastName = db.Column(db.String(256), nullable=False)
-#     phoneNumber = db.Column(db.Integer, nullable=False)
-#     streetAddress = db.Column(db.String(256), nullable=False)
-#     city = db.Column(db.String(128), nullable=False)
-#     state = db.Column(db.String(2), nullable=False)
-#     zipCode = db.Column(db.Integer, nullable=False)
-#     email = db.Column(db.String(256), nullable=False)
-#     password = db.Column(db.String(256), nullable=False)
-#     dogs = db.relationship('Dogs')
-#
-#     def __repr__(self):
-#         return '<Dogs %r>' % self.id
-#
-#
-# class DogSizes(db.Model):
-#     __tablename__ = "DogSizes"
-#     id = db.Column(db.Integer, primary_key=True)
-#     size = db.Column(db.String(256), nullable=False)
-#     dog = db.relationship('Dogs')
-#
-#     def __repr__(self):
-#         return'<DogSizes %r>' % self.id
-#
-#
-# class Dogs(db.Model):
-#     __tablename__ = "Dogs"
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(256), nullable=False)
-#     age = db.Column(db.Integer, nullable=False)
-#     size = db.Column(db.Integer, db.ForeignKey(DogSizes.id), nullable=False)
-#     petOwner = db.Column(db.Integer,
-#                          db.ForeignKey(PetOwners.id), nullable=False)
-#     service = db.relationship('Services')
-#
-#     def __repr__(self):
-#         return '<Dogs %r>' % self.id
-#
-#
-# class ServiceTypes(db.Model):
-#     __tablename__ = "ServiceTypes"
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(256), nullable=False)
-#     service = db.relationship('Services')
-#
-#     def __repr__(self):
-#         return '<ServiceTypes %r>' % self.id
-#
-#
-# class FrequencyOfServices(db.Model):
-#     __tablename__ = "FrequencyOfServices"
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(256), nullable=False)
-#     service = db.relationship('Services')
-#
-#     def __repr__(self):
-#         return '<FrequencyOfServices %r>' % self.id
-#
-#
-# class Certifications(db.Model):
-#     __tablename__ = "Certifications"
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(256), nullable=False)
-#     date = db.Column(db.DateTime, nullable=False)
-#
-#     def __repr__(self):
-#         return '<Certifications %r>' % self.id
-#
-#
-# class Vaccines(db.Model):
-#     __tablename__ = "Vaccines"
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(256), nullable=False)
-#     date = db.Column(db.DateTime, nullable=False)
-#
-#     def __repr__(self):
-#         return '<Vaccines %r>' % self.id
-#
-#
-# class Services(db.Model):
-#     __tablename__ = "Services"
-#     id = db.Column(db.Integer, primary_key=True)
-#     startDate = db.Column(db.DateTime, nullable=False)
-#     time = db.Column(db.DateTime, nullable=False)
-#     endDate = db.Column(db.DateTime, nullable=False)
-#     serviceType = db.Column(db.Integer,
-#                             db.ForeignKey(ServiceTypes.id),
-#                             nullable=False)
-#     frequency = db.Column(db.Integer,
-#                           db.ForeignKey(FrequencyOfServices.id),
-#                           nullable=False)
-#     sitter = db.Column(db.Integer,
-#                        db.ForeignKey(Sitters.id),
-#                        nullable=False)
-#     dog = db.Column(db.Integer,
-#                     db.ForeignKey(Dogs.id),
-#                     nullable=False)
-#     # Pet owner will be fetched from Dog id but this is used for HTML testing
-#     owner = db.Column(db.Integer, nullable=False)
-#
-#     def __repr__(self):
-#         return '<Services %r>' % self.id
-
-
 # Add task
 @app.route('/testdb', methods=['GET', 'POST'])
 def testdb():
@@ -165,6 +31,86 @@ def create_tables():
     PRIMARY KEY(`id`)   
 )ENGINE=INNODB;
 ''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS FrequencyOfServices ( 
+    `id` INT(11) AUTO_INCREMENT,
+    `name` VARCHAR(256) NOT NULL,
+    PRIMARY KEY(`id`)   
+)ENGINE=INNODB;
+''')
+
+    cur.execute('''CREATE TABLE IF NOT EXISTS Certifications ( 
+    `id` INT(11) AUTO_INCREMENT,
+    `name` VARCHAR(256) NOT NULL,
+    PRIMARY KEY(`id`)     
+)ENGINE=INNODB;
+''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS Vaccines ( 
+    `id` INT(11) AUTO_INCREMENT,
+    `name` VARCHAR(256) NOT NULL,
+    PRIMARY KEY(`id`) 
+)ENGINE=INNODB;
+''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS DogSizes( 
+    `id` INT(11) AUTO_INCREMENT,
+    `name` VARCHAR(256) NOT NULL,
+    PRIMARY KEY(`id`)    
+)ENGINE=INNODB;
+     ''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS PetOwners( 
+    `id` INT(11) AUTO_INCREMENT,
+    `firstName` VARCHAR(256) NOT NULL,
+    `lastName` VARCHAR(255)  NOT NULL ,
+    `phoneNumber` BIGINT(10) NOT NULL,
+    `streetAddress` VARCHAR(256) NOT NULL,
+    `city` VARCHAR(128) NOT NULL,
+    `state` VARCHAR(2) NOT NULL,
+    `zipCode` INT(5) NOT NULL,
+    `email` VARCHAR(256) NOT NULL,
+    `password` VARCHAR(256) NOT NULL,    
+    PRIMARY KEY(`id`)       
+) ENGINE=INNODB;
+''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS Sitters ( 
+    `id` INT(11) AUTO_INCREMENT,
+    `firstName` VARCHAR(256) NOT NULL,
+    `lastName` VARCHAR(255)  NOT NULL ,
+    `phoneNumber` BIGINT(10) NOT NULL,
+    `streetAddress` VARCHAR(256) NOT NULL,
+    `city` VARCHAR(128) NOT NULL,
+    `state` VARCHAR(2) NOT NULL,
+    `zipCode` INT(5) NOT NULL,
+    `email` VARCHAR(256) NOT NULL,
+    `password` VARCHAR(256) NOT NULL,    
+    PRIMARY KEY(`id`)     
+)ENGINE=INNODB;
+''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS Dogs ( 
+    `id` INT(11) AUTO_INCREMENT,
+    `name` VARCHAR(256) NOT NULL,
+    `age` INT(2) NOT NULL,
+    `dogSizesId` INT,
+    `petOwnersId` INT NOT NULL, 
+    PRIMARY KEY(`id`),
+    CONSTRAINT dogs_ibfk_1 FOREIGN KEY (dogSizesId) REFERENCES DogSizes(id),
+	 CONSTRAINT dogs_ibfk_2 FOREIGN KEY (petOwnersId) REFERENCES PetOwners(id)    
+)ENGINE=INNODB;
+''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS Services ( 
+    `id` INT(11) AUTO_INCREMENT,
+	 `startDate` DATETIME NOT NULL,
+	 `endDate` DATETIME NOT NULL,
+	 `serviceTypesId` INT NOT NULL,
+	 `frequencyOfServicesId` INT NOT NULL,
+	 `sittersId` INT,
+	 `dogsId` INT NOT NULL,
+	 PRIMARY KEY(`id`), 
+    CONSTRAINT services_ibfk_1 FOREIGN KEY (serviceTypesId) REFERENCES ServiceTypes(id),
+	 CONSTRAINT services_ibfk_2 FOREIGN KEY (frequencyOfServicesId) REFERENCES FrequencyOfServices(id),
+	 CONSTRAINT services_ibfk_3 FOREIGN KEY (sittersId) REFERENCES Sitters(id),
+	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id)    
+)ENGINE=INNODB;
+''')
+
     return 'created tables'
 
 
