@@ -4,7 +4,8 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 # DB login info to connect to pythonanywhere db
-app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
+# app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
+app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
 app.config['MYSQL_USER'] = 'dogsdream'
 app.config['MYSQL_PASSWORD'] = 'group3osu'
 app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
@@ -24,7 +25,8 @@ def testdb():
 
 @app.route('/createtables', methods=['GET', 'POST'])
 def create_tables():
-    cur = mysql.connection.cursor()
+    connection = mysql.connection
+    cur = connection.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS ServiceTypes ( 
     `id` INT(11) AUTO_INCREMENT,
     `name` VARCHAR(256) NOT NULL,
@@ -111,8 +113,79 @@ def create_tables():
 )ENGINE=INNODB;
 ''')
 
-    return 'created tables'
+    try:
+        cur.execute('''INSERT INTO DogSizes (`name`)
+VALUES
+('Very Small <10lbs'),
+('Small 11-20lbs'),
+('Medium 21-49lbs'),
+('Large 50-84lbs'),
+('Very Large >85lbs');''')
+        cur.execute('''INSERT INTO ServiceTypes (`name`)
+VALUES
+('Walk'),
+('Watch'),
+('Groom'),
+('Train');''')
 
+        cur.execute('''INSERT INTO FrequencyOfServices(`name`)
+        VALUES
+        ('Once'),
+        ('Daily'),
+        ('Weekly'),
+        ('Bi-Weekly'),
+        ('Monthly'),
+        ('Yearly');''')
+
+        cur.execute('''INSERT INTO Certifications(`name`)
+        VALUES
+        ('Dog Groomer'),
+        ('Pro Walker'),
+        ('Dog Watcher'),
+        ('Pro Trainer');''')
+
+        cur.execute('''INSERT INTO Vaccines(`name`)
+        VALUES
+        ('Rabies'),
+        ('Parvo'),
+        ('Distemper'),
+        ('Hepatitis');''')
+
+        cur.execute('''INSERT INTO PetOwners(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode, email, `password`)
+        VALUES
+        ('John', 'Doe', '5411111111', '123 SE Woof Ln', 'Amarillo', 'TX', '25172', 'dog@dog.com', 'woofwoof'),
+        ('Mary', 'Ellis', '5031111111', '123 SE Bark Ln', 'Lexington', 'KY', '23029', 'meow@dog.com', 'barkwoof'),
+        ('Xavier', 'Brown', '5981111111', '123 SE Growl Ln', 'Corvallis', 'OR', '97333', 'dream@dog.com', 'woofbark');''')
+
+        cur.execute('''INSERT INTO Sitters(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode, email, `password`)
+        VALUES
+        ('Joe', 'Douglas', '1111111111', '123 SE Bitey Ln', 'Amarillo', 'TX', '25172', 'dog@dog.com', 'woofwoof'),
+        ('Jeff', 'Duncan', '1231111111', '123 SE Yippie Ln', 'Lexington', 'KY', '23029', 'meow@dog.com', 'barkwoof'),
+        ('Marisa', 'Hunter', '4561111111', '456 SE Growl Ln', 'Corvallis', 'OR', '97333', 'dream@dog.com', 'woofbark');''')
+
+        cur.execute('''INSERT INTO Dogs(`name`, age, dogSizesId, petOwnersId)
+        VALUES
+        ('Fluffy', '3', '2', '1'),
+        ('Scooby', '10', '4', '1'),
+        ('Scrappy', '2', '3', '1'),
+        ('Molly', '3', '2', '2'),
+        ('Brandi', '6', '4', '2'),
+        ('Koda', '11', '5', '3'),
+        ('Arya', '8', '2', '2'),
+        ('Tank', '4', '5', '3');''')
+
+        cur.execute('''INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId)
+        VALUES
+        ('2020/1/11', '2020/1/12', '1', '1', '1', '1'),
+        ('2020/2/15', '2020/3/15', '2', '4', '1', '5'),
+        ('2020/3/20', '2020/3/20', '3', '3', '3', '3'),
+        ('2020/4/11', '2020/4/11', '1', '1', '2', '2'),
+        ('2020/6/11', '2020/6/11', '4', '2', '2', '4');''')
+        connection.commit()
+        return 'Initialized tables'
+    except Exception as e:
+        print("Problem inserting into db: " + str(e))
+        return 'Failed to init'
 
 @app.route('/')
 def index():
