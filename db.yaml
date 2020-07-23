@@ -1,0 +1,4 @@
+mysql_user: 'dogsdream'
+mysql_password: 'group3osu'
+mysql_host: 'dogsdream.mysql.pythonanywhere-services.com'
+mysql_db:  'dogsdream$dogsdream'

@@ -1,30 +1,40 @@
 {% extends 'base.html' %}
 {% block content  %}
-<h1>Dogs Data Base - view for administrator </h1>
-
-<table border="1px solid black">
+<div class="container-fluid">
+        <h1 class="mt-4">Dogs Table</h1>
+<table class="table">
+  <thead>
     <tr>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Dog Size</th>
-        <th>Pet Owner</th>
-        <th>Action</th>
+        <th scope="col">Name</th>
+        <th scope="col">Age</th>
+        <th scope="col">Dog Size</th>
+        <th scope="col">Pet Owner</th>
+        <th scope="col">Action</th>
     </tr>
+  </thead>
+  <tbody>
     <tr>
         <td>Bark</td>
         <td>2</td>
         <td>small</td>
         <td>Anna Smith</td>
-        <td><button type="update">Update</button><button type="button">Delete</button></td>
+        <td>
+            <a href="/dogs/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/dogs/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
-<tr>
+    <tr>
         <td>Bone</td>
         <td>0</td>
         <td>big</td>
         <td>Anna Smith</td>
-    <td><button type="update">Update</button><button type="button">Delete</button></td>
+        <td>
+            <a href="/dogs/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/dogs/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
     </tr>
+  </tbody>
 </table>
-    <button type="add"><a href="">Add new dog</a></button>
-
+    <a href="/owner/add_dogs"><button type="button" class="btn btn-primary">Add Dog</button></a>
+</div>
 {% endblock %}

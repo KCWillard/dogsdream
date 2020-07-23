@@ -1,36 +1,145 @@
 {% extends 'base.html' %}
-{% block content  %}
-<h1>Services Data Base - view for administrator </h1>
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="mt-4">Services</h1>
+        <h3> Unassigned Services </h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <td scope="col">Start Date</td>
+                <td scope="col">End Date</td>
+                <td scope="col">Service Type</td>
+                <td scope="col">Dog</td>
+                <td scope="col">Frequency</td>
+                <td scope="col">Sitter</td>
+                <td scope="col">Action</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2020-01-01</td>
+                <td>2020-01-02</td>
+                <td>Walk</td>
+                <td>Sam</td>
+                <td>weekly</td>
+                <td>Unassigned</td>
+                <td>
+                    <a href="/jobs/update">
+                        <button type="button" class="btn btn-warning btn-sm">Update</button>
+                    </a>
+                    <a href="/jobs/delete">
+                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>2020-02-02</td>
+                <td>2020-03-03</td>
+                <td>Boarding</td>
+                <td>Rodeo</td>
+                <td>weekly</td>
+                <td>Unassigned</td>
+                <td>
+                    <a href="/jobs/update">
+                        <button type="button" class="btn btn-warning btn-sm">Update</button>
+                    </a>
+                    <a href="/jobs/delete">
+                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a href="/jobs/add"><button type="button" class="btn btn-primary">Add Service</button></a>
+        <h3> Assigned Services </h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <td scope="col">Start Date</td>
+                <td scope="col">End Date</td>
+                <td scope="col">Service Type</td>
+                <td scope="col">Dog</td>
+                <td scope="col">Frequency</td>
+                <td scope="col">Sitter</td>
+                <td scope="col">Action</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2020-01-01</td>
+                <td>2020-01-02</td>
+                <td>Walk</td>
+                <td>Sam</td>
+                <td>weekly</td>
+                <td>Sanders</td>
+                <td>
+                    <a href="/jobs/update">
+                        <button type="button" class="btn btn-warning btn-sm">Update</button>
+                    </a>
+                    <a href="/jobs/delete">
+                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>2020-02-02</td>
+                <td>2020-03-03</td>
+                <td>Boarding</td>
+                <td>Rodeo</td>
+                <td>weekly</td>
+                <td>Billy</td>
+                <td>
+                    <a href="/jobs/update">
+                        <button type="button" class="btn btn-warning btn-sm">Update</button>
+                    </a>
+                    <a href="/jobs/delete">
+                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-<table border="1px solid black">
-    <tr>
-        <td>Start Date</td>
-        <td>End Date</td>
-        <td>Service Type</td>
-        <td>Dog</td>
-        <td>Frequency</td>
-        <td>Sitter</td>
-        <td>Action</td>
-    </tr>
-    <tr>
-        <td>2020-01-01</td>
-        <td>2020-01-02</td>
-        <td>Walk</td>
-        <td>Sam</td>
-        <td>weekly</td>
-        <td>Anna Smith</td>
-        <td><button type="update">Update</button><button type="button">Delete</button></td>
-    </tr>
-<<tr>
-        <td>2020-01-01</td>
-        <td>2020-01-02</td>
-        <td>Walk</td>
-        <td>Sam</td>
-        <td>weekly</td>
-        <td>NULL</td>
-        <td><button type="update">Update</button><button type="button">Delete</button></td>
-    </tr>
-</table>
-    <button type="add"><a href=""></a>Add new Service</button>
+            <hr/>
+            <h3> Filter Services </h3>
+            <form action='#' method='POST'>
+                <input type="date" id='date' placeholder='Pick a date'>
+                <a href="/jobs/filter">
+                    <button type="button" class="btn btn-primary btn-sm">Filter</button>
+                </a>
 
+            </form>
+            <h5>List of services filtered by date </h5>
+            <table class="table">
+                <thead>
+                <tr>
+                    <td scope="col">Start Date</td>
+                    <td scope="col">End Date</td>
+                    <td scope="col">Service Type</td>
+                    <td scope="col">Dog</td>
+                    <td scope="col">Frequency</td>
+                    <td scope="col">Sitter</td>
+                    <td scope="col">Action</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>2020-01-01</td>
+                    <td>2020-01-02</td>
+                    <td>Walk</td>
+                    <td>Sam</td>
+                    <td>weekly</td>
+                    <td>Anna Smith</td>
+                    <td>
+                        <a href="/jobs/update">
+                            <button type="button" class="btn btn-warning btn-sm">Update</button>
+                        </a>
+                        <a href="/jobs/delete">
+                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    </div>
 {% endblock %}

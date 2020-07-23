@@ -1,24 +1,29 @@
 {% extends 'base.html' %}
-
-
-{% block content %}
-<h1>Dog's Dream!</h1>
-
-<form action='/owner/add-dog'method='POST'>
-    <div class='form-group'>
-        <input type="text" class='form-control' id='name' name='name' maxlength='256' placeholder='Name'>
-    </div>
-    <div class='form-group'>
-        <input type="number" class='form-control' id='age' name='age' maxlength='2' placeholder='Age'>
-    </div>
-    <select id='size' class='custom-select' name='size' placeholder='Size'>
-        <option value='1'>Very Small(&lt; 10lbs)</option>
-        <option value='2'>Small(11-20lbs)</option>
-        <option value='3'>Medium(21-50lbs)</option>
-        <option value='4'>Large(51-80lbs)</option>
-        <option value='5'>Extra Large(81+lbs)</option>
-    </select>
+{% block content  %}
+<h1>Dog</h1>
+<form>
+<table border="1px solid black">
+    <tr>
+        <th>Name</th>
+        <td><input type="text" value="Place Holder"></td>
+    </tr>
+     <tr>
+        <th>Age</th>
+        <td><input type="text" value="Place Holder"></td>
+    </tr>
+     <tr>
+        <th>Dog Size</th>
+        <td><input type="text" value="Place Holder"></td>
+    </tr>
+     <tr>
+        <th>Pet Owner</th>
+        <td><input type="text" value="Place Holder"></td>
+    </tr>
+</table>
+            <a href="/owner/add_dogs"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
     <br>
-    <input type='submit' value='Submit'>
+
+
 </form>
+
 {% endblock %}
