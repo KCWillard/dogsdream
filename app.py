@@ -11,14 +11,14 @@ app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
 
 mysql = MySQL(app)
 Bootstrap(app)
+
+
 # app.config['SQLALCHEMY_DATABASE_URI'] =\
 #     'mysql://{}:{}@{}:{}/{}'.\
 #     format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
 # app.config["DEBUG"] = True
 # app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-
 
 
 # # initialize migrate object to allow for easily updating dbs with models
@@ -156,6 +156,18 @@ def testdb():
     return str(rv)
 
 
+@app.route('/createtables', methods=['GET', 'POST'])
+def create_tables():
+    cur = mysql.connection.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS ServiceTypes ( 
+    `id` INT(11) AUTO_INCREMENT,
+    `name` VARCHAR(256) NOT NULL,
+    PRIMARY KEY(`id`)   
+)ENGINE=INNODB;
+''')
+    return 'created tables'
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -165,9 +177,11 @@ def index():
 def about():
     return render_template('about.html')
 
+
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
 
 # @app.route('/testdb')
 # def testdb():
@@ -182,7 +196,7 @@ def login():
     error = None
     if request.method == 'POST':
         if request.form['username'] == 'admin@admin.com' and \
-           request.form['password'] == 'admin':
+                request.form['password'] == 'admin':
             return redirect(url_for('administrator'))
         # else:
         #     if request.form['username'] == 'sitter' and \
@@ -197,6 +211,7 @@ def login():
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
     return render_template('administrator/add_user.html')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -225,7 +240,7 @@ def owner_profile():
     #                    password='******',
     #                    dogs=[Dogs(name='Arya'), Dogs(name='Fluffy')])
     #
-        return render_template('administrator/all_owners.html')
+    return render_template('administrator/all_owners.html')
 
 
 # @app.route('/owner/view_appointments', methods=['POST', 'GET'])
@@ -259,7 +274,7 @@ def view_dogs():
     #               age='3', size='Very Small',
     #               petOwner='KC')
     # dogs = [arya, fluffy]
-            
+
     return render_template('owner/view_dogs.html')
 
 
@@ -267,22 +282,26 @@ def view_dogs():
 def owner_update():
     return render_template('owner/profile_update.html')
 
+
 @app.route('/owner/delete', methods=['GET', 'POST'])
 def owner_delete():
     return render_template('administrator/all_owners.html')
+
 
 @app.route('/dogs/update', methods=['GET', 'POST'])
 def owner_dogs_update():
     return render_template('owner/add_dogs.html')
 
+
 @app.route('/dogs/delete', methods=['GET', 'POST'])
 def owner_dogs_delete():
     return render_template('administrator/all_dogs.html')
 
+
 @app.route('/owner/vaccines', methods=['POST', 'GET'])
 def vaccines():
-
     return render_template('owner/vaccines.html')
+
 
 @app.route('/sitter/view_jobs', methods=['GET'])
 def view_jobs():
@@ -326,10 +345,10 @@ def delete_sitter():
 def profile_update():
     return render_template('sitter/profile_update.html')
 
+
 @app.route('/owner/profile_update', methods=['POST', 'GET'])
 def profile_update2():
     return render_template('owner/profile_update.html')
-
 
 
 @app.route('/administrator/administrator', methods=['POST', 'GET'])
@@ -351,29 +370,36 @@ def full_certifications():
 def certification_delete():
     return render_template('administrator/full_certifications.html')
 
+
 @app.route('/certification/update', methods=['POST', 'GET'])
 def certification_update():
     return render_template('administrator/update_certification.html')
+
 
 @app.route('/certification/add', methods=['POST', 'GET'])
 def certification_add():
     return render_template('administrator/add_certification.html')
 
+
 @app.route('/jobs', methods=['POST', 'GET'])
 def all_jobs():
     return render_template('administrator/all_jobs.html')
+
 
 @app.route('/jobs/delete', methods=['POST', 'GET'])
 def jobs_delete():
     return render_template('administrator/all_jobs.html')
 
+
 @app.route('/jobs/update', methods=['POST', 'GET'])
 def jobs_update():
     return render_template('administrator/all_jobs.html')
 
+
 @app.route('/jobs/add', methods=['POST', 'GET'])
 def jobs_add():
     return render_template('administrator/add_service.html')
+
 
 @app.route('/jobs/filter', methods=['POST', 'GET'])
 def jobs_filter():
@@ -384,13 +410,16 @@ def jobs_filter():
 def frequency():
     return render_template('administrator/frequency.html')
 
+
 @app.route('/service_frequency/delete', methods=['POST', 'GET'])
 def frequency_delete():
     return render_template('administrator/frequency.html')
 
+
 @app.route('/service_frequency/update', methods=['POST', 'GET'])
 def frequency_update():
     return render_template('administrator/update_service_frequency.html')
+
 
 @app.route('/service_frequency/add', methods=['POST', 'GET'])
 def frequency_add():
@@ -401,13 +430,16 @@ def frequency_add():
 def types():
     return render_template('administrator/types.html')
 
+
 @app.route('/service_type/delete', methods=['POST', 'GET'])
 def service_delete():
     return render_template('administrator/types.html')
 
+
 @app.route('/service_type/update', methods=['POST', 'GET'])
 def service_update():
     return render_template('administrator/update_service_type.html')
+
 
 @app.route('/service_type/add', methods=['POST', 'GET'])
 def service_add():
@@ -418,33 +450,41 @@ def service_add():
 def dog_sizes():
     return render_template('administrator/dog_sizes.html')
 
+
 @app.route('/sizes/delete', methods=['POST', 'GET'])
 def sizes_delete():
     return render_template('administrator/dog_sizes.html')
+
 
 @app.route('/sizes/update', methods=['POST', 'GET'])
 def sizes_update():
     return render_template('administrator/update_dog_size.html')
 
+
 @app.route('/sizes/add', methods=['POST', 'GET'])
 def sizes_add():
     return render_template('administrator/add_dog_size.html')
+
 
 @app.route('/vaccines', methods=['POST', 'GET'])
 def all_vaccines():
     return render_template('administrator/all_vaccines.html')
 
+
 @app.route('/vaccines/add', methods=['POST', 'GET'])
 def add_vaccines():
     return render_template('administrator/add_vaccines.html')
+
 
 @app.route('/vaccines/delete', methods=['POST', 'GET'])
 def vaccines_delete():
     return render_template('administrator/all_vaccines.html')
 
+
 @app.route('/vaccines/update', methods=['POST', 'GET'])
 def vaccines_update():
     return render_template('administrator/update_vaccines.html')
+
 
 @app.route('/vaccines/add', methods=['POST', 'GET'])
 def vaccines_add():
@@ -454,6 +494,7 @@ def vaccines_add():
 @app.route('/administrator/all_dogs', methods=['POST', 'GET'])
 def all_dogs():
     return render_template('administrator/all_dogs.html')
+
 
 @app.route('/administrator/all_owners', methods=['POST', 'GET'])
 def all_owners():
