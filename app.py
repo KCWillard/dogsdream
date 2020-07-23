@@ -149,6 +149,17 @@ Bootstrap(app)
 #         return '<Services %r>' % self.id
 
 
+# Add task
+@app.route('/testdb', methods=['GET', 'POST'])
+def testdb():
+    # Create Cursor
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * from Persons")
+    data = cursor.fetchone()
+    return data
+
 @app.route('/')
 def index():
     return render_template('index.html')
