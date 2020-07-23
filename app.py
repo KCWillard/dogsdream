@@ -1,15 +1,13 @@
 from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
-import yaml
 
 app = Flask(__name__)
 # DB login info to connect to pythonanywhere db
-db = yaml.load(open('db.yaml'))
-app.config['MYSQL_HOST'] = db['mysql_host']
-app.config['MYSQL_USER'] = db['mysql_user']
-app.config['MYSQL_PASSWORD'] = db['mysql_password']
-app.config['MYSQL_DB'] = db['mysql_db']
+app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
+app.config['MYSQL_USER'] = 'dogsdream'
+app.config['MYSQL_PASSWORD'] = 'group3osu'
+app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
 
 mysql = MySQL(app)
 Bootstrap(app)
