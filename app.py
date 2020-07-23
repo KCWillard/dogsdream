@@ -1,34 +1,27 @@
 from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask_mysqldb import MySQL
+import yaml
 
-# DB login info to connect to pythonanywhere db
-DB_USER = 'dogsdream'
-DB_PASS = 'group3osu'
-DB_HOST = 'dogsdream.mysql.pythonanywhere-services.com'
-DB_PORT = '3306'
-DATABASE = 'dogsdream$dogsdream'
-
-# DB_USER = 'root'
-# DB_PASS = '1234'
-# DB_HOST = '127.0.0.1'
-# DB_PORT = '3306'
-# DATABASE = 'dogsdream'
-
-
-# Set up flask app to connect to db
 app = Flask(__name__)
+# DB login info to connect to pythonanywhere db
+db = yaml.load(open('db.yaml'))
+app.config['MYSQL_HOST'] = db['mysql_host']
+app.config['MYSQL_USER'] = db['mysql_user']
+app.config['MYSQL_PASSWORD'] = db['mysql_password']
+app.config['MYSQL_DB'] = db['mysql_db']
+
+mysql = MySQL(app)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'mysql://{}:{}@{}:{}/{}'.\
-    format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
-app.config["DEBUG"] = True
-app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# app.config['SQLALCHEMY_DATABASE_URI'] =\
+#     'mysql://{}:{}@{}:{}/{}'.\
+#     format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
+# app.config["DEBUG"] = True
+# app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
-# initialize database
-db = SQLAlchemy(app)
+
 
 # # initialize migrate object to allow for easily updating dbs with models
 # migrate = Migrate(app, db)
