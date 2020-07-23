@@ -12,28 +12,20 @@
         <th scope="col">Action</th>
     </tr>
   </thead>
+  {% for dog in dogs %}
   <tbody>
-    <tr>
-        <td>Bark</td>
-        <td>2</td>
-        <td>small</td>
-        <td>Anna Smith</td>
+    <tr id= {{dog.id}}>
+        <td>{{dog.name}}</td>
+        <td>{{dog.age}}</td>
+        <td>{{dog.dogSizeId}}</td>
+        <td>{{dog.petOwnersId}}</td>
         <td>
             <a href="/dogs/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/dogs/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
-    </tr>
-    <tr>
-        <td>Bone</td>
-        <td>0</td>
-        <td>big</td>
-        <td>Anna Smith</td>
-        <td>
-            <a href="/dogs/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/dogs/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
+    </tr>    
   </tbody>
+  {% endfor %}
 </table>
     <a href="/owner/add_dogs"><button type="button" class="btn btn-primary">Add Dog</button></a>
 </div>
