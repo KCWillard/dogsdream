@@ -127,9 +127,7 @@ VALUES
 ('Groom'),
 ('Train');''')
 
-        cur.execute('''INSERT
-        INTO
-        FrequencyOfServices(`name`)
+        cur.execute('''INSERT INTO FrequencyOfServices(`name`)
         VALUES
         ('Once'),
         ('Daily'),
@@ -138,43 +136,33 @@ VALUES
         ('Monthly'),
         ('Yearly');''')
 
-        cur.execute('''INSERT
-        INTO
-        Certifications(`name`)
+        cur.execute('''INSERT INTO Certifications(`name`)
         VALUES
         ('Dog Groomer'),
         ('Pro Walker'),
         ('Dog Watcher'),
         ('Pro Trainer');''')
 
-        cur.execute('''INSERT
-        INTO
-        Vaccines(`name`)
+        cur.execute('''INSERT INTO Vaccines(`name`)
         VALUES
         ('Rabies'),
         ('Parvo'),
         ('Distemper'),
         ('Hepatitis');''')
 
-        cur.execute('''INSERT
-        INTO
-        PetOwners(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode, email, `password`)
+        cur.execute('''INSERT INTO PetOwners(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode, email, `password`)
         VALUES
         ('John', 'Doe', '5411111111', '123 SE Woof Ln', 'Amarillo', 'TX', '25172', 'dog@dog.com', 'woofwoof'),
         ('Mary', 'Ellis', '5031111111', '123 SE Bark Ln', 'Lexington', 'KY', '23029', 'meow@dog.com', 'barkwoof'),
         ('Xavier', 'Brown', '5981111111', '123 SE Growl Ln', 'Corvallis', 'OR', '97333', 'dream@dog.com', 'woofbark');''')
 
-        cur.execute('''INSERT
-        INTO
-        Sitters(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode, email, `password`)
+        cur.execute('''INSERT INTO Sitters(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode, email, `password`)
         VALUES
         ('Joe', 'Douglas', '1111111111', '123 SE Bitey Ln', 'Amarillo', 'TX', '25172', 'dog@dog.com', 'woofwoof'),
         ('Jeff', 'Duncan', '1231111111', '123 SE Yippie Ln', 'Lexington', 'KY', '23029', 'meow@dog.com', 'barkwoof'),
         ('Marisa', 'Hunter', '4561111111', '456 SE Growl Ln', 'Corvallis', 'OR', '97333', 'dream@dog.com', 'woofbark');''')
 
-        cur.execute('''INSERT
-        INTO
-        Dogs(`name`, age, dogSizesId, petOwnersId)
+        cur.execute('''INSERT INTO Dogs(`name`, age, dogSizesId, petOwnersId)
         VALUES
         ('Fluffy', '3', '2', '1'),
         ('Scooby', '10', '4', '1'),
@@ -185,9 +173,7 @@ VALUES
         ('Arya', '8', '2', '2'),
         ('Tank', '4', '5', '3');''')
 
-        cur.execute('''INSERT
-        INTO
-        Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId)
+        cur.execute('''INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId)
         VALUES
         ('2020/1/11', '2020/1/12', '1', '1', '1', '1'),
         ('2020/2/15', '2020/3/15', '2', '4', '1', '5'),
