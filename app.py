@@ -151,7 +151,7 @@ Bootstrap(app)
 @app.route('/testdb', methods=['GET', 'POST'])
 def testdb():
     cur = mysql.connection.cursor()
-    cur.execute('''SELECT id FROM Persons''')
+    cur.execute('''SELECT * FROM Persons''')
     rv = cur.fetchall()
     return str(rv)
 
