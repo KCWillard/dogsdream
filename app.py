@@ -4,7 +4,8 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 # DB login info to connect to pythonanywhere db
-app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
+# app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
+app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
 app.config['MYSQL_USER'] = 'dogsdream'
 app.config['MYSQL_PASSWORD'] = 'group3osu'
 app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
