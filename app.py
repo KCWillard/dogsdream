@@ -24,7 +24,8 @@ def testdb():
 
 @app.route('/createtables', methods=['GET', 'POST'])
 def create_tables():
-    cur = mysql.connection.cursor()
+    connection = mysql.connection
+    cur = connection.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS ServiceTypes ( 
     `id` INT(11) AUTO_INCREMENT,
     `name` VARCHAR(256) NOT NULL,
@@ -110,6 +111,16 @@ def create_tables():
 	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id)    
 )ENGINE=INNODB;
 ''')
+    cur.execute('''INSERT INTO DogSizes (`name`)
+VALUES
+('Very Small <10lbs'),
+('Small 11-20lbs'),
+('Medium 21-49lbs'),
+('Large 50-84lbs'),
+('Very Large >85lbs');''')
+    connection.commit()
+
+
 
     return 'created tables'
 
