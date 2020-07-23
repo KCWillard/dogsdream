@@ -111,19 +111,20 @@ def create_tables():
 	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id)    
 )ENGINE=INNODB;
 ''')
-    cur.execute('''INSERT INTO DogSizes (`name`)
+
+    try:
+        cur.execute('''INSERT INTO DogSizes (`name`)
 VALUES
 ('Very Small <10lbs'),
 ('Small 11-20lbs'),
 ('Medium 21-49lbs'),
 ('Large 50-84lbs'),
 ('Very Large >85lbs');''')
-    connection.commit()
-
-
-
-    return 'created tables'
-
+        connection.commit()
+        return 'Initialized tables'
+    except Exception as e:
+        print("Problem inserting into db: " + str(e))
+        return False
 
 @app.route('/')
 def index():
