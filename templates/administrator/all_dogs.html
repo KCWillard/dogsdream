@@ -9,16 +9,30 @@
         <th scope="col">Age</th>
         <th scope="col">Dog Size</th>
         <th scope="col">Pet Owner</th>
+        <th scope="col">Vaccines</th>
         <th scope="col">Action</th>
     </tr>
   </thead>
   {% for dog in dogs %}
   <tbody>
-    <tr id= {{dog.id}}>
-        <td>{{dog.name}}</td>
-        <td>{{dog.age}}</td>
-        <td>{{dog.dogSizeId}}</td>
-        <td>{{dog.petOwnersId}}</td>
+    <tr>
+        <td>Bark</td>
+        <td>2</td>
+        <td>small</td>
+        <td>Anna Smith</td>
+        <td><a href="../owner/vaccines">Vaccines</a></td>
+        <td>
+            <a href="/dogs/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/dogs/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        </td>
+    </tr>
+    <tr>
+        <td>Bone</td>
+        <td>0</td>
+        <td>big</td>
+        <td>Anna Smith</td>
+        <td><a href="../owner/vaccines">Vaccines</a></td>
+
         <td>
             <a href="/dogs/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/dogs/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
