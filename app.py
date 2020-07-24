@@ -112,6 +112,21 @@ def create_tables():
 	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id)    
 )ENGINE=INNODB;
 ''')
+    cur.execute('''CREATE TABLE IF NOT EXISTS Sitters_Certifications (
+    `sitterID` INT(11) NOT NULL,
+    `certificationID` INT(11) NOT NULL,
+    PRIMARY KEY(`sitterID`,`certificationID`),
+    FOREIGN KEY fk_sitters(`sitterID`) REFERENCES Sitters(`id`) ON DELETE CASCADE,
+    FOREIGN KEY fk_certification(`certificationID`) REFERENCES Certifications(`id`) ON DELETE CASCADE
+)ENGINE=INNODB;''')
+
+    cur.execute('''CREATE TABLE IF NOT EXISTS Dogs_Vaccines (
+        `dogID` INT(11) NOT NULL,
+        `vaccineID` INT(11) NOT NULL,
+        PRIMARY KEY(`dogID`,`vaccineID`),
+        FOREIGN KEY fk_dogs(`dogID`) REFERENCES Dogs(`id`) ON DELETE CASCADE,
+        FOREIGN KEY fk_vaccines(`vaccineID`) REFERENCES Vaccines(`id`) ON DELETE CASCADE
+    )ENGINE=INNODB;''')
 
     try:
         cur.execute('''INSERT INTO DogSizes (`name`)
