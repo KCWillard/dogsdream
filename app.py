@@ -527,7 +527,23 @@ def vaccines_add():
 
 @app.route('/administrator/all_dogs', methods=['POST', 'GET'])
 def all_dogs():
-    return render_template('administrator/all_dogs.html')
+    conn = None
+    cur = None
+    """"try:"""
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName FROM Dogs\
+           INNER JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
+           INNER JOIN PetOwners on Dogs.petOwnersId=PetOwners.id\
+           ORDER BY Dogs.petOwnersId"
+    cur.execute(sql)
+    dogs = cur.fetchall()
+    return render_template('administrator/all_dogs.html', dogs=dogs)
+"""     except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+        conn.close() """
 
 
 @app.route('/administrator/all_owners', methods=['POST', 'GET'])
