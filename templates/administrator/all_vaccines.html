@@ -9,22 +9,17 @@
         <th scope="col">Action</th>
     </tr>
   </thead>
+  {% for vaccine in vaccines %}
   <tbody>
     <tr>
-        <td>Vaccines 1</td>
-        <td>
-            <a href="/vaccines/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/vaccines/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-    <tr>
-        <td>Vaccines 2</td>
+        <td>{{vaccine.0}}</td>
         <td>
             <a href="/vaccines/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/vaccines/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
     </tr>
   </tbody>
+  {% endfor %}
 </table>
     <a href="/vaccines/add"><button type="button" class="btn btn-primary">Add Vaccine</button></a>
 </div>

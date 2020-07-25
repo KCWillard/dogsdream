@@ -9,29 +9,16 @@
         <th scope="col">Action</th>
     </tr>
   </thead>
+  {% for type in types %}
   <tbody>
     <tr>
-        <td>Walking</td>
+        <td>{{type.0}}</td>
         <td>
             <a href="/service_type/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/service_type/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
-    </tr>
-    <tr>
-        <td>Boarding</td>
-        <td>
-            <a href="/service_type/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/service_type/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-    <tr>
-        <td>Day Care</td>
-        <td>
-            <a href="/service_type/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/service_type/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
   </tbody>
+  {% endfor %}
 </table>
         <a href="/service_type/add"><button type="button" class="btn btn-primary">Add Service Type</button></a>
 </div>

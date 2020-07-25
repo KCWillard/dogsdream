@@ -9,29 +9,17 @@
         <th scope="col">Action</th>
     </tr>
   </thead>
+  {% for size in sizes %}
   <tbody>
     <tr>
-        <td>Small</td>
-        <td>
-            <a href="/sizes/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/sizes/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-    <tr>
-        <td>Medium</td>
-        <td>
-            <a href="/sizes/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/sizes/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-    <tr>
-        <td>Big</td>
+        <td>{{size.0}}</td>
         <td>
             <a href="/sizes/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/sizes/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
     </tr>
   </tbody>
+  {% endfor %}
 </table>
     <a href="/sizes/add"><button type="button" class="btn btn-primary">Add Dog Size</button></a>
 </div>
