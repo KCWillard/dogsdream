@@ -22,6 +22,25 @@ def testdb():
     rv = cur.fetchall()
     return str(rv)
 
+@app.route('/deletealltables', methods=['GET', 'POST'])
+def delete_all_tables():
+    connection = mysql.connection
+    cur = connection.cursor()
+    cur.execute('''DROP TABLE IF EXISTS Dogs_Vaccines;''')
+    cur.execute('''DROP TABLE IF EXISTS Services;''')
+    cur.execute('''DROP TABLE IF EXISTS Dogs;''')
+    cur.execute('''DROP TABLE IF EXISTS PetOwners;''')
+
+    cur.execute('''DROP TABLE IF EXISTS Sitters_Certifications;''')
+    cur.execute('''DROP TABLE IF EXISTS Certifications;''')
+    cur.execute('''DROP TABLE IF EXISTS Sitters;''')
+
+    cur.execute('''DROP TABLE IF EXISTS ServiceTypes;''')
+    cur.execute('''DROP TABLE IF EXISTS FrequencyOfServices;''')
+
+    cur.execute('''DROP TABLE IF EXISTS Vaccines;''')
+    cur.execute('''DROP TABLE IF EXISTS DogSizes;''')
+    return "Deleted all tables"
 
 @app.route('/createtables', methods=['GET', 'POST'])
 def create_tables():
@@ -109,7 +128,8 @@ def create_tables():
     CONSTRAINT services_ibfk_1 FOREIGN KEY (serviceTypesId) REFERENCES ServiceTypes(id),
 	 CONSTRAINT services_ibfk_2 FOREIGN KEY (frequencyOfServicesId) REFERENCES FrequencyOfServices(id),
 	 CONSTRAINT services_ibfk_3 FOREIGN KEY (sittersId) REFERENCES Sitters(id),
-	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id)    
+	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id),
+	 CONSTRAINT chk_date CHECK(endDate >= startDate)   
 )ENGINE=INNODB;
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Sitters_Certifications (
@@ -197,10 +217,10 @@ VALUES
         ('2020/4/11', '2020/4/11', '1', '1', '2', '2'),
         ('2020/6/11', '2020/6/11', '4', '2', '2', '4');''')
         connection.commit()
-        return 'Initialized tables'
+        return 'Initialized all tables'
     except Exception as e:
         print("Problem inserting into db: " + str(e))
-        return 'Failed to init'
+        return 'Failed to initialize all tables'
 
 @app.route('/')
 def index():
