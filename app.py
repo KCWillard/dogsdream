@@ -494,8 +494,8 @@ def all_jobs():
            INNER JOIN Dogs on Services.dogsId=Dogs.id\
            INNER JOIN FrequencyOfServices on \
            Services.frequencyOfServicesId=FrequencyOfServices.id\
-           INNER JOIN Sitters on Services.sittersId=Sitters.id\
-           ORDER BY Services.sittersId"
+           LEFT JOIN Sitters on Services.sittersId=Sitters.id\
+           ORDER BY Services.startDate"
     cur.execute(sql)
     jobs = cur.fetchall()
     return render_template('administrator/all_jobs.html', jobs=jobs)
@@ -518,9 +518,46 @@ def jobs_add():
     return render_template('administrator/add_service.html')
 
 
-@app.route('/jobs/filter', methods=['POST', 'GET'])
+@app.route('/filter', methods=['POST', 'GET'])
 def jobs_filter():
-    return render_template('administrator/all_jobs.html')
+    return render_template('administrator/filter.html')
+
+@app.route('/jobs/assigned', methods=['POST', 'GET'])
+def jobs_assigned():
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
+               FrequencyOfServices.name,Sitters.firstName FROM Services\
+               INNER JOIN Servicetypes on Services.serviceTypesId=ServiceTypes.id\
+               INNER JOIN Dogs on Services.dogsId=Dogs.id\
+               INNER JOIN FrequencyOfServices on \
+               Services.frequencyOfServicesId=FrequencyOfServices.id\
+                JOIN Sitters on Services.sittersId=Sitters.id\
+               ORDER BY Services.startDate"
+    cur.execute(sql)
+    jobs = cur.fetchall()
+    return render_template('administrator/assigned_services.html',jobs=jobs)
+
+@app.route('/jobs/unassigned', methods=['POST', 'GET'])
+def jobs_unassigned():
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
+               FrequencyOfServices.name FROM Services\
+               INNER JOIN Servicetypes on Services.serviceTypesId=ServiceTypes.id\
+               INNER JOIN Dogs on Services.dogsId=Dogs.id\
+               INNER JOIN FrequencyOfServices on \
+               Services.frequencyOfServicesId=FrequencyOfServices.id\
+                WHERE sittersID IS NULL\
+               ORDER BY Services.startDate"
+    cur.execute(sql)
+    jobs = cur.fetchall()
+    return render_template('administrator/unassigned_services.html',jobs=jobs)
+
 
 
 @app.route('/administrator/frequency', methods=['POST', 'GET'])
