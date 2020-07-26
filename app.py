@@ -4,29 +4,29 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 # DB login info to connect to pythonanywhere db
-# app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
-# app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
-# app.config['MYSQL_USER'] = 'dogsdream'
-# app.config['MYSQL_PASSWORD'] = 'group3osu'
-# app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
+app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
+app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
+app.config['MYSQL_USER'] = 'dogsdream'
+app.config['MYSQL_PASSWORD'] = 'group3osu'
+app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
 
 # OSU
-app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu' #for Gosia local db
-app.config['MYSQL_USER'] = 'cs340_sklarekm'
-app.config['MYSQL_PASSWORD'] = 'YAuCrJDuUCfrS6Q4'
-app.config['MYSQL_DB'] = 'cs340_sklarekm'
+# app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu' #for Gosia local db
+# app.config['MYSQL_USER'] = 'cs340_sklarekm'
+# app.config['MYSQL_PASSWORD'] = 'YAuCrJDuUCfrS6Q4'
+# app.config['MYSQL_DB'] = 'cs340_sklarekm'
 
 mysql = MySQL(app)
 Bootstrap(app)
 
 
 # Add task
-@app.route('/testdb', methods=['GET', 'POST'])
-def testdb():
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM Persons''')
-    rv = cur.fetchall()
-    return str(rv)
+# @app.route('/testdb', methods=['GET', 'POST'])
+# def testdb():
+#     cur = mysql.connection.cursor()
+#     cur.execute('''SELECT * FROM Persons''')
+#     rv = cur.fetchall()
+#     return str(rv)
 
 @app.route('/deletealltables', methods=['GET', 'POST'])
 def delete_all_tables():
@@ -501,6 +501,7 @@ def all_jobs():
     return render_template('administrator/all_jobs.html', jobs=jobs)
 
 
+
 @app.route('/jobs/delete', methods=['POST', 'GET'])
 def jobs_delete():
     return render_template('administrator/all_jobs.html')
@@ -513,6 +514,7 @@ def jobs_update():
 
 @app.route('/jobs/add', methods=['POST', 'GET'])
 def jobs_add():
+
     return render_template('administrator/add_service.html')
 
 
@@ -669,7 +671,6 @@ def all_dogs():
     cur.execute(sql)
     dogs = cur.fetchall()
     return render_template('administrator/all_dogs.html', dogs=dogs)
-
 
 
 @app.route('/administrator/all_owners', methods=['POST', 'GET'])
