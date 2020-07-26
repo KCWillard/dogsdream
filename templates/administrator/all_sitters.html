@@ -7,44 +7,29 @@
     <tr>
         <th scope="col">Name</th>
         <th scope="col">Last Name</th>
-        <th scope="col">Phone number</th>
+        <th scope="col">Phone Number</th>
         <th scope="col">Street Address</th>
         <th scope="col">City</th>
         <th scope="col">State</th>
         <th scope="col">Zip Code</th>
-        <th scope="col">email</th>
-        <th scope="col">password</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">Password</th>
         <th scope="col">Certification</th>
         <th scope="col">Action</th>
     </tr>
   </thead>
+  {% for sitter in sitters %}
   <tbody>
     <tr>
-<td>Anna</td>
-        <td>Smith</td>
-        <td>12345676</td>
-        <td>Lamp 34</td>
-        <td>San Jose</td>
-        <td>CA</td>
-        <td>12345</td>
-        <td>anna@smith.com</td>
-        <td>annasmith</td>
-        <td><a href="../sitter/certifications">Certifications</a></td>
-        <td>
-            <a href="/sitter/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/sitter/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-    <tr>
-<td>Anna</td>
-        <td>Smith</td>
-        <td>12345676</td>
-        <td>Lamp 34</td>
-        <td>San Jose</td>
-        <td>CA</td>
-        <td>12345</td>
-        <td>anna@smith.com</td>
-        <td>annasmith</td>
+      <td>{{sitter.0}}</td>
+      <td>{{sitter.1}}</td>
+      <td>{{sitter.2}}</td>
+      <td>{{sitter.3}}</td>
+      <td>{{sitter.4}}</td>
+      <td>{{sitter.5}}</td>
+      <td>{{sitter.6}}</td>
+      <td>{{sitter.7}}</td>
+      <td>{{sitter.8}}</td>
         <td><a href="../sitter/certifications">Certifications</a></td>
         <td>
             <a href="/sitter/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
@@ -52,6 +37,7 @@
         </td>
     </tr>
   </tbody>
+  {% endfor %}
 </table>
     <a href="/add_user"><button type="button" class="btn btn-primary">Add Sitter</button></a>
 </div>

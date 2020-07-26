@@ -64,30 +64,15 @@
                 <td scope="col">Action</td>
             </tr>
             </thead>
+            {% for job in jobs %}
             <tbody>
             <tr>
-                <td>2020-01-01</td>
-                <td>2020-01-02</td>
-                <td>Walk</td>
-                <td>Sam</td>
-                <td>weekly</td>
-                <td>Sanders</td>
-                <td>
-                    <a href="/jobs/update">
-                        <button type="button" class="btn btn-warning btn-sm">Update</button>
-                    </a>
-                    <a href="/jobs/delete">
-                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>2020-02-02</td>
-                <td>2020-03-03</td>
-                <td>Boarding</td>
-                <td>Rodeo</td>
-                <td>weekly</td>
-                <td>Billy</td>
+                <td>{{job.0}}</td>
+                <td>{{job.1}}</td>
+                <td>{{job.2}}</td>
+                <td>{{job.3}}</td>
+                <td>{{job.4}}</td>
+                <td>{{job.5}}</td>
                 <td>
                     <a href="/jobs/update">
                         <button type="button" class="btn btn-warning btn-sm">Update</button>
@@ -98,6 +83,7 @@
                 </td>
             </tr>
             </tbody>
+            {% endfor %}
         </table>
 
             <hr/>

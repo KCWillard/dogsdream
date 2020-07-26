@@ -7,48 +7,35 @@
     <tr>
         <th scope="col">Name</th>
         <th scope="col">Last Name</th>
-        <th scope="col">Phone number</th>
+        <th scope="col">Phone Number</th>
         <th scope="col">Street Address</th>
         <th scope="col">City</th>
         <th scope="col">State</th>
         <th scope="col">Zip Code</th>
-        <th scope="col">email</th>
-        <th scope="col">password</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">Password</th>
         <th scope="col">Action</th>
     </tr>
   </thead>
+  {% for owner in owners %}
   <tbody>
     <tr>
-        <td>Bill</td>
-        <td>Smith</td>
-        <td>12345676</td>
-        <td>Lamp 34</td>
-        <td>San Jose</td>
-        <td>CA</td>
-        <td>12345</td>
-        <td>anna@smith.com</td>
-        <td>annasmith</td>
-        <td>
-            <a href="/owner/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/owner/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-    <tr>
-        <td>Anna</td>
-        <td>Smith</td>
-        <td>12345676</td>
-        <td>Lamp 34</td>
-        <td>San Jose</td>
-        <td>CA</td>
-        <td>12345</td>
-        <td>anna@smith.com</td>
-        <td>annasmith</td>
+        <td>{{owner.0}}</td>
+        <td>{{owner.1}}</td>
+        <td>{{owner.2}}</td>
+        <td>{{owner.3}}</td>
+        <td>{{owner.4}}</td>
+        <td>{{owner.5}}</td>
+        <td>{{owner.6}}</td>
+        <td>{{owner.7}}</td>
+        <td>{{owner.8}}</td>
         <td>
             <a href="/owner/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/owner/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
     </tr>
   </tbody>
+  {% endfor %}
 </table>
     <a href="/add_user"><button type="button" class="btn btn-primary">Add Owner</button></a>
 </div>
