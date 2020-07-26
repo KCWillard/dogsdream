@@ -413,8 +413,7 @@ def full_certifications():
     sql = "SELECT name FROM Certifications"
     cur.execute(sql)
     certs = cur.fetchall()
-    return render_template('administrator/all_certifications.html', certs=certs)
-    
+    return render_template('administrator/all_certifications.html', certs=certs)    
 
 
 @app.route('/certification/delete', methods=['POST', 'GET'])
