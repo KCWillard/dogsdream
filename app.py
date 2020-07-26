@@ -5,10 +5,16 @@ from flask_mysqldb import MySQL
 app = Flask(__name__)
 # DB login info to connect to pythonanywhere db
 # app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
-app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
-app.config['MYSQL_USER'] = 'dogsdream'
-app.config['MYSQL_PASSWORD'] = 'group3osu'
-app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
+# app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
+# app.config['MYSQL_USER'] = 'dogsdream'
+# app.config['MYSQL_PASSWORD'] = 'group3osu'
+# app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
+
+# OSU
+app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu' #for Gosia local db
+app.config['MYSQL_USER'] = 'cs340_sklarekm'
+app.config['MYSQL_PASSWORD'] = 'YAuCrJDuUCfrS6Q4'
+app.config['MYSQL_DB'] = 'cs340_sklarekm'
 
 mysql = MySQL(app)
 Bootstrap(app)
@@ -264,6 +270,25 @@ def login():
 
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
+    if request.method == 'POST':
+        form = request.form
+        email = form['email']
+        password = form['password']
+        firstName = form['firstName']
+        lastName = form['lastName']
+        phoneNumber = form['phoneNumber']
+        streetAddress = form['streetAddress']
+        city = form['city']
+        state = form['state']
+        zipCode = form['zipCode']
+        reg_type = form['reg_type']
+        cur = mysql.connection.cursor()
+        if reg_type == 'sitter':
+            cur.execute("INSERT INTO Sitters(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
+        else:
+            cur.execute("INSERT INTO PetOwners(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
+
+        mysql.connection.commit()
     return render_template('administrator/add_user.html')
 
 
@@ -410,14 +435,30 @@ def administrator():
     return render_template('administrator/administrator.html')
 
 
-@app.route('/sitter', methods=['POST', 'GET'])
+@app.route('/administrator/all_sitters', methods=['POST', 'GET'])
 def all_sitters():
-    return render_template('administrator/all_sitters.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT firstName,lastName,phoneNumber,streetAddress,city,state,\
+           zipCode,email,password FROM Sitters"
+    cur.execute(sql)
+    sitters = cur.fetchall()
+    return render_template('administrator/all_sitters.html', sitters=sitters)
+    
 
 
-@app.route('/certifications', methods=['POST', 'GET'])
+@app.route('/administrator/all_certifications', methods=['POST', 'GET'])
 def full_certifications():
-    return render_template('administrator/full_certifications.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT name FROM Certifications"
+    cur.execute(sql)
+    certs = cur.fetchall()
+    return render_template('administrator/all_certifications.html', certs=certs)    
 
 
 @app.route('/certification/delete', methods=['POST', 'GET'])
@@ -432,12 +473,32 @@ def certification_update():
 
 @app.route('/certification/add', methods=['POST', 'GET'])
 def certification_add():
+    if request.method == 'POST':
+        form = request.form
+        name = form['name']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO Certifications(name) VALUES(%s)", [name])
+        mysql.connection.commit()
     return render_template('administrator/add_certification.html')
 
 
-@app.route('/jobs', methods=['POST', 'GET'])
+@app.route('/administrator/all_jobs', methods=['POST', 'GET'])
 def all_jobs():
-    return render_template('administrator/all_jobs.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
+           FrequencyOfServices.name,Sitters.firstName FROM Services\
+           INNER JOIN Servicetypes on Services.serviceTypesId=ServiceTypes.id\
+           INNER JOIN Dogs on Services.dogsId=Dogs.id\
+           INNER JOIN FrequencyOfServices on \
+           Services.frequencyOfServicesId=FrequencyOfServices.id\
+           INNER JOIN Sitters on Services.sittersId=Sitters.id\
+           ORDER BY Services.sittersId"
+    cur.execute(sql)
+    jobs = cur.fetchall()
+    return render_template('administrator/all_jobs.html', jobs=jobs)
 
 
 @app.route('/jobs/delete', methods=['POST', 'GET'])
@@ -460,9 +521,17 @@ def jobs_filter():
     return render_template('administrator/all_jobs.html')
 
 
-@app.route('/service_frequency', methods=['POST', 'GET'])
+@app.route('/administrator/frequency', methods=['POST', 'GET'])
 def frequency():
-    return render_template('administrator/frequency.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT name FROM FrequencyOfServices"
+    cur.execute(sql)
+    frequencies = cur.fetchall()
+    return render_template('administrator/frequency.html',
+                           frequencies=frequencies)
 
 
 @app.route('/service_frequency/delete', methods=['POST', 'GET'])
@@ -477,12 +546,25 @@ def frequency_update():
 
 @app.route('/service_frequency/add', methods=['POST', 'GET'])
 def frequency_add():
+    if request.method == 'POST':
+        form = request.form
+        name = form['name']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO FrequencyOfServices(name) VALUES(%s)", [name])
+        mysql.connection.commit()
     return render_template('administrator/add_service_frequency.html')
 
 
-@app.route('/service_type', methods=['POST', 'GET'])
+@app.route('/administrator/types', methods=['POST', 'GET'])
 def types():
-    return render_template('administrator/types.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT name FROM ServiceTypes"
+    cur.execute(sql)
+    types = cur.fetchall()
+    return render_template('administrator/types.html', types=types)
 
 
 @app.route('/service_type/delete', methods=['POST', 'GET'])
@@ -497,12 +579,25 @@ def service_update():
 
 @app.route('/service_type/add', methods=['POST', 'GET'])
 def service_add():
+    if request.method == 'POST':
+        form = request.form
+        name = form['name']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO ServiceTypes(name) VALUES(%s)", [name])
+        mysql.connection.commit()
     return render_template('administrator/add_service_type.html')
 
 
-@app.route('/sizes', methods=['POST', 'GET'])
+@app.route('/administrator/dog_sizes', methods=['POST', 'GET'])
 def dog_sizes():
-    return render_template('administrator/dog_sizes.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT name FROM DogSizes"
+    cur.execute(sql)
+    sizes = cur.fetchall()
+    return render_template('administrator/dog_sizes.html', sizes=sizes)
 
 
 @app.route('/sizes/delete', methods=['POST', 'GET'])
@@ -517,16 +612,36 @@ def sizes_update():
 
 @app.route('/sizes/add', methods=['POST', 'GET'])
 def sizes_add():
+    if request.method == 'POST':
+        form = request.form
+        name = form['name']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO DogSizes(name) VALUES(%s)", [name])
+        mysql.connection.commit()
     return render_template('administrator/add_dog_size.html')
 
 
-@app.route('/vaccines', methods=['POST', 'GET'])
+@app.route('/administrator/all_vaccines', methods=['POST', 'GET'])
 def all_vaccines():
-    return render_template('administrator/all_vaccines.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT name FROM Vaccines"
+    cur.execute(sql)
+    vaccines = cur.fetchall()
+    return render_template('administrator/all_vaccines.html',
+                           vaccines=vaccines)
 
 
 @app.route('/vaccines/add', methods=['POST', 'GET'])
 def add_vaccines():
+    if request.method == 'POST':
+        form = request.form
+        name = form['name']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO Vaccines(name) VALUES(%s)", [name])
+        mysql.connection.commit()
     return render_template('administrator/add_vaccines.html')
 
 
@@ -540,19 +655,35 @@ def vaccines_update():
     return render_template('administrator/update_vaccines.html')
 
 
-@app.route('/vaccines/add', methods=['POST', 'GET'])
-def vaccines_add():
-    return render_template('administrator/all_vaccines.html')
-
 
 @app.route('/administrator/all_dogs', methods=['POST', 'GET'])
 def all_dogs():
-    return render_template('administrator/all_dogs.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName FROM Dogs\
+           INNER JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
+           INNER JOIN PetOwners on Dogs.petOwnersId=PetOwners.id\
+           ORDER BY Dogs.petOwnersId"
+    cur.execute(sql)
+    dogs = cur.fetchall()
+    return render_template('administrator/all_dogs.html', dogs=dogs)
+
 
 
 @app.route('/administrator/all_owners', methods=['POST', 'GET'])
 def all_owners():
-    return render_template('administrator/all_owners.html')
+    conn = None
+    cur = None
+    conn = mysql.connect
+    cur = conn.cursor()
+    sql = "SELECT firstName,lastName,phoneNumber,streetAddress,city,state,\
+           zipCode,email,password FROM PetOwners"
+    cur.execute(sql)
+    owners = cur.fetchall()
+    return render_template('administrator/all_owners.html', owners=owners)
+    
 
 
 if __name__ == '__main__':

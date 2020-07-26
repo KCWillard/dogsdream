@@ -9,29 +9,17 @@
         <th scope="col">Action</th>
     </tr>
   </thead>
+  {% for frequency in frequencies %}
   <tbody>
     <tr>
-        <td>Daily</td>
-        <td>
-            <a href="/service_frequency/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/service_frequency/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-    <tr>
-        <td>Weekly</td>
-        <td>
-            <a href="/service_frequency/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/service_frequency/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-    <tr>
-        <td>Monthly</td>
+        <td>{{frequency.0}}</td>
         <td>
             <a href="/service_frequency/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/service_frequency/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
     </tr>
   </tbody>
+  {% endfor %}
 </table>
         <a href="/service_frequency/add"><button type="button" class="btn btn-primary">Add New Frequency</button></a>
 </div>

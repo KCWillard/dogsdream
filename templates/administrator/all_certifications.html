@@ -9,22 +9,16 @@
         <th scope="col">Action</th>
     </tr>
   </thead>
+  {% for cert in certs%}
   <tbody>
     <tr>
-        <td>Certification 1</td>
+        <td>{{cert.0}}</td>
         <td>
             <a href="/certification/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/certification/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
     </tr>
-    <tr>
-        <td>Certification 2</td>
-        <td>
-            <a href="/certification/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/certification/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>
-    </tr>
-  </tbody>
+  {% endfor %}
 </table>
     <a href="/certification/add"><button type="button" class="btn btn-primary">Add Certification</button></a>
 </div>

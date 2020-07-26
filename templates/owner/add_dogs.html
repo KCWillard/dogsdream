@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
 {% block content  %}
 <h1>Dog</h1>
-<form>
+<form method="post">
 <table border="1px solid black">
     <tr>
         <th>Name</th>
-        <td><input type="text" value="Place Holder"></td>
+        <td><input type="text" name="name" value="Place Holder"></td>
     </tr>
      <tr>
         <th>Age</th>
-        <td><input type="text" value="Place Holder"></td>
+        <td><input type="text" name="age" value="Place Holder"></td>
     </tr>
      <tr>
         <th>Dog Size</th>
-        <td><input type="text" value="Place Holder"></td>
+        <td><input type="text" name="size" value="Place Holder"></td>
     </tr>
      <tr>
         <th>Pet Owner</th>
-        <td><input type="text" value="Place Holder"></td>
+        <td><input type="text" name="owner" value="Place Holder"></td>
     </tr>
 </table>
             <a href="/owner/add_dogs"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
