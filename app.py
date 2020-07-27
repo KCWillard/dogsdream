@@ -139,7 +139,7 @@ def create_tables():
 )ENGINE=INNODB;
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Sitters_Certifications (
-    `sitterID` INT(11) NOT NULL,
+    `sittersID` INT(11) NOT NULL,
     `certificationID` INT(11) NOT NULL,
     PRIMARY KEY(`sitterID`,`certificationID`),
     FOREIGN KEY fk_sitters(`sitterID`) REFERENCES Sitters(`id`) ON DELETE CASCADE,
