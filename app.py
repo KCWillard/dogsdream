@@ -411,7 +411,34 @@ def certifications():
     # cert3 = Certifications(id='1', name='Pro Trainer')
     #
     # certs = [cert1, cert2, cert3]
-    return render_template('sitter/certifications.html')
+    if request.method == 'GET':
+        reqSitterID = request.args.get("sitterID")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT Certifications.name FROM Sitters_Certifications\
+         INNER JOIN Certifications on Sitters_Certifications.certificationID = Certifications.id\
+          WHERE sitterID=%s", [reqSitterID])
+
+        sitter_certificates = cur.fetchall()
+
+        cur.execute("SELECT c.id, c.name  FROM Certifications c LEFT JOIN (SELECT certificationID from Sitters_Certifications WHERE sitterID=%s) as sc on c.id = sc.certificationID where sc.certificationID IS NULL", [reqSitterID])
+        all_certificates = cur.fetchall()
+        print(all_certificates)
+
+        return render_template('sitter/certifications.html', sitter_id = reqSitterID, certificates=sitter_certificates, all_certificates = all_certificates)
+    else :
+        print (request.form['sitterId'])
+        print(request.form['newcert'])
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Sitters_Certifications(sitterID, certificationID) VALUES(%s,%s)",
+            ([request.form['sitterId']], [request.form['newcert']]))
+        conn.commit()
+
+        newurl = '/sitter/certifications?sitterID=' + request.form['sitterId']
+        return redirect(newurl)
+
 
 
 @app.route('/sitter/delete', methods=['GET'])
@@ -441,7 +468,7 @@ def all_sitters():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT firstName,lastName,phoneNumber,streetAddress,city,state,\
+    sql = "SELECT id, firstName,lastName,phoneNumber,streetAddress,city,state,\
            zipCode,email,password FROM Sitters"
     cur.execute(sql)
     sitters = cur.fetchall()
@@ -490,7 +517,7 @@ def all_jobs():
     cur = conn.cursor()
     sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
            FrequencyOfServices.name,Sitters.firstName FROM Services\
-           INNER JOIN Servicetypes on Services.serviceTypesId=ServiceTypes.id\
+           INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
            INNER JOIN Dogs on Services.dogsId=Dogs.id\
            INNER JOIN FrequencyOfServices on \
            Services.frequencyOfServicesId=FrequencyOfServices.id\
@@ -530,7 +557,7 @@ def jobs_assigned():
     cur = conn.cursor()
     sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
                FrequencyOfServices.name,Sitters.firstName FROM Services\
-               INNER JOIN Servicetypes on Services.serviceTypesId=ServiceTypes.id\
+               INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
                INNER JOIN Dogs on Services.dogsId=Dogs.id\
                INNER JOIN FrequencyOfServices on \
                Services.frequencyOfServicesId=FrequencyOfServices.id\
