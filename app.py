@@ -586,7 +586,6 @@ def jobs_unassigned():
     return render_template('administrator/unassigned_services.html',jobs=jobs)
 
 
-
 @app.route('/administrator/frequency', methods=['POST', 'GET'])
 def frequency():
     conn = None
