@@ -124,8 +124,8 @@ def create_tables():
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Services ( 
     `id` INT(11) AUTO_INCREMENT,
-	 `startDate` DATETIME NOT NULL,
-	 `endDate` DATETIME NOT NULL,
+	 `startDate` DATE NOT NULL,
+	 `endDate` DATE NOT NULL,
 	 `serviceTypesId` INT NOT NULL,
 	 `frequencyOfServicesId` INT NOT NULL,
 	 `sittersId` INT,
@@ -648,7 +648,7 @@ def jobs_update():
         serviceId = request.args.get("id")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, DATE_FORMAT(startDate , '%%Y-%%m-%%d') AS custom_start_date, DATE_FORMAT(endDate , '%%Y-%%m-%%d') AS custom_end_date,serviceTypesId,frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
+        cur.execute("SELECT id, startDate,endDate, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
         serviceDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM ServiceTypes")
         typeDetail = cur.fetchall()
@@ -672,7 +672,7 @@ def jobs_update():
         frequencyOfServicesId = request.form['frequencyOfServicesId']
         sittersId = request.form['sittersId']
         dogsId = request.form['dogsId']
-        cur.execute("UPDATE Services SET DATE_FORMAT(startDate , '%%Y-%%m-%%d') AS custom_start_date, DATE_FORMAT(endDate , '%%Y-%%m-%%d') AS custom_end_date,serviceTypesId,frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", \
+        cur.execute("UPDATE Services SET startDate, endDate,serviceTypesId,frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", \
                     ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [sittersId], [dogsId], [serviceId]))
         conn.commit()
         newurl = '/administrator/all_jobs'
