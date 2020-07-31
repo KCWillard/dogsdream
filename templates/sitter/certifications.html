@@ -8,9 +8,9 @@
         </tr>
         {% for certificate in certificates %}
             <tr>
-                <td>{{ certificate.0 }}</td>
+                <td>{{ certificate.1 }}</td>
                 <td>
-                    <a href="/sitter/certification/">
+                    <a href="/sitter/certifications/delete?sitterID={{sitter_id}}&certificateID={{ certificate.0 }}">
                         <button type="button" class="btn btn-danger btn-sm">Delete</button>
                     </a>
                 </td>

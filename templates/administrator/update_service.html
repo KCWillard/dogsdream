@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="container">
-        <h1>Add Service</h1>
+        <h1>Update Service</h1>
         <br>
-        <form method="POST" action="/jobs/add">
+        <form method="POST" action="/jobs/update">
+            <input type="hidden" id="id" name="id" value="{{job.0}}">
             <div class="form-group">
                 <label for="startdate">Start Date</label>
-                <input type="date" class="form-control" id="startdate"  name="startdate">
+                <input type="date" class="form-control" id="startdate"  name="startdate" value="{{ job.1 }}">
             </div>
             <div class="form-group">
                 <label for="enddate">End Date</label>
-                <input type="date" class="form-control" id="enddate" name="enddate">
+                <input type="date" class="form-control" id="enddate" name="enddate" value="{{ job.2 }}">
             </div>
             <div>
                 <label for="type">Service Type</label>
-                <select class="form-control" id="type" name="type">
+                <select class="form-control" id="type" name="type" value="{{ servtype.1 }}" >
                     {% for servicestype in servicestypes %}
                         <option value="{{ servicestype.0 }}">{{ servicestype.1 }}</option>
                     {% endfor %}
@@ -45,7 +46,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary" value="Submit">Add</button>
+            <button type="submit" class="btn btn-primary" value="Submit">Update</button>
         </form>
         <hr/>
 
