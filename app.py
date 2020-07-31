@@ -139,19 +139,19 @@ def create_tables():
 )ENGINE=INNODB;
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Sitters_Certifications (
-    `sitterId` INT(11) NOT NULL,
-    `certificationId` INT(11) NOT NULL,
-    PRIMARY KEY(`sitterId`,`certificationId`),
-    FOREIGN KEY fk_sitters(`sitterId`) REFERENCES Sitters(`id`) ON DELETE CASCADE,
-    FOREIGN KEY fk_certification(`certificationId`) REFERENCES Certifications(`id`) ON DELETE CASCADE
+    `sittersId` INT(11) NOT NULL,
+    `certificationsId` INT(11) NOT NULL,
+    PRIMARY KEY(`sittersId`,`certificationsId`),
+    FOREIGN KEY fk_sitters(`sittersId`) REFERENCES Sitters(`id`) ON DELETE CASCADE,
+    FOREIGN KEY fk_certifications(`certificationsId`) REFERENCES Certifications(`id`) ON DELETE CASCADE
 )ENGINE=INNODB;''')
 
     cur.execute('''CREATE TABLE IF NOT EXISTS Dogs_Vaccines (
-        `dogID` INT(11) NOT NULL,
-        `vaccineID` INT(11) NOT NULL,
-        PRIMARY KEY(`dogID`,`vaccineID`),
-        FOREIGN KEY fk_dogs(`dogID`) REFERENCES Dogs(`id`) ON DELETE CASCADE,
-        FOREIGN KEY fk_vaccines(`vaccineID`) REFERENCES Vaccines(`id`) ON DELETE CASCADE
+        `dogsId` INT(11) NOT NULL,
+        `vaccinesId` INT(11) NOT NULL,
+        PRIMARY KEY(`dogsId`,`vaccinesId`),
+        FOREIGN KEY fk_dogs(`dogsId`) REFERENCES Dogs(`id`) ON DELETE CASCADE,
+        FOREIGN KEY fk_vaccines(`vaccinesId`) REFERENCES Vaccines(`id`) ON DELETE CASCADE
     )ENGINE=INNODB;''')
 
     try:
@@ -228,7 +228,7 @@ VALUES
                 ('2020/1/11', '2020/1/12', '1', '1', '1'),
                 ('2020/2/15', '2020/3/15', '2', '4', '5'),
                 ('2020/3/20', '2020/3/20', '3', '3', '3');''')
-        cur.execute('''INSERT INTO Sitters_Certifications(sitterID, certificationID)
+        cur.execute('''INSERT INTO Sitters_Certifications(sittersId, certificationsId)
                 VALUES
                 ('1', '1'),
                 ('1', '2'),
@@ -425,7 +425,7 @@ def sitter_certification_delete():
     conn = mysql.connect
     cur = conn.cursor()
     cur.execute(
-        "DELETE FROM Sitters_Certifications WHERE sitterID=%s AND certificationID=%s",
+        "DELETE FROM Sitters_Certifications WHERE sittersId=%s AND certificationsId=%s",
         ([reqSitterID], [reqCertificateID]))
     conn.commit()
 
@@ -435,24 +435,24 @@ def sitter_certification_delete():
 @app.route('/sitter/certifications', methods=['POST', 'GET'])
 def certifications():
     if request.method == 'GET':
-        reqSitterID = request.args.get("sitterID")
+        reqSitterID = request.args.get("sittersId")
         conn = mysql.connect
         cur = conn.cursor()
         cur.execute("SELECT Certifications.id, Certifications.name FROM Sitters_Certifications\
-         INNER JOIN Certifications on Sitters_Certifications.certificationID = Certifications.id\
-          WHERE sitterID=%s", [reqSitterID])
+         INNER JOIN Certifications on Sitters_Certifications.certificationsId = Certifications.id\
+          WHERE sittersId=%s", [reqSitterID])
         sitter_certificates = cur.fetchall()
 
-        cur.execute("SELECT c.id, c.name  FROM Certifications c LEFT JOIN (SELECT certificationID from\
-         Sitters_Certifications WHERE sitterID=%s) as sc on c.id = sc.certificationID where\
-          sc.certificationID IS NULL", [reqSitterID])
+        cur.execute("SELECT c.id, c.name  FROM Certifications c LEFT JOIN (SELECT certificationsId from\
+         Sitters_Certifications WHERE sittersId=%s) as sc on c.id = sc.certificationsId where\
+          sc.certificationsId IS NULL", [reqSitterID])
         all_certificates = cur.fetchall()
         return render_template('sitter/certifications.html', sitter_id = reqSitterID, certificates=sitter_certificates, all_certificates = all_certificates)
     else:
         conn = mysql.connect
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO Sitters_Certifications(sitterID, certificationID) VALUES(%s,%s)",
+            "INSERT INTO Sitters_Certifications(sittersId, certificationsId) VALUES(%s,%s)",
             ([request.form['sitterId']], [request.form['newcert']]))
         conn.commit()
 
@@ -472,7 +472,7 @@ def delete_sitter():
         "DELETE FROM Services WHERE sittersId=%s",
         ([reqSitterID]))
     cur.execute(
-        "DELETE FROM Sitters_Certifications WHERE sitterID=%s",
+        "DELETE FROM Sitters_Certifications WHERE sittersId=%s",
         ([reqSitterID]))
     cur.execute(
         "DELETE FROM Sitters WHERE id=%s",
@@ -486,7 +486,7 @@ def delete_sitter():
 @app.route('/sitter/update', methods=['POST', 'GET'])
 def profile_update():
     if request.method == 'GET':
-        reqSitterID = request.args.get("sitterID")
+        reqSitterID = request.args.get("sitterId")
         conn = mysql.connect
         cur = conn.cursor()
         cur.execute("SELECT id, firstName,lastName,phoneNumber,streetAddress,city,state,\
@@ -561,7 +561,7 @@ def certification_delete():
     conn = mysql.connect
     cur = conn.cursor()
     cur.execute(
-        "DELETE FROM Sitters_Certifications WHERE certificationID=%s",
+        "DELETE FROM Sitters_Certifications WHERE certificationsId=%s",
         ([certificationID]))
     cur.execute(
         "DELETE FROM Certifications WHERE id=%s",
@@ -672,7 +672,7 @@ def jobs_update():
         frequencyOfServicesId = request.form['frequencyOfServicesId']
         sittersId = request.form['sittersId']
         dogsId = request.form['dogsId']
-        cur.execute("UPDATE Services SET startDate, endDate,serviceTypesId,frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", \
+        cur.execute("UPDATE Services SET startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId FROM Services WHERE id=%s", \
                     ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [sittersId], [dogsId], [serviceId]))
         conn.commit()
         newurl = '/administrator/all_jobs'
@@ -726,7 +726,7 @@ def jobs_filter():
         conn = mysql.connect
         cur = conn.cursor()
         print(date)
-        cur.execute("SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
+        cur.execute("SELECT Services.id, Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
                FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
                INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
                INNER JOIN Dogs on Services.dogsId=Dogs.id\

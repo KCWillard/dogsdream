@@ -25,17 +25,17 @@
             {% for job in jobs %}
             <tbody>
             <tr>
-                <td>{{job.0}}</td>
                 <td>{{job.1}}</td>
                 <td>{{job.2}}</td>
                 <td>{{job.3}}</td>
                 <td>{{job.4}}</td>
-                <td>{{job.5}} {{ job.6 }}</td>
+                <td>{{job.5}}</td>
+                <td>{{job.6}} {{ job.7 }}</td>
                 <td>
-                    <a href="/jobs/update">
+                    <a href="/jobs/update?id={{ job.0 }}">
                         <button type="button" class="btn btn-warning btn-sm">Update</button>
                     </a>
-                    <a href="/jobs/delete">
+                    <a href="/jobs/delete?id={{ job.0 }}">
                         <button type="button" class="btn btn-danger btn-sm">Delete</button>
                     </a>
                 </td>
