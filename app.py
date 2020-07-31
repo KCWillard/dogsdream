@@ -617,7 +617,7 @@ def all_jobs():
     conn = mysql.connect
     cur = conn.cursor()
     sql = "SELECT Services.id, Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
-           FrequencyOfServices.name,Sitters.firstName FROM Services\
+           FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
            INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
            INNER JOIN Dogs on Services.dogsId=Dogs.id\
            INNER JOIN FrequencyOfServices on \
@@ -650,9 +650,17 @@ def jobs_update():
         cur = conn.cursor()
         cur.execute("SELECT id, DATE_FORMAT(startDate , '%%Y-%%m-%%d') AS custom_start_date, DATE_FORMAT(endDate , '%%Y-%%m-%%d') AS custom_end_date,serviceTypesId,frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
         serviceDetails = cur.fetchone()
-        cur.execute("SELECT id, name FROM ServiceTypes st LEFT JOIN Services s on st.id = s.serviceTypesId WHERE s.serviceTypesId=%s",[serviceId])
-        servtype = cur.fetchone()
-        return render_template('administrator/update_service.html', job=serviceDetails, servtype=servtype)
+        cur.execute("SELECT id, name FROM ServiceTypes")
+        typeDetail = cur.fetchall()
+        cur.execute("SELECT id, name FROM Dogs")
+        dogsdetail = cur.fetchall()
+        cur.execute("SELECT id, name FROM FrequencyOfServices")
+        freqdetail = cur.fetchall()
+        cur.execute("SELECT id, firstName, lastName FROM Sitters")
+        sitterDetail = cur.fetchall()
+        return render_template('administrator/update_service.html', job=serviceDetails, types=typeDetail, dogs=dogsdetail,\
+                               frequency=freqdetail, sitters=sitterDetail)
+
 
     elif request.method == "POST":
         conn = mysql.connect
@@ -664,45 +672,8 @@ def jobs_update():
         frequencyOfServicesId = request.form['frequencyOfServicesId']
         sittersId = request.form['sittersId']
         dogsId = request.form['dogsId']
-
-        cur.execute("UPDATE Services SET startDate=%s, endDate=%s, serviceTypesId=%s, frequencyOfServicesId=%s, sittersId=%s, dogsId=%s FROM Services WHERE id=%s",([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [sittersId], [dogsId], [serviceId]))
-        conn.commit()
-        newurl = '/administrator/all_jobs'
-        return redirect(newurl)
-
-        # sql = "SELECT id,name FROM ServiceTypes"
-        # cur.execute(sql)
-        # serviceTypes = cur.fetchall()
-        # sql = "SELECT id,name FROM FrequencyOfServices"
-        # cur.execute(sql)
-        # serviceFrequency = cur.fetchall()
-        #
-        # sql = "SELECT id,firstName,lastName FROM Sitters"
-        # cur.execute(sql)
-        # sitters = cur.fetchall()
-        #
-        # sql = "SELECT id,name FROM Dogs"
-        # cur.execute(sql)
-        # dogs = cur.fetchall()
-        #
-        # return render_template('administrator/update_service.html',  service = serviceDetails, servicestypes=serviceTypes,
-        #                        servicefrequency=serviceFrequency, sitters=sitters, dogs=dogs)
-
-    elif request.method == 'POST':
-        print('update sitter')
-        conn = mysql.connect
-        cur = conn.cursor()
-        serviceID = request.form['id']
-        print(serviceID)
-        startDate = request.form['startdate']
-        endDate = request.form['enddate']
-        serviceType = request.form['type']
-        dog = request.form['dog']
-        frequency = request.form['frequency']
-        sitter = request.form['sitter']
-
-        print(request.form)
-        cur.execute("UPDATE Services SET startDate=%s, endDate=%s,serviceTypesId=%s, frequencyOfServicesId=%s,sittersId=%s,dogsId=%s WHERE id=%s", ([startDate], [endDate], [serviceType], [frequency], [sitter], [dog], [serviceID]))
+        cur.execute("UPDATE Services SET DATE_FORMAT(startDate , '%%Y-%%m-%%d') AS custom_start_date, DATE_FORMAT(endDate , '%%Y-%%m-%%d') AS custom_end_date,serviceTypesId,frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", \
+                    ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [sittersId], [dogsId], [serviceId]))
         conn.commit()
         newurl = '/administrator/all_jobs'
         return redirect(newurl)
@@ -732,8 +703,6 @@ def jobs_add():
                                servicefrequency=serviceFrequency, sitters=sitters, dogs=dogs)
 
     elif request.method == 'POST':
-        print('add service')
-        print(request.form)
         conn = mysql.connect
         cur = conn.cursor()
         startDate = request.form['startdate']
@@ -750,9 +719,24 @@ def jobs_add():
         newurl = '../administrator/all_jobs'
         return redirect(newurl)
 
-@app.route('/filter', methods=['POST', 'GET'])
+@app.route('/jobs/filter', methods=['POST', 'GET'])
 def jobs_filter():
-    return render_template('administrator/filter.html')
+    if request.method=="GET":
+        date = request.args.get("date")
+        conn = mysql.connect
+        cur = conn.cursor()
+        print(date)
+        cur.execute("SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
+               FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
+               INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
+               INNER JOIN Dogs on Services.dogsId=Dogs.id\
+               INNER JOIN FrequencyOfServices on \
+               Services.frequencyOfServicesId=FrequencyOfServices.id\
+                LEFT JOIN Sitters on Services.sittersId=Sitters.id WHERE Services.startDate>=%s\
+               ORDER BY Services.startDate",[date])
+        jobs = cur.fetchall()
+        print(jobs)
+    return render_template('administrator/filter.html', jobs=jobs)
 
 @app.route('/jobs/assigned', methods=['POST', 'GET'])
 def jobs_assigned():
@@ -761,7 +745,7 @@ def jobs_assigned():
     conn = mysql.connect
     cur = conn.cursor()
     sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
-               FrequencyOfServices.name,Sitters.firstName FROM Services\
+               FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
                INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
                INNER JOIN Dogs on Services.dogsId=Dogs.id\
                INNER JOIN FrequencyOfServices on \

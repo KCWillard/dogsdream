@@ -22,7 +22,7 @@
                 <td>{{job.3}}</td>
                 <td>{{job.4}}</td>
                 <td>{{job.5}}</td>
-                <td>{{job.6}}</td>
+                <td>{{job.6}} {{ job.7 }}</td>
                 <td>
                     <a href="/jobs/update?id={{ job.0 }}">
                         <button type="button" class="btn btn-warning btn-sm">Update</button>
@@ -39,7 +39,7 @@
   <a href="/jobs/add"><button type="button" class="btn btn-primary">Add Service</button></a>
     <br>
     <br>
-        <a href="/filter"><button type="button" class="btn btn-outline-info">Filter Jobs By Date</button></a>
+        <a href="/jobs/filter"><button type="button" class="btn btn-outline-info">Filter Jobs By Date</button></a>
         <a href="/jobs/assigned"><button type="button" class="btn btn-outline-info">Assigned Jobs</button></a>
         <a href="/jobs/unassigned"><button type="button" class="btn btn-outline-info">Unassigned Jobs</button></a>
 <br>
