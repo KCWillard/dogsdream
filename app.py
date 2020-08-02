@@ -4,7 +4,7 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 # DB login info to connect to pythonanywhere db
-app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
+# app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
 app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
 app.config['MYSQL_USER'] = 'dogsdream'
 app.config['MYSQL_PASSWORD'] = 'group3osu'
@@ -124,8 +124,8 @@ def create_tables():
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Services ( 
     `id` INT(11) AUTO_INCREMENT,
-	 `startDate` DATETIME NOT NULL,
-	 `endDate` DATETIME NOT NULL,
+	 `startDate` DATE NOT NULL,
+	 `endDate` DATE NOT NULL,
 	 `serviceTypesId` INT NOT NULL,
 	 `frequencyOfServicesId` INT NOT NULL,
 	 `sittersId` INT,
@@ -139,19 +139,19 @@ def create_tables():
 )ENGINE=INNODB;
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Sitters_Certifications (
-    `sittersID` INT(11) NOT NULL,
-    `certificationID` INT(11) NOT NULL,
-    PRIMARY KEY(`sitterID`,`certificationID`),
-    FOREIGN KEY fk_sitters(`sitterID`) REFERENCES Sitters(`id`) ON DELETE CASCADE,
-    FOREIGN KEY fk_certification(`certificationID`) REFERENCES Certifications(`id`) ON DELETE CASCADE
+    `sittersId` INT(11) NOT NULL,
+    `certificationsId` INT(11) NOT NULL,
+    PRIMARY KEY(`sittersId`,`certificationsId`),
+    FOREIGN KEY fk_sitters(`sittersId`) REFERENCES Sitters(`id`) ON DELETE CASCADE,
+    FOREIGN KEY fk_certifications(`certificationsId`) REFERENCES Certifications(`id`) ON DELETE CASCADE
 )ENGINE=INNODB;''')
 
     cur.execute('''CREATE TABLE IF NOT EXISTS Dogs_Vaccines (
-        `dogID` INT(11) NOT NULL,
-        `vaccineID` INT(11) NOT NULL,
-        PRIMARY KEY(`dogID`,`vaccineID`),
-        FOREIGN KEY fk_dogs(`dogID`) REFERENCES Dogs(`id`) ON DELETE CASCADE,
-        FOREIGN KEY fk_vaccines(`vaccineID`) REFERENCES Vaccines(`id`) ON DELETE CASCADE
+        `dogsId` INT(11) NOT NULL,
+        `vaccinesId` INT(11) NOT NULL,
+        PRIMARY KEY(`dogsId`,`vaccinesId`),
+        FOREIGN KEY fk_dogs(`dogsId`) REFERENCES Dogs(`id`) ON DELETE CASCADE,
+        FOREIGN KEY fk_vaccines(`vaccinesId`) REFERENCES Vaccines(`id`) ON DELETE CASCADE
     )ENGINE=INNODB;''')
 
     try:
@@ -222,6 +222,18 @@ VALUES
         ('2020/3/20', '2020/3/20', '3', '3', '3', '3'),
         ('2020/4/11', '2020/4/11', '1', '1', '2', '2'),
         ('2020/6/11', '2020/6/11', '4', '2', '2', '4');''')
+
+        cur.execute('''INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, dogsId)
+                VALUES
+                ('2020/1/11', '2020/1/12', '1', '1', '1'),
+                ('2020/2/15', '2020/3/15', '2', '4', '5'),
+                ('2020/3/20', '2020/3/20', '3', '3', '3');''')
+        cur.execute('''INSERT INTO Sitters_Certifications(sittersId, certificationsId)
+                VALUES
+                ('1', '1'),
+                ('1', '2'),
+                ('2', '3'),
+                ('2', '4');''')
         connection.commit()
         return 'Initialized all tables'
     except Exception as e:
@@ -403,26 +415,108 @@ def pickup_job():
 def sitter_profile():
     return render_template('sitter/profile.html')
 
+@app.route('/sitter/certifications/delete', methods=['GET'])
+def sitter_certification_delete():
+    reqSitterID = request.args.get("sitterID")
+    reqCertificateID = request.args.get("certificateID")
+    print(reqSitterID)
+    print(reqCertificateID)
+
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Sitters_Certifications WHERE sittersId=%s AND certificationsId=%s",
+        ([reqSitterID], [reqCertificateID]))
+    conn.commit()
+
+    newurl = '/sitter/certifications?sitterID=' + reqSitterID
+    return redirect(newurl)
 
 @app.route('/sitter/certifications', methods=['POST', 'GET'])
 def certifications():
-    # cert1 = Certifications(id='0', name='Pro Walker')
-    # cert2 = Certifications(id='1', name='Pro Watcher')
-    # cert3 = Certifications(id='1', name='Pro Trainer')
-    #
-    # certs = [cert1, cert2, cert3]
-    return render_template('sitter/certifications.html')
+    if request.method == 'GET':
+        reqSitterID = request.args.get("sittersId")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT Certifications.id, Certifications.name FROM Sitters_Certifications\
+         INNER JOIN Certifications on Sitters_Certifications.certificationsId = Certifications.id\
+          WHERE sittersId=%s", [reqSitterID])
+        sitter_certificates = cur.fetchall()
+
+        cur.execute("SELECT c.id, c.name  FROM Certifications c LEFT JOIN (SELECT certificationsId from\
+         Sitters_Certifications WHERE sittersId=%s) as sc on c.id = sc.certificationsId where\
+          sc.certificationsId IS NULL", [reqSitterID])
+        all_certificates = cur.fetchall()
+        return render_template('sitter/certifications.html', sitter_id = reqSitterID, certificates=sitter_certificates, all_certificates = all_certificates)
+    else:
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Sitters_Certifications(sittersId, certificationsId) VALUES(%s,%s)",
+            ([request.form['sitterId']], [request.form['newcert']]))
+        conn.commit()
+
+        newurl = '/sitter/certifications?sitterID=' + request.form['sitterId']
+        return redirect(newurl)
 
 
 @app.route('/sitter/delete', methods=['GET'])
 def delete_sitter():
     # delete this sitter from database
-    return render_template('administrator/all_sitters.html')
+    reqSitterID = request.args.get("sitterID")
+    print(reqSitterID)
+
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Services WHERE sittersId=%s",
+        ([reqSitterID]))
+    cur.execute(
+        "DELETE FROM Sitters_Certifications WHERE sittersId=%s",
+        ([reqSitterID]))
+    cur.execute(
+        "DELETE FROM Sitters WHERE id=%s",
+        ([reqSitterID]))
+    conn.commit()
+
+    newurl = '/administrator/all_sitters'
+    return redirect(newurl)
 
 
 @app.route('/sitter/update', methods=['POST', 'GET'])
 def profile_update():
-    return render_template('sitter/profile_update.html')
+    if request.method == 'GET':
+        reqSitterID = request.args.get("sitterId")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, firstName,lastName,phoneNumber,streetAddress,city,state,\
+               zipCode,email,password FROM Sitters WHERE id=%s", [reqSitterID])
+        sitter_details = cur.fetchone()
+        # print(sitter_details)
+        return render_template('sitter/profile_update.html', sitter = sitter_details)
+
+    elif request.method == 'POST':
+        # print('update sitter')
+        conn = mysql.connect
+        cur = conn.cursor()
+        reqSitterID = request.form['sitterId']
+        # print(reqSitterID)
+        firstName = request.form['firstName']
+        lastName = request.form['lastName']
+        phoneNumber = request.form['phoneNumber']
+        streetAddress = request.form['streetAddress']
+        city = request.form['city']
+        state = request.form['state']
+        zipCode = request.form['zipCode']
+        password = request.form['password']
+
+        cur.execute("UPDATE Sitters SET firstName=%s, lastName=%s,phoneNumber=%s, streetAddress=%s,city=%s,state=%s,\
+        zipCode=%s, password=%s WHERE id=%s", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [password], [reqSitterID]))
+        conn.commit()
+        newurl = '/administrator/all_sitters'
+        return redirect(newurl)
+
+# return render_template('sitter/profile_update.html')
 
 
 @app.route('/owner/profile_update', methods=['POST', 'GET'])
@@ -441,7 +535,7 @@ def all_sitters():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT firstName,lastName,phoneNumber,streetAddress,city,state,\
+    sql = "SELECT id, firstName,lastName,phoneNumber,streetAddress,city,state,\
            zipCode,email,password FROM Sitters"
     cur.execute(sql)
     sitters = cur.fetchall()
@@ -455,7 +549,7 @@ def full_certifications():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT name FROM Certifications"
+    sql = "SELECT id, name FROM Certifications"
     cur.execute(sql)
     certs = cur.fetchall()
     return render_template('administrator/all_certifications.html', certs=certs)    
@@ -463,12 +557,44 @@ def full_certifications():
 
 @app.route('/certification/delete', methods=['POST', 'GET'])
 def certification_delete():
-    return render_template('administrator/full_certifications.html')
+    certificationID = request.args.get("id")
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Sitters_Certifications WHERE certificationsId=%s",
+        ([certificationID]))
+    cur.execute(
+        "DELETE FROM Certifications WHERE id=%s",
+        ([certificationID]))
+    conn.commit()
+    newurl = '../administrator/all_certifications'
+    return redirect(newurl)
 
 
 @app.route('/certification/update', methods=['POST', 'GET'])
 def certification_update():
-    return render_template('administrator/update_certification.html')
+    if request.method == 'GET':
+        reqCertificateID = request.args.get("id")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, name FROM Certifications WHERE id=%s", [reqCertificateID])
+        certificate_details = cur.fetchone()
+        print(certificate_details)
+        return render_template('administrator/update_certification.html', certificate=certificate_details)
+
+    elif request.method == 'POST':
+        print('update certification')
+        conn = mysql.connect
+        cur = conn.cursor()
+        certificate_id = request.form['id']
+        print(certificate_id)
+        name = request.form['name']
+
+        print(request.form)
+        cur.execute("UPDATE Certifications SET name=%s WHERE id=%s", ([name], [certificate_id]))
+        conn.commit()
+        newurl = '../administrator/all_certifications'
+        return redirect(newurl)
 
 
 @app.route('/certification/add', methods=['POST', 'GET'])
@@ -479,8 +605,10 @@ def certification_add():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO Certifications(name) VALUES(%s)", [name])
         mysql.connection.commit()
-    return render_template('administrator/add_certification.html')
-
+        newurl = '../administrator/all_certifications'
+        return redirect(newurl)
+    else:
+        return render_template('administrator/add_certification.html')
 
 @app.route('/administrator/all_jobs', methods=['POST', 'GET'])
 def all_jobs():
@@ -488,9 +616,9 @@ def all_jobs():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
-           FrequencyOfServices.name,Sitters.firstName FROM Services\
-           INNER JOIN Servicetypes on Services.serviceTypesId=ServiceTypes.id\
+    sql = "SELECT Services.id, Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
+           FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
+           INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
            INNER JOIN Dogs on Services.dogsId=Dogs.id\
            INNER JOIN FrequencyOfServices on \
            Services.frequencyOfServicesId=FrequencyOfServices.id\
@@ -504,23 +632,111 @@ def all_jobs():
 
 @app.route('/jobs/delete', methods=['POST', 'GET'])
 def jobs_delete():
-    return render_template('administrator/all_jobs.html')
+    jobID = request.args.get("id")
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Services WHERE id=%s", ([jobID]))
+    conn.commit()
+
+    return redirect('../administrator/all_jobs')
 
 
 @app.route('/jobs/update', methods=['POST', 'GET'])
 def jobs_update():
-    return render_template('administrator/all_jobs.html')
+    if request.method == 'GET':
+        serviceId = request.args.get("id")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, startDate,endDate, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
+        serviceDetails = cur.fetchone()
+        cur.execute("SELECT id, name FROM ServiceTypes")
+        typeDetail = cur.fetchall()
+        cur.execute("SELECT id, name FROM Dogs")
+        dogsdetail = cur.fetchall()
+        cur.execute("SELECT id, name FROM FrequencyOfServices")
+        freqdetail = cur.fetchall()
+        cur.execute("SELECT id, firstName, lastName FROM Sitters")
+        sitterDetail = cur.fetchall()
+        return render_template('administrator/update_service.html', job=serviceDetails, types=typeDetail, dogs=dogsdetail,\
+                               frequency=freqdetail, sitters=sitterDetail)
+
+
+    elif request.method == "POST":
+        conn = mysql.connect
+        cur = conn.cursor()
+        serviceId = request.form['id']
+        startDate = request.form['startDate']
+        endDate = request.form['endDate']
+        serviceTypeId = request.form['serviceTypeId']
+        frequencyOfServicesId = request.form['frequencyOfServicesId']
+        sittersId = request.form['sittersId']
+        dogsId = request.form['dogsId']
+        cur.execute("UPDATE Services SET startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId FROM Services WHERE id=%s", \
+                    ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [sittersId], [dogsId], [serviceId]))
+        conn.commit()
+        newurl = '/administrator/all_jobs'
+        return redirect(newurl)
 
 
 @app.route('/jobs/add', methods=['POST', 'GET'])
 def jobs_add():
+    if request.method == 'GET':
+        conn = mysql.connect
+        cur = conn.cursor()
+        sql = "SELECT id,name FROM ServiceTypes"
+        cur.execute(sql)
+        serviceTypes = cur.fetchall()
+        sql = "SELECT id,name FROM FrequencyOfServices"
+        cur.execute(sql)
+        serviceFrequency = cur.fetchall()
 
-    return render_template('administrator/add_service.html')
+        sql = "SELECT id,firstName,lastName FROM Sitters"
+        cur.execute(sql)
+        sitters = cur.fetchall()
 
+        sql = "SELECT id,name FROM Dogs"
+        cur.execute(sql)
+        dogs = cur.fetchall()
 
-@app.route('/filter', methods=['POST', 'GET'])
+        return render_template('administrator/add_service.html', servicestypes=serviceTypes,
+                               servicefrequency=serviceFrequency, sitters=sitters, dogs=dogs)
+
+    elif request.method == 'POST':
+        conn = mysql.connect
+        cur = conn.cursor()
+        startDate = request.form['startdate']
+        endDate = request.form['enddate']
+        serviceType = request.form['type']
+        dog = request.form['dog']
+        frequency = request.form['frequency']
+        sitter = request.form['sitter']
+
+        cur.execute(
+            "INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId) VALUES(%s,%s,%s,%s,%s,%s)",
+            ([startDate], [endDate], [serviceType], [frequency], [sitter], [dog]))
+        conn.commit()
+        newurl = '../administrator/all_jobs'
+        return redirect(newurl)
+
+@app.route('/jobs/filter', methods=['POST', 'GET'])
 def jobs_filter():
-    return render_template('administrator/filter.html')
+    if request.method=="GET":
+        date = request.args.get("date")
+        conn = mysql.connect
+        cur = conn.cursor()
+        print(date)
+        cur.execute("SELECT Services.id, Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
+               FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
+               INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
+               INNER JOIN Dogs on Services.dogsId=Dogs.id\
+               INNER JOIN FrequencyOfServices on \
+               Services.frequencyOfServicesId=FrequencyOfServices.id\
+                LEFT JOIN Sitters on Services.sittersId=Sitters.id WHERE Services.startDate>=%s\
+               ORDER BY Services.startDate",[date])
+        jobs = cur.fetchall()
+        print(jobs)
+    return render_template('administrator/filter.html', jobs=jobs)
 
 @app.route('/jobs/assigned', methods=['POST', 'GET'])
 def jobs_assigned():
@@ -529,8 +745,8 @@ def jobs_assigned():
     conn = mysql.connect
     cur = conn.cursor()
     sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
-               FrequencyOfServices.name,Sitters.firstName FROM Services\
-               INNER JOIN Servicetypes on Services.serviceTypesId=ServiceTypes.id\
+               FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
+               INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
                INNER JOIN Dogs on Services.dogsId=Dogs.id\
                INNER JOIN FrequencyOfServices on \
                Services.frequencyOfServicesId=FrequencyOfServices.id\
@@ -548,7 +764,7 @@ def jobs_unassigned():
     cur = conn.cursor()
     sql = "SELECT Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
                FrequencyOfServices.name FROM Services\
-               INNER JOIN Servicetypes on Services.serviceTypesId=ServiceTypes.id\
+               INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
                INNER JOIN Dogs on Services.dogsId=Dogs.id\
                INNER JOIN FrequencyOfServices on \
                Services.frequencyOfServicesId=FrequencyOfServices.id\
@@ -565,7 +781,7 @@ def frequency():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT name FROM FrequencyOfServices"
+    sql = "SELECT id, name FROM FrequencyOfServices"
     cur.execute(sql)
     frequencies = cur.fetchall()
     return render_template('administrator/frequency.html',
@@ -574,12 +790,40 @@ def frequency():
 
 @app.route('/service_frequency/delete', methods=['POST', 'GET'])
 def frequency_delete():
-    return render_template('administrator/frequency.html')
+    typeId = request.args.get("id")
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Services WHERE frequencyOfServicesId=%s",
+        ([typeId]))
+    cur.execute(
+        "DELETE FROM FrequencyOfServices WHERE id=%s",
+        ([typeId]))
+    conn.commit()
+    newurl = '../administrator/frequency'
+    return redirect(newurl)
 
 
 @app.route('/service_frequency/update', methods=['POST', 'GET'])
 def frequency_update():
-    return render_template('administrator/update_service_frequency.html')
+    if request.method == 'GET':
+        reqFreqId = request.args.get("id")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, name FROM FrequencyOfServices WHERE id=%s", [reqFreqId])
+        frequencies_details = cur.fetchone()
+        return render_template('administrator/update_service_frequency.html', frequencies=frequencies_details)
+
+    elif request.method == 'POST':
+        conn = mysql.connect
+        cur = conn.cursor()
+        reqFreqId = request.form['id']
+        name = request.form['name']
+        cur.execute("UPDATE FrequencyOfServices SET name=%s WHERE id=%s", ([name], [reqFreqId]))
+        conn.commit()
+        newurl = '../administrator/frequency'
+        return redirect(newurl)
+
 
 
 @app.route('/service_frequency/add', methods=['POST', 'GET'])
@@ -590,7 +834,9 @@ def frequency_add():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO FrequencyOfServices(name) VALUES(%s)", [name])
         mysql.connection.commit()
-    return render_template('administrator/add_service_frequency.html')
+        return redirect('../administrator/frequency')
+    else:
+        return render_template('administrator/add_service_frequency.html')
 
 
 @app.route('/administrator/types', methods=['POST', 'GET'])
@@ -599,7 +845,7 @@ def types():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT name FROM ServiceTypes"
+    sql = "SELECT id, name FROM ServiceTypes"
     cur.execute(sql)
     types = cur.fetchall()
     return render_template('administrator/types.html', types=types)
@@ -607,12 +853,39 @@ def types():
 
 @app.route('/service_type/delete', methods=['POST', 'GET'])
 def service_delete():
-    return render_template('administrator/types.html')
+    typeId = request.args.get("id")
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Services WHERE serviceTypesId=%s",
+        ([typeId]))
+    cur.execute(
+        "DELETE FROM ServiceTypes WHERE id=%s",
+        ([typeId]))
+    conn.commit()
+    newurl = '../administrator/types'
+    return redirect(newurl)
 
 
 @app.route('/service_type/update', methods=['POST', 'GET'])
 def service_update():
-    return render_template('administrator/update_service_type.html')
+    if request.method == 'GET':
+        reqTypeId = request.args.get("id")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, name FROM ServiceTypes WHERE id=%s", [reqTypeId])
+        type_details = cur.fetchone()
+        return render_template('administrator/update_service_type.html', types=type_details)
+
+    elif request.method == 'POST':
+        conn = mysql.connect
+        cur = conn.cursor()
+        typeId = request.form['id']
+        name = request.form['name']
+        cur.execute("UPDATE ServiceTypes SET name=%s WHERE id=%s", ([name], [typeId]))
+        conn.commit()
+        newurl = '../administrator/types'
+        return redirect(newurl)
 
 
 @app.route('/service_type/add', methods=['POST', 'GET'])
@@ -623,7 +896,10 @@ def service_add():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO ServiceTypes(name) VALUES(%s)", [name])
         mysql.connection.commit()
-    return render_template('administrator/add_service_type.html')
+        return redirect('../administrator/types')
+    else:
+        return render_template('administrator/add_service_type.html')
+
 
 
 @app.route('/administrator/dog_sizes', methods=['POST', 'GET'])
@@ -668,6 +944,7 @@ def all_vaccines():
     sql = "SELECT name FROM Vaccines"
     cur.execute(sql)
     vaccines = cur.fetchall()
+    print(vaccines)
     return render_template('administrator/all_vaccines.html',
                            vaccines=vaccines)
 

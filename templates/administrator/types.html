@@ -12,10 +12,10 @@
   {% for type in types %}
   <tbody>
     <tr>
-        <td>{{type.0}}</td>
+        <td>{{type.1}}</td>
         <td>
-            <a href="/service_type/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/service_type/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+            <a href="/service_type/update?id={{ type.0 }}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/service_type/delete?id={{ type.0 }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
   </tbody>
   {% endfor %}

@@ -1,26 +1,27 @@
 {% extends 'base.html' %}
 {% block content  %}
-<div class="container-fluid">
-        <h1 class="mt-4">Service Frequency Table</h1>
+    <div class="container-fluid">
+        <h1 class="mt-4">Service Frequency</h1>
 <table class="table">
   <thead>
     <tr>
-        <th scope="col">Frequency</th>
+        <th scope="col">Type</th>
         <th scope="col">Action</th>
     </tr>
   </thead>
   {% for frequency in frequencies %}
   <tbody>
     <tr>
-        <td>{{frequency.0}}</td>
+        <td>{{frequency.1}}</td>
         <td>
-            <a href="/service_frequency/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/service_frequency/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+            <a href="/service_frequency/update?id={{ frequency.0 }}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/service_frequency/delete?id={{ frequency.0 }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
-    </tr>
   </tbody>
   {% endfor %}
 </table>
-        <a href="/service_frequency/add"><button type="button" class="btn btn-primary">Add New Frequency</button></a>
+        <a href="/service_frequency/add"><button type="button" class="btn btn-primary">Add New Frequency </button></a>
 </div>
 {% endblock %}
+
+

@@ -3,7 +3,7 @@
     <div class="container">
         <h1>Add Service</h1>
         <br>
-        <form method="post">
+        <form method="POST" action="/jobs/add">
             <div class="form-group">
                 <label for="startdate">Start Date</label>
                 <input type="date" class="form-control" id="startdate"  name="startdate">
@@ -15,24 +15,34 @@
             <div>
                 <label for="type">Service Type</label>
                 <select class="form-control" id="type" name="type">
-                    <option value="boarding">Boarding</option>
-                    <option value="walking">Walking</option>
+                    {% for servicestype in servicestypes %}
+                        <option value="{{ servicestype.0 }}">{{ servicestype.1 }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div>
                 <label for="dog">Dog</label>
-                <input type="text" class="form-control" id="dog" name="dog">
+                    <select class="form-control" id="dog" name="dog">
+                    {% for dog in dogs %}
+                        <option value="{{ dog.0 }}">{{ dog.1 }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div>
                 <label for="frequency">Service Frequency</label>
                 <select class="form-control" id="frequency" name="frequency">
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
+                    {% for frequency in servicefrequency %}
+                        <option value="{{ frequency.0 }}">{{ frequency.1 }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="form-group">
                 <label for="sitter">Sitter</label>
-                <input type="text" class="form-control" id="sitter" name="sitter">
+                <select class="form-control" id="sitter" name="sitter">
+                    {% for sitter in sitters %}
+                        <option value="{{ sitter.0 }}">{{ sitter.1 }} {{ sitter.2 }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
             <button type="submit" class="btn btn-primary" value="Submit">Add</button>
