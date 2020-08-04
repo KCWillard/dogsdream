@@ -10,12 +10,12 @@
                 <input type="date" class="form-control" id="startDate"  name="startDate" value="{{ job.1 }}">
             </div>
             <div class="form-group">
-                <label for="enddate">End Date</label>
-                <input type="date" class="form-control" id="enddate" name="enddate" value="{{ job.2 }}">
+                <label for="endDate">End Date</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" value="{{ job.2 }}">
             </div>
             <div>
-                <label for="type">Service Type</label>
-                <select class="form-control" id="type" name="type">
+                <label for="serviceTypeId">Service Type</label>
+                <select class="form-control" id="serviceTypeId" name="serviceTypeId">
                     {% for type in types %}
                         {{ type[0] }}
                         {{ job[3] }}
@@ -28,8 +28,8 @@
                 </select>
             </div>
             <div>
-                <label for="dog">Dog</label>
-                    <select class="form-control" id="dog" name="dog">
+                <label for="dogsId">Dog</label>
+                    <select class="form-control" id="dogsId" name="dogsId">
                     {% for dog in dogs %}
                         {{ dog[0] }}
                         {{ job[6] }}
@@ -42,8 +42,8 @@
                 </select>
             </div>
             <div>
-                <label for="frequency">Service Frequency</label>
-                <select class="form-control" id="frequency" name="frequency">
+                <label for="frequencyOfServicesId">Service Frequency</label>
+                <select class="form-control" id="frequencyOfServicesId" name="frequencyOfServicesId">
                     {% for freq in frequency %}
                         {{ freq[0] }}
                         {{ job[4] }}
@@ -56,8 +56,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="sitter">Sitter</label>
-                <select class="form-control" id="sitter" name="sitter">
+                <label for="sittersId">Sitter</label>
+                <select class="form-control" id="sittersId" name="sittersId">
                     {% for sitter in sitters %}
                         {{ sitter[0] }}
                         {{ job[5] }}

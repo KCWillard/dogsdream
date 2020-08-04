@@ -772,7 +772,7 @@ def jobs_update():
         frequencyOfServicesId = request.form['frequencyOfServicesId']
         sittersId = request.form['sittersId']
         dogsId = request.form['dogsId']
-        cur.execute("UPDATE Services SET startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId FROM Services WHERE id=%s", \
+        cur.execute("UPDATE Services SET startDate=%s, endDate=%s, serviceTypesId=%s, frequencyOfServicesId=%s, sittersId=%s, dogsId=%s WHERE id=%s", \
                     ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [sittersId], [dogsId], [serviceId]))
         conn.commit()
         newurl = '/administrator/all_jobs'
