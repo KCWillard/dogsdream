@@ -6,8 +6,8 @@
         <form method="POST" action="/jobs/update">
             <input type="hidden" id="id" name="id" value="{{job.0}}">
             <div class="form-group">
-                <label for="startdate">Start Date</label>
-                <input type="date" class="form-control" id="startdate"  name="startdate" value="{{ job.1 }}">
+                <label for="startDate">Start Date</label>
+                <input type="date" class="form-control" id="startDate"  name="startDate" value="{{ job.1 }}">
             </div>
             <div class="form-group">
                 <label for="enddate">End Date</label>
@@ -63,11 +63,11 @@
                         {{ job[5] }}
                         {% if sitter[0] == job[5] %}
                             <option selected value="{{ sitter[0] }}">{{ sitter[1] }} {{  sitter[2] }}</option>
-                            <option>{{ None }}</option>
                         {% else %}
                             <option value="{{ sitter[0] }}">{{ sitter[1] }} {{  sitter[2] }}</option>
                         {% endif %}
                      {% endfor %}
+{#                <option value="{{ sittersId }}">None</option>#}
                 </select>
             </div>
 
