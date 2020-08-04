@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Update {{dog.1}}</h1>
+        <br>
+        <form method="POST" action="/dogs/update">
+            <input type="hidden" id="id" name="id" value="{{dog.0}}">
+            <div class="form-group">
+                <label for="startdate">Name</label>
+                <input type="text" class="form-control" id="name"  name="name" value="{{ dog.1 }}">
+            </div>
+            <div class="form-group">
+                <label for="enddate">Age</label>
+                <input type="text" class="form-control" id="age" name="age" value="{{ dog.2 }}">
+            </div>
+            <div>
+                <label for="type">Size</label>
+                <select class="form-control" id="size" name="size">
+                    {% for size in sizes %}
+                        {{ size[0] }}
+                        {{ dog[3] }}
+                        {% if size[0] == dog[3] %}
+                            <option selected value="{{ size[0] }}">{{ size[1] }}</option>
+                        {% else %}
+                            <option value="{{ size[0] }}">{{ size[1] }}</option>
+                        {% endif %}
+                     {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="dog">Pet Owner</label>
+                    <select class="form-control" id="owner" name="owner">
+                    {% for owner in owners %}
+                        {{ owner[0] }}
+                        {{ dog[4] }}
+                        {% if owner[0] == dog[4] %}
+                            <option selected value="{{ owner[0] }}">{{ owner[1] }} {{ owner[2] }}</option>
+                        {% else %}
+                            <option value="{{ owner[0] }}">{{ owner[1] }} {{ owner[2] }}</option>
+                        {% endif %}
+                     {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" value="Submit">Update</button>
+        </form>
+        <hr/>
+        </a>
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}
+        {% endif %}
+    </div>
+{% endblock %}

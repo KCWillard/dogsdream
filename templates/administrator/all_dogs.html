@@ -9,25 +9,25 @@
         <th scope="col">Age</th>
         <th scope="col">Dog Size</th>
         <th scope="col">Pet Owner</th>
-        <th scope="col">Vaccines</th>
+{#        <th scope="col">Vaccines</th>#}
         <th scope="col">Action</th>
     </tr>
   </thead>
   {% for dog in dogs %}
   <tbody>
     <tr>
-        <td>{{dog.0}}</td>
         <td>{{dog.1}}</td>
         <td>{{dog.2}}</td>
         <td>{{dog.3}}</td>
-        <td><a href="../owner/vaccines">Vaccines</a></td>
+        <td>{{dog.4}}</td>
+{#        <td><a href="../owner/vaccines">Vaccines</a></td>#}
         <td>
-            <a href="/dogs/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/dogs/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+            <a href="/dogs/update?dogId={{ dog.0 }}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/dogs/delete?dogId={{ dog.0 }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>   
   </tbody>
   {% endfor %}
 </table>
-    <a href="/owner/add_dogs"><button type="button" class="btn btn-primary">Add Dog</button></a>
+    <a href="/dogs/add"><button type="button" class="btn btn-primary">Add Dog</button></a>
 </div>
 {% endblock %}

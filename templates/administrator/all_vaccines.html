@@ -12,10 +12,10 @@
   {% for vaccine in vaccines %}
   <tbody>
     <tr>
-        <td>{{vaccine.0}}</td>
+        <td>{{vaccine.1}}</td>
         <td>
-            <a href="/vaccines/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/vaccines/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+            <a href="/vaccines/update?id= {{ vaccine.0 }}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/vaccines/delete?id= {{vaccine.0}}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
     </tr>
   </tbody>
