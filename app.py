@@ -119,8 +119,8 @@ def create_tables():
     `petOwnersId` INT NOT NULL, 
     PRIMARY KEY(`id`),
     CONSTRAINT dogs_ibfk_1 FOREIGN KEY (dogSizesId) REFERENCES DogSizes(id),
-	CONSTRAINT dogs_ibfk_2 FOREIGN KEY (petOwnersId) REFERENCES PetOwners(id)    
-)ENGINE=INNODB;
+	CONSTRAINT `dogs_ibfk_2` FOREIGN KEY (`petOwnersId`) REFERENCES `PetOwners`(`id`) ON DELETE CASCADE
+    )ENGINE=INNODB;
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Services ( 
     `id` INT(11) AUTO_INCREMENT,
@@ -134,7 +134,7 @@ def create_tables():
     CONSTRAINT services_ibfk_1 FOREIGN KEY (serviceTypesId) REFERENCES ServiceTypes(id),
 	 CONSTRAINT services_ibfk_2 FOREIGN KEY (frequencyOfServicesId) REFERENCES FrequencyOfServices(id),
 	 CONSTRAINT services_ibfk_3 FOREIGN KEY (sittersId) REFERENCES Sitters(id),
-	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id),
+	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id) ON DELETE CASCADE,
 	 CONSTRAINT chk_date CHECK(endDate >= startDate)   
 )ENGINE=INNODB;
 ''')
@@ -365,12 +365,52 @@ def view_dogs():
 
 @app.route('/owner/update', methods=['GET', 'POST'])
 def owner_update():
-    return render_template('owner/profile_update.html')
+    if request.method == 'GET':
+        reqOwnerID = request.args.get("id")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, firstName,lastName,phoneNumber,streetAddress,city,state,\
+               zipCode,email,password FROM PetOwners WHERE id=%s", [reqOwnerID])
+        owner_details = cur.fetchone()
+        # print(sitter_details)
+        return render_template('owner/profile_update.html', owner=owner_details)
+
+    elif request.method == 'POST':        
+        conn = mysql.connect
+        cur = conn.cursor()
+        reqOwnerID = request.form['id']       
+        firstName = request.form['firstName']
+        lastName = request.form['lastName']
+        phoneNumber = request.form['phoneNumber']
+        streetAddress = request.form['streetAddress']
+        city = request.form['city']
+        state = request.form['state']
+        zipCode = request.form['zipCode']
+        password = request.form['password']
+        cur.execute("UPDATE PetOwners SET firstName=%s, lastName=%s,phoneNumber=%s, streetAddress=%s,city=%s,state=%s,\
+        zipCode=%s, password=%s WHERE id=%s", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [password], [reqOwnerID]))
+        conn.commit()
+        newurl = '/administrator/all_owners'
+        return redirect(newurl)
+ 
 
 
 @app.route('/owner/delete', methods=['GET', 'POST'])
 def owner_delete():
-    return render_template('administrator/all_owners.html')
+    # delete thisownerfrom database
+    reqOwnerID = request.args.get("id")    
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Dogs WHERE petOwnersId=%s",
+        ([reqOwnerID]))
+    cur.execute(
+        "DELETE FROM PetOwners WHERE id=%s",
+        ([reqOwnerID]))
+    conn.commit()
+    newurl = '/administrator/all_owners'
+    return redirect(newurl)
+
 
 
 @app.route('/dogs/update', methods=['GET', 'POST'])
@@ -1001,7 +1041,7 @@ def all_vaccines():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT name FROM Vaccines"
+    sql = "SELECT id, name FROM Vaccines"
     cur.execute(sql)
     vaccines = cur.fetchall()
     print(vaccines)
@@ -1039,7 +1079,7 @@ def vaccines_update():
         reqVaccID = request.args.get("id")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, name FROM DogSizes WHERE id=%s", [reqVaccID])
+        cur.execute("SELECT id, name FROM Vaccines WHERE id=%s", [reqVaccID])
         vacc_details = cur.fetchone()
         print(vacc_details)
         return render_template('administrator/update_vaccines.html', vaccines=vacc_details)
@@ -1053,7 +1093,7 @@ def vaccines_update():
         name = request.form['name']
 
         print(request.form)
-        cur.execute("UPDATE DogSizes SET name=%s WHERE id=%s", ([name], [vacc_id]))
+        cur.execute("UPDATE Vaccines SET name=%s WHERE id=%s", ([name], [vacc_id]))
         conn.commit()
         newurl = '../administrator/all_vaccines'
         return redirect(newurl)
@@ -1080,7 +1120,7 @@ def all_owners():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT firstName,lastName,phoneNumber,streetAddress,city,state,\
+    sql = "SELECT id, firstName,lastName,phoneNumber,streetAddress,city,state,\
            zipCode,email,password FROM PetOwners"
     cur.execute(sql)
     owners = cur.fetchall()

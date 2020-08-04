@@ -20,7 +20,6 @@
   {% for owner in owners %}
   <tbody>
     <tr>
-        <td>{{owner.0}}</td>
         <td>{{owner.1}}</td>
         <td>{{owner.2}}</td>
         <td>{{owner.3}}</td>
@@ -29,9 +28,10 @@
         <td>{{owner.6}}</td>
         <td>{{owner.7}}</td>
         <td>{{owner.8}}</td>
+        <td>{{owner.9}}</td>
         <td>
-            <a href="/owner/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/owner/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+            <a href="/owner/update?id= {{owner.0}}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/owner/delete?id= {{owner.0}}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
     </tr>
   </tbody>
