@@ -353,13 +353,13 @@ def add_dog():
     if request.method == 'GET':
         conn = mysql.connect
         cur = conn.cursor()
-        sql = "SELECT id,name FROM DogSizes"
+        sql = "SELECT id, name FROM DogSizes"
         cur.execute(sql)
         dogSizes = cur.fetchall()
-        sql = "SELECT id,firstName,lastName FROM PetOwners"
+        sql = "SELECT id, firstName, lastName FROM PetOwners"
         cur.execute(sql)
         owners = cur.fetchall()
-        return render_template('administrator/add_dogs.html', dogSizes=dogSizes,owners=owners)
+        return render_template('administrator/add_dogs.html', dogSizes=dogSizes, owners=owners)
 
     elif request.method == 'POST':
         conn = mysql.connect
@@ -770,13 +770,24 @@ def jobs_update():
         endDate = request.form['endDate']
         serviceTypeId = request.form['serviceTypeId']
         frequencyOfServicesId = request.form['frequencyOfServicesId']
-        sittersId = request.form['sittersId']
         dogsId = request.form['dogsId']
-        cur.execute("UPDATE Services SET startDate=%s, endDate=%s, serviceTypesId=%s, frequencyOfServicesId=%s, sittersId=%s, dogsId=%s WHERE id=%s", \
+        sittersId = request.form['sittersId']
+
+        if sittersId == 'NULL':
+            cur.execute("UPDATE Services set sittersId=null WHERE id=%s", [serviceId])
+            conn.commit()
+            cur.execute(
+                "UPDATE Services SET startDate=%s, endDate=%s, serviceTypesId=%s, frequencyOfServicesId=%s, dogsId=%s WHERE id=%s", \
+                ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [dogsId], [serviceId]))
+            conn.commit()
+            newurl = '/administrator/all_jobs'
+            return redirect(newurl)
+        else:
+            cur.execute("UPDATE Services SET startDate=%s, endDate=%s, serviceTypesId=%s, frequencyOfServicesId=%s, sittersId=%s, dogsId=%s WHERE id=%s", \
                     ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [sittersId], [dogsId], [serviceId]))
-        conn.commit()
-        newurl = '/administrator/all_jobs'
-        return redirect(newurl)
+            conn.commit()
+            newurl = '/administrator/all_jobs'
+            return redirect(newurl)
 
 
 @app.route('/jobs/add', methods=['POST', 'GET'])
