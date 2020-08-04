@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Add Dog</h1>
+        <br>
+        <form method="POST" action="/dogs/add">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="Text" class="form-control" id="name"  name="name">
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="text" class="form-control" id="age" name="age">
+            </div>
+            <div>
+                <label for="size">Dog Size</label>
+                <select class="form-control" id="size" name="size">
+                    {% for dogSize in dogSizes %}
+                        <option value="{{ dogSize.0 }}">{{ dogSize.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="owner">Owner</label>
+                    <select class="form-control" id="owner" name="owner">
+                    {% for owner in owners %}
+                        <option value="{{ owner.0 }}">{{ owner.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <p>
+                <div>
+                    <button type="submit" class="btn btn-primary" value="Submit">Add</button>
+                
+                </div>
+            </p>
+
+            
+        </a>
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}
+        {% endif %}
+    </div>
+{% endblock %}

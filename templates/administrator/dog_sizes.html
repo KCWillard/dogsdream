@@ -12,10 +12,10 @@
   {% for size in sizes %}
   <tbody>
     <tr>
-        <td>{{size.0}}</td>
+        <td>{{size.1}}</td>
         <td>
-            <a href="/sizes/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/sizes/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+            <a href="/sizes/update?id= {{ size.0 }}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/sizes/delete?id= {{ size.0 }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>
     </tr>
   </tbody>
