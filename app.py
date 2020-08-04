@@ -133,7 +133,7 @@ def create_tables():
 	 PRIMARY KEY(`id`),
     CONSTRAINT services_ibfk_1 FOREIGN KEY (serviceTypesId) REFERENCES ServiceTypes(id),
 	 CONSTRAINT services_ibfk_2 FOREIGN KEY (frequencyOfServicesId) REFERENCES FrequencyOfServices(id),
-	 CONSTRAINT services_ibfk_3 FOREIGN KEY (sittersId) REFERENCES Sitters(id),
+	 CONSTRAINT services_ibfk_3 FOREIGN KEY (sittersId) REFERENCES Sitters(id) ON DELETE SET NULL,
 	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id) ON DELETE CASCADE,
 	 CONSTRAINT chk_date CHECK(endDate >= startDate)
 )ENGINE=INNODB;
@@ -237,6 +237,7 @@ VALUES
                 ('1', '2'),
                 ('2', '3'),
                 ('2', '4');''')
+
         connection.commit()
         return 'Initialized all tables'
     except Exception as e:
@@ -756,6 +757,7 @@ def jobs_update():
         freqdetail = cur.fetchall()
         cur.execute("SELECT id, firstName, lastName FROM Sitters")
         sitterDetail = cur.fetchall()
+        print(sitterDetail)
         return render_template('administrator/update_service.html', job=serviceDetails, types=typeDetail, dogs=dogsdetail,\
                                frequency=freqdetail, sitters=sitterDetail)
 
@@ -823,7 +825,6 @@ def jobs_filter():
         date = request.args.get("date")
         conn = mysql.connect
         cur = conn.cursor()
-        print(date)
         cur.execute("SELECT Services.id, Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
                FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
                INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
@@ -833,7 +834,6 @@ def jobs_filter():
                 LEFT JOIN Sitters on Services.sittersId=Sitters.id WHERE Services.startDate>=%s\
                ORDER BY Services.startDate",[date])
         jobs = cur.fetchall()
-        print(jobs)
     return render_template('administrator/filter.html', jobs=jobs)
 
 @app.route('/jobs/assigned', methods=['POST', 'GET'])
@@ -1036,18 +1036,15 @@ def sizes_update():
         cur = conn.cursor()
         cur.execute("SELECT id, name FROM DogSizes WHERE id=%s", [reqSizeID])
         size_details = cur.fetchone()
-        print(size_details)
         return render_template('administrator/update_dog_size.html', size=size_details)
 
     elif request.method == 'POST':
-        print('update dog size')
         conn = mysql.connect
         cur = conn.cursor()
         size_id = request.form['id']
-        print(size_id)
+
         name = request.form['name']
 
-        print(request.form)
         cur.execute("UPDATE DogSizes SET name=%s WHERE id=%s", ([name], [size_id]))
         conn.commit()
         newurl = '../administrator/dog_sizes'
@@ -1076,7 +1073,6 @@ def all_vaccines():
     sql = "SELECT id, name FROM Vaccines"
     cur.execute(sql)
     vaccines = cur.fetchall()
-    print(vaccines)
     return render_template('administrator/all_vaccines.html',
                            vaccines=vaccines)
 
@@ -1115,7 +1111,6 @@ def vaccines_update():
         cur = conn.cursor()
         cur.execute("SELECT id, name FROM Vaccines WHERE id=%s", [reqVaccID])
         vacc_details = cur.fetchone()
-        print(vacc_details)
         return render_template('administrator/update_vaccines.html', vaccines=vacc_details)
 
     elif request.method == 'POST':

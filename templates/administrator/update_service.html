@@ -63,6 +63,7 @@
                         {{ job[5] }}
                         {% if sitter[0] == job[5] %}
                             <option selected value="{{ sitter[0] }}">{{ sitter[1] }} {{  sitter[2] }}</option>
+                            <option>{{ None }}</option>
                         {% else %}
                             <option value="{{ sitter[0] }}">{{ sitter[1] }} {{  sitter[2] }}</option>
                         {% endif %}
