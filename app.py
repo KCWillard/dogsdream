@@ -347,10 +347,34 @@ def dogs():
     return render_template('owner/dogs.html')
 
 
-@app.route('/owner/add_dogs', methods=['POST', 'GET'])
+@app.route('/dogs/add', methods=['POST', 'GET'])
 def add_dog():
+    if request.method == 'GET':
+        conn = mysql.connect
+        cur = conn.cursor()
+        sql = "SELECT id,name FROM DogSizes"
+        cur.execute(sql)
+        dogSizes = cur.fetchall()
+        sql = "SELECT id,firstName,lastName FROM PetOwners"
+        cur.execute(sql)
+        owners = cur.fetchall()
+        return render_template('administrator/add_dogs.html', dogSizes=dogSizes,owners=owners)
 
-    return render_template('owner/add_dogs.html')
+    elif request.method == 'POST':
+        conn = mysql.connect
+        cur = conn.cursor()
+        name = request.form['name']
+        age = request.form['age']
+        size = request.form['size']
+        owner = request.form['owner']
+        cur.execute(
+            "INSERT INTO Dogs(name,age,dogSizesId,petOwnersId) VALUES(%s,%s,%s,%s)",
+            ([name], [age], [size], [owner]))
+        conn.commit()
+        newurl = '../administrator/all_dogs'
+        return redirect(newurl)
+
+
 
 
 @app.route('/owner/view_dogs', methods=['GET'])
@@ -404,6 +428,9 @@ def owner_delete():
     reqOwnerID = request.args.get("id")    
     conn = mysql.connect
     cur = conn.cursor()
+    cur.execute(
+        "DELETE Services FROM Services LEFT JOIN Dogs ON Services.dogsId = Dogs.id WHERE petOwnersId=%s",
+        ([reqOwnerID]))
     cur.execute(
         "DELETE FROM Dogs WHERE petOwnersId=%s",
         ([reqOwnerID]))
@@ -1035,7 +1062,9 @@ def sizes_add():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO DogSizes(name) VALUES(%s)", [name])
         mysql.connection.commit()
-    return render_template('administrator/add_dog_size.html')
+        return redirect('../administrator/dog_sizes')
+    else:
+        return render_template('administrator/add_dog_size.html')
 
 
 @app.route('/administrator/all_vaccines', methods=['POST', 'GET'])
@@ -1060,7 +1089,9 @@ def add_vaccines():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO Vaccines(name) VALUES(%s)", [name])
         mysql.connection.commit()
-    return render_template('administrator/add_vaccines.html')
+        return redirect('../administrator/all_vaccines')
+    else:
+        return render_template('administrator/add_vaccines.html')
 
 
 @app.route('/vaccines/delete', methods=['POST', 'GET'])
