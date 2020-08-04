@@ -449,7 +449,7 @@ def owner_dogs_update():
         dogId = request.args.get("dogId")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, name,age FROM Dogs WHERE id=%s", [dogId])
+        cur.execute("SELECT id, name,age, dogSizesId FROM Dogs WHERE id=%s", [dogId])
         dogDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM DogSizes")
         sizesDetail = cur.fetchall()
@@ -746,7 +746,8 @@ def jobs_update():
         serviceId = request.args.get("id")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, startDate,endDate, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
+        cur.execute("SELECT id, startDate,endDate, serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
+        cur.execute("SELECT id, startDate,endDate, serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
         serviceDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM ServiceTypes")
         typeDetail = cur.fetchall()
