@@ -196,12 +196,14 @@ VALUES
         VALUES
         ('John', 'Doe', '5411111111', '123 SE Woof Ln', 'Amarillo', 'TX', '25172', 'dog@dog.com', 'woofwoof'),
         ('Mary', 'Ellis', '5031111111', '123 SE Bark Ln', 'Lexington', 'KY', '23029', 'meow@dog.com', 'barkwoof'),
+        ('Owen', 'Last', '5981111111', '123 SE Growl Ln', 'Corvallis', 'OR', '97333', 'owen@dog.com', 'password'),
         ('Xavier', 'Brown', '5981111111', '123 SE Growl Ln', 'Corvallis', 'OR', '97333', 'dream@dog.com', 'woofbark');''')
 
         cur.execute('''INSERT INTO Sitters(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode, email, `password`)
         VALUES
         ('Joe', 'Douglas', '1111111111', '123 SE Bitey Ln', 'Amarillo', 'TX', '25172', 'dog@dog.com', 'woofwoof'),
         ('Jeff', 'Duncan', '1231111111', '123 SE Yippie Ln', 'Lexington', 'KY', '23029', 'meow@dog.com', 'barkwoof'),
+        ('Mary', 'Skitlle', '1231111111', '123 SE Mary Ln', 'Lexington', 'KY', '23029', 'mary@dog.com', 'marymary'),
         ('Marisa', 'Hunter', '4561111111', '456 SE Growl Ln', 'Corvallis', 'OR', '97333', 'dream@dog.com', 'woofbark');''')
 
         cur.execute('''INSERT INTO Dogs(`name`, age, dogSizesId, petOwnersId)
@@ -227,6 +229,7 @@ VALUES
                 VALUES
                 ('2020/1/11', '2020/1/12', '1', '1', '1'),
                 ('2020/2/15', '2020/3/15', '2', '4', '5'),
+                ('2020/2/15', '2020/3/15', '2', '4', '4'),
                 ('2020/3/20', '2020/3/20', '3', '3', '3');''')
         cur.execute('''INSERT INTO Sitters_Certifications(sittersId, certificationsId)
                 VALUES
