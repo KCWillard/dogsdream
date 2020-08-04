@@ -648,7 +648,7 @@ def jobs_update():
         serviceId = request.args.get("id")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, startDate,endDate, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
+        cur.execute("SELECT id, startDate,endDate,serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
         serviceDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM ServiceTypes")
         typeDetail = cur.fetchall()
