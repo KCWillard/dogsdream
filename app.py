@@ -119,7 +119,7 @@ def create_tables():
     `petOwnersId` INT NOT NULL, 
     PRIMARY KEY(`id`),
     CONSTRAINT dogs_ibfk_1 FOREIGN KEY (dogSizesId) REFERENCES DogSizes(id),
-	 CONSTRAINT dogs_ibfk_2 FOREIGN KEY (petOwnersId) REFERENCES PetOwners(id)    
+	CONSTRAINT dogs_ibfk_2 FOREIGN KEY (petOwnersId) REFERENCES PetOwners(id)    
 )ENGINE=INNODB;
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Services ( 
@@ -346,12 +346,6 @@ def dogs():
 
 @app.route('/owner/add_dogs', methods=['POST', 'GET'])
 def add_dog():
-    # if request.method == 'POST':
-    #    dog_name = request.form['name']
-    #    dog_age = request.form['age']
-    #    dog_size = request.form['size']
-    #    dog_owner = 'Admin'
-    #    new_dog = Dogs(name = dog_name,age=dog_age,petOwner=dog_owner)
 
     return render_template('owner/add_dogs.html')
 
@@ -381,12 +375,53 @@ def owner_delete():
 
 @app.route('/dogs/update', methods=['GET', 'POST'])
 def owner_dogs_update():
-    return render_template('owner/add_dogs.html')
+    if request.method == 'GET':
+        dogId = request.args.get("dogId")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, name,age FROM Dogs WHERE id=%s", [dogId])
+        dogDetails = cur.fetchone()
+        cur.execute("SELECT id, name FROM DogSizes")
+        sizesDetail = cur.fetchall()
+        cur.execute("SELECT id, firstName, lastName FROM PetOwners")
+        ownerDetail = cur.fetchall()
+        return render_template('administrator/update_dog.html', dog=dogDetails, sizes=sizesDetail,owners=ownerDetail)
+
+
+    elif request.method == "POST":
+        conn = mysql.connect
+        cur = conn.cursor()
+        dogId = request.form['id']
+        name = request.form['name']
+        age = request.form['age']
+        dogSizesId = request.form['size']
+        petOwnersId = request.form['owner']
+        cur.execute("UPDATE Dogs SET name=%s, age=%s, dogSizesId=%s, petOwnersId=%s WHERE id=%s",
+                    ([name], [age], [dogSizesId], [petOwnersId], [dogId]))
+        conn.commit()
+        newurl = '/administrator/all_dogs'
+        return redirect(newurl)
 
 
 @app.route('/dogs/delete', methods=['GET', 'POST'])
 def owner_dogs_delete():
-    return render_template('administrator/all_dogs.html')
+    # delete this sitter from database
+    reqDogID = request.args.get("dogId")
+    print(reqDogID)
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Services WHERE dogsId=%s",
+        ([reqDogID]))
+    cur.execute(
+        "DELETE FROM Dogs_Vaccines WHERE dogsId=%s",
+        ([reqDogID]))        
+    cur.execute(
+        "DELETE FROM Dogs WHERE id=%s",
+        ([reqDogID]))
+    conn.commit()
+    newurl = '/administrator/all_dogs'
+    return redirect(newurl)
 
 
 @app.route('/owner/vaccines', methods=['POST', 'GET'])
@@ -396,13 +431,6 @@ def vaccines():
 
 @app.route('/sitter/view_jobs', methods=['GET'])
 def view_jobs():
-    # job1 = Services(startDate='1/1/2020', time='12:00:00', endDate='1/2/2020',
-    #                 serviceType='Walk', frequency='Weekly',
-    #                 sitter='Jake', dog='Arya', owner='KC')
-    # job2 = Services(startDate='5/22/2020', time='19:00:00', endDate='5/25/2020',
-    #                 serviceType='Watch', frequency='Once',
-    #                 sitter='Jake', dog='Fluffy', owner='Gosia')
-    # jobs = [job1, job2]
     return render_template('sitter/view_jobs.html')
 
 
@@ -908,7 +936,7 @@ def dog_sizes():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT name FROM DogSizes"
+    sql = "SELECT id, name FROM DogSizes"
     cur.execute(sql)
     sizes = cur.fetchall()
     return render_template('administrator/dog_sizes.html', sizes=sizes)
@@ -916,12 +944,44 @@ def dog_sizes():
 
 @app.route('/sizes/delete', methods=['POST', 'GET'])
 def sizes_delete():
-    return render_template('administrator/dog_sizes.html')
+    sizeId = request.args.get("id")
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Dogs WHERE dogSizesId=%s",
+        ([sizeId]))
+    cur.execute(
+        "DELETE FROM DogSizes WHERE id=%s",
+        ([sizeId]))
+    conn.commit()
+    newurl = '../administrator/dog_sizes'
+    return redirect(newurl)
 
 
 @app.route('/sizes/update', methods=['POST', 'GET'])
 def sizes_update():
-    return render_template('administrator/update_dog_size.html')
+    if request.method == 'GET':
+        reqSizeID = request.args.get("id")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, name FROM DogSizes WHERE id=%s", [reqSizeID])
+        size_details = cur.fetchone()
+        print(size_details)
+        return render_template('administrator/update_dog_size.html', size=size_details)
+
+    elif request.method == 'POST':
+        print('update dog size')
+        conn = mysql.connect
+        cur = conn.cursor()
+        size_id = request.form['id']
+        print(size_id)
+        name = request.form['name']
+
+        print(request.form)
+        cur.execute("UPDATE DogSizes SET name=%s WHERE id=%s", ([name], [size_id]))
+        conn.commit()
+        newurl = '../administrator/dog_sizes'
+        return redirect(newurl)
 
 
 @app.route('/sizes/add', methods=['POST', 'GET'])
@@ -962,13 +1022,41 @@ def add_vaccines():
 
 @app.route('/vaccines/delete', methods=['POST', 'GET'])
 def vaccines_delete():
-    return render_template('administrator/all_vaccines.html')
+    vaccId = request.args.get("id")
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Vaccines WHERE id=%s",
+        ([vaccId]))
+    conn.commit()
+    newurl = '../administrator/all_vaccines'
+    return redirect(newurl)
 
 
 @app.route('/vaccines/update', methods=['POST', 'GET'])
 def vaccines_update():
-    return render_template('administrator/update_vaccines.html')
+    if request.method == 'GET':
+        reqVaccID = request.args.get("id")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT id, name FROM DogSizes WHERE id=%s", [reqVaccID])
+        vacc_details = cur.fetchone()
+        print(vacc_details)
+        return render_template('administrator/update_vaccines.html', vaccines=vacc_details)
 
+    elif request.method == 'POST':
+        print('update vaccine')
+        conn = mysql.connect
+        cur = conn.cursor()
+        vacc_id = request.form['id']
+        print(vacc_id)
+        name = request.form['name']
+
+        print(request.form)
+        cur.execute("UPDATE DogSizes SET name=%s WHERE id=%s", ([name], [vacc_id]))
+        conn.commit()
+        newurl = '../administrator/all_vaccines'
+        return redirect(newurl)
 
 
 @app.route('/administrator/all_dogs', methods=['POST', 'GET'])
@@ -977,7 +1065,7 @@ def all_dogs():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName FROM Dogs\
+    sql = "SELECT Dogs.id,Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName FROM Dogs\
            INNER JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
            INNER JOIN PetOwners on Dogs.petOwnersId=PetOwners.id\
            ORDER BY Dogs.petOwnersId"

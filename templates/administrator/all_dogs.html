@@ -16,14 +16,14 @@
   {% for dog in dogs %}
   <tbody>
     <tr>
-        <td>{{dog.0}}</td>
         <td>{{dog.1}}</td>
         <td>{{dog.2}}</td>
         <td>{{dog.3}}</td>
+        <td>{{dog.4}}</td>
         <td><a href="../owner/vaccines">Vaccines</a></td>
         <td>
-            <a href="/dogs/update"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-            <a href="/dogs/delete"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+            <a href="/dogs/update?dogId={{ dog.0 }}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
+            <a href="/dogs/delete?dogId={{ dog.0 }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
         </td>   
   </tbody>
   {% endfor %}
