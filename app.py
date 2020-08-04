@@ -746,12 +746,7 @@ def jobs_update():
         serviceId = request.args.get("id")
         conn = mysql.connect
         cur = conn.cursor()
-<<<<<<< HEAD
         cur.execute("SELECT id, startDate,endDate,serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
-=======
-        cur.execute("SELECT id, startDate,endDate, serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
-        cur.execute("SELECT id, startDate,endDate, serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
->>>>>>> master
         serviceDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM ServiceTypes")
         typeDetail = cur.fetchall()
@@ -1144,7 +1139,7 @@ def all_dogs():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT Dogs.id,Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName FROM Dogs\
+    sql = "SELECT Dogs.id,Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName, PetOwners.lastName FROM Dogs\
            INNER JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
            INNER JOIN PetOwners on Dogs.petOwnersId=PetOwners.id\
            ORDER BY Dogs.petOwnersId"

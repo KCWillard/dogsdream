@@ -24,7 +24,7 @@
                 <label for="owner">Owner</label>
                     <select class="form-control" id="owner" name="owner">
                     {% for owner in owners %}
-                        <option value="{{ owner.0 }}">{{ owner.1 }}</option>
+                        <option value="{{ owner.0 }}">{{ owner.1 }} {{ owner.2 }}</option>
                     {% endfor %}
                 </select>
             </div>
