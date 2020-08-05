@@ -533,7 +533,7 @@ def sitter_certification_delete():
 @app.route('/sitter/certifications', methods=['POST', 'GET'])
 def certifications():
     if request.method == 'GET':
-        reqSitterID = request.args.get("sittersId")
+        reqSitterID = request.args.get("sitterID")
         conn = mysql.connect
         cur = conn.cursor()
         cur.execute("SELECT Certifications.id, Certifications.name FROM Sitters_Certifications\
