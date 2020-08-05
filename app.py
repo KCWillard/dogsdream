@@ -305,7 +305,7 @@ def add_user():
             cur.execute("INSERT INTO PetOwners(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
 
         mysql.connection.commit()
-    return render_template('administrator/add_user.html')
+    return render_template('administrator/all_owners.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -450,7 +450,7 @@ def owner_dogs_update():
         dogId = request.args.get("dogId")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, name,age, dogSizesId FROM Dogs WHERE id=%s", [dogId])
+        cur.execute("SELECT id, name,age, dogSizesId, petOwnersId FROM Dogs WHERE id=%s", [dogId])
         dogDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM DogSizes")
         sizesDetail = cur.fetchall()
