@@ -584,7 +584,7 @@ def delete_sitter():
 @app.route('/sitter/update', methods=['POST', 'GET'])
 def profile_update():
     if request.method == 'GET':
-        reqSitterID = request.args.get("sitterId")
+        reqSitterID = request.args.get("sitterID")
         conn = mysql.connect
         cur = conn.cursor()
         cur.execute("SELECT id, firstName,lastName,phoneNumber,streetAddress,city,state,\
