@@ -9,8 +9,8 @@
                 <input type="Text" class="form-control" id="name"  name="name">
             </div>
             <div class="form-group">
-                <label for="age">Age</label>
-                <input type="text" class="form-control" id="age" name="age">
+                <label for="age" >Age</label>
+                <input type="text" class="form-control" id="age" name="age" value="Please enter 0-99">
             </div>
             <div>
                 <label for="size">Dog Size</label>
@@ -24,7 +24,7 @@
                 <label for="owner">Owner</label>
                     <select class="form-control" id="owner" name="owner">
                     {% for owner in owners %}
-                        <option value="{{ owner.0 }}">{{ owner.1 }}</option>
+                        <option value="{{ owner.0 }}">{{ owner.1 }} {{ owner.2 }}</option>
                     {% endfor %}
                 </select>
             </div>

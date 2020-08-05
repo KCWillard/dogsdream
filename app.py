@@ -52,38 +52,38 @@ def delete_all_tables():
 def create_tables():
     connection = mysql.connection
     cur = connection.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS ServiceTypes ( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS ServiceTypes (
     `id` INT(11) AUTO_INCREMENT,
     `name` VARCHAR(256) NOT NULL,
-    PRIMARY KEY(`id`)   
+    PRIMARY KEY(`id`)
 )ENGINE=INNODB;
 ''')
-    cur.execute('''CREATE TABLE IF NOT EXISTS FrequencyOfServices ( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS FrequencyOfServices (
     `id` INT(11) AUTO_INCREMENT,
     `name` VARCHAR(256) NOT NULL,
-    PRIMARY KEY(`id`)   
+    PRIMARY KEY(`id`)
 )ENGINE=INNODB;
 ''')
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS Certifications ( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS Certifications (
     `id` INT(11) AUTO_INCREMENT,
     `name` VARCHAR(256) NOT NULL,
-    PRIMARY KEY(`id`)     
+    PRIMARY KEY(`id`)
 )ENGINE=INNODB;
 ''')
-    cur.execute('''CREATE TABLE IF NOT EXISTS Vaccines ( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS Vaccines (
     `id` INT(11) AUTO_INCREMENT,
     `name` VARCHAR(256) NOT NULL,
-    PRIMARY KEY(`id`) 
+    PRIMARY KEY(`id`)
 )ENGINE=INNODB;
 ''')
-    cur.execute('''CREATE TABLE IF NOT EXISTS DogSizes( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS DogSizes(
     `id` INT(11) AUTO_INCREMENT,
     `name` VARCHAR(256) NOT NULL,
-    PRIMARY KEY(`id`)    
+    PRIMARY KEY(`id`)
 )ENGINE=INNODB;
      ''')
-    cur.execute('''CREATE TABLE IF NOT EXISTS PetOwners( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS PetOwners(
     `id` INT(11) AUTO_INCREMENT,
     `firstName` VARCHAR(256) NOT NULL,
     `lastName` VARCHAR(255)  NOT NULL ,
@@ -93,11 +93,11 @@ def create_tables():
     `state` VARCHAR(2) NOT NULL,
     `zipCode` INT(5) NOT NULL,
     `email` VARCHAR(256) NOT NULL,
-    `password` VARCHAR(256) NOT NULL,    
-    PRIMARY KEY(`id`)       
+    `password` VARCHAR(256) NOT NULL,
+    PRIMARY KEY(`id`)
 ) ENGINE=INNODB;
 ''')
-    cur.execute('''CREATE TABLE IF NOT EXISTS Sitters ( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS Sitters (
     `id` INT(11) AUTO_INCREMENT,
     `firstName` VARCHAR(256) NOT NULL,
     `lastName` VARCHAR(255)  NOT NULL ,
@@ -107,22 +107,22 @@ def create_tables():
     `state` VARCHAR(2) NOT NULL,
     `zipCode` INT(5) NOT NULL,
     `email` VARCHAR(256) NOT NULL,
-    `password` VARCHAR(256) NOT NULL,    
-    PRIMARY KEY(`id`)     
+    `password` VARCHAR(256) NOT NULL,
+    PRIMARY KEY(`id`)
 )ENGINE=INNODB;
 ''')
-    cur.execute('''CREATE TABLE IF NOT EXISTS Dogs ( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS Dogs (
     `id` INT(11) AUTO_INCREMENT,
     `name` VARCHAR(256) NOT NULL,
     `age` INT(2) NOT NULL,
     `dogSizesId` INT,
-    `petOwnersId` INT NOT NULL, 
+    `petOwnersId` INT NOT NULL,
     PRIMARY KEY(`id`),
     CONSTRAINT dogs_ibfk_1 FOREIGN KEY (dogSizesId) REFERENCES DogSizes(id),
 	CONSTRAINT `dogs_ibfk_2` FOREIGN KEY (`petOwnersId`) REFERENCES `PetOwners`(`id`) ON DELETE CASCADE
     )ENGINE=INNODB;
 ''')
-    cur.execute('''CREATE TABLE IF NOT EXISTS Services ( 
+    cur.execute('''CREATE TABLE IF NOT EXISTS Services (
     `id` INT(11) AUTO_INCREMENT,
 	 `startDate` DATE NOT NULL,
 	 `endDate` DATE NOT NULL,
@@ -130,12 +130,12 @@ def create_tables():
 	 `frequencyOfServicesId` INT NOT NULL,
 	 `sittersId` INT,
 	 `dogsId` INT NOT NULL,
-	 PRIMARY KEY(`id`), 
+	 PRIMARY KEY(`id`),
     CONSTRAINT services_ibfk_1 FOREIGN KEY (serviceTypesId) REFERENCES ServiceTypes(id),
 	 CONSTRAINT services_ibfk_2 FOREIGN KEY (frequencyOfServicesId) REFERENCES FrequencyOfServices(id),
-	 CONSTRAINT services_ibfk_3 FOREIGN KEY (sittersId) REFERENCES Sitters(id),
+	 CONSTRAINT services_ibfk_3 FOREIGN KEY (sittersId) REFERENCES Sitters(id) ON DELETE SET NULL,
 	 CONSTRAINT services_ibfk_4 FOREIGN KEY (dogsId) REFERENCES Dogs(id) ON DELETE CASCADE,
-	 CONSTRAINT chk_date CHECK(endDate >= startDate)   
+	 CONSTRAINT chk_date CHECK(endDate >= startDate)
 )ENGINE=INNODB;
 ''')
     cur.execute('''CREATE TABLE IF NOT EXISTS Sitters_Certifications (
@@ -237,6 +237,7 @@ VALUES
                 ('1', '2'),
                 ('2', '3'),
                 ('2', '4');''')
+
         connection.commit()
         return 'Initialized all tables'
     except Exception as e:
@@ -352,13 +353,13 @@ def add_dog():
     if request.method == 'GET':
         conn = mysql.connect
         cur = conn.cursor()
-        sql = "SELECT id,name FROM DogSizes"
+        sql = "SELECT id, name FROM DogSizes"
         cur.execute(sql)
         dogSizes = cur.fetchall()
-        sql = "SELECT id,firstName,lastName FROM PetOwners"
+        sql = "SELECT id, firstName, lastName FROM PetOwners"
         cur.execute(sql)
         owners = cur.fetchall()
-        return render_template('administrator/add_dogs.html', dogSizes=dogSizes,owners=owners)
+        return render_template('administrator/add_dogs.html', dogSizes=dogSizes, owners=owners)
 
     elif request.method == 'POST':
         conn = mysql.connect
@@ -402,10 +403,10 @@ def owner_update():
         # print(sitter_details)
         return render_template('owner/profile_update.html', owner=owner_details)
 
-    elif request.method == 'POST':        
+    elif request.method == 'POST':
         conn = mysql.connect
         cur = conn.cursor()
-        reqOwnerID = request.form['id']       
+        reqOwnerID = request.form['id']
         firstName = request.form['firstName']
         lastName = request.form['lastName']
         phoneNumber = request.form['phoneNumber']
@@ -419,13 +420,13 @@ def owner_update():
         conn.commit()
         newurl = '/administrator/all_owners'
         return redirect(newurl)
- 
+
 
 
 @app.route('/owner/delete', methods=['GET', 'POST'])
 def owner_delete():
     # delete thisownerfrom database
-    reqOwnerID = request.args.get("id")    
+    reqOwnerID = request.args.get("id")
     conn = mysql.connect
     cur = conn.cursor()
     cur.execute(
@@ -485,7 +486,7 @@ def owner_dogs_delete():
         ([reqDogID]))
     cur.execute(
         "DELETE FROM Dogs_Vaccines WHERE dogsId=%s",
-        ([reqDogID]))        
+        ([reqDogID]))
     cur.execute(
         "DELETE FROM Dogs WHERE id=%s",
         ([reqDogID]))
@@ -638,7 +639,7 @@ def all_sitters():
     cur.execute(sql)
     sitters = cur.fetchall()
     return render_template('administrator/all_sitters.html', sitters=sitters)
-    
+
 
 
 @app.route('/administrator/all_certifications', methods=['POST', 'GET'])
@@ -650,7 +651,7 @@ def full_certifications():
     sql = "SELECT id, name FROM Certifications"
     cur.execute(sql)
     certs = cur.fetchall()
-    return render_template('administrator/all_certifications.html', certs=certs)    
+    return render_template('administrator/all_certifications.html', certs=certs)
 
 
 @app.route('/certification/delete', methods=['POST', 'GET'])
@@ -746,8 +747,7 @@ def jobs_update():
         serviceId = request.args.get("id")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, startDate,endDate, serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
-        cur.execute("SELECT id, startDate,endDate, serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
+        cur.execute("SELECT id, startDate,endDate,serviceTypesId, frequencyOfServicesId,sittersId,dogsId FROM Services WHERE id=%s", [serviceId])
         serviceDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM ServiceTypes")
         typeDetail = cur.fetchall()
@@ -757,6 +757,7 @@ def jobs_update():
         freqdetail = cur.fetchall()
         cur.execute("SELECT id, firstName, lastName FROM Sitters")
         sitterDetail = cur.fetchall()
+        print(sitterDetail)
         return render_template('administrator/update_service.html', job=serviceDetails, types=typeDetail, dogs=dogsdetail,\
                                frequency=freqdetail, sitters=sitterDetail)
 
@@ -769,13 +770,24 @@ def jobs_update():
         endDate = request.form['endDate']
         serviceTypeId = request.form['serviceTypeId']
         frequencyOfServicesId = request.form['frequencyOfServicesId']
-        sittersId = request.form['sittersId']
         dogsId = request.form['dogsId']
-        cur.execute("UPDATE Services SET startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId FROM Services WHERE id=%s", \
+        sittersId = request.form['sittersId']
+
+        if sittersId == 'NULL':
+            cur.execute("UPDATE Services set sittersId=null WHERE id=%s", [serviceId])
+            conn.commit()
+            cur.execute(
+                "UPDATE Services SET startDate=%s, endDate=%s, serviceTypesId=%s, frequencyOfServicesId=%s, dogsId=%s WHERE id=%s", \
+                ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [dogsId], [serviceId]))
+            conn.commit()
+            newurl = '/administrator/all_jobs'
+            return redirect(newurl)
+        else:
+            cur.execute("UPDATE Services SET startDate=%s, endDate=%s, serviceTypesId=%s, frequencyOfServicesId=%s, sittersId=%s, dogsId=%s WHERE id=%s", \
                     ([startDate], [endDate], [serviceTypeId], [frequencyOfServicesId], [sittersId], [dogsId], [serviceId]))
-        conn.commit()
-        newurl = '/administrator/all_jobs'
-        return redirect(newurl)
+            conn.commit()
+            newurl = '/administrator/all_jobs'
+            return redirect(newurl)
 
 
 @app.route('/jobs/add', methods=['POST', 'GET'])
@@ -824,7 +836,6 @@ def jobs_filter():
         date = request.args.get("date")
         conn = mysql.connect
         cur = conn.cursor()
-        print(date)
         cur.execute("SELECT Services.id, Services.startDate,Services.endDate,ServiceTypes.name,Dogs.name,\
                FrequencyOfServices.name,Sitters.firstName, Sitters.lastName FROM Services\
                INNER JOIN ServiceTypes on Services.serviceTypesId=ServiceTypes.id\
@@ -834,7 +845,6 @@ def jobs_filter():
                 LEFT JOIN Sitters on Services.sittersId=Sitters.id WHERE Services.startDate>=%s\
                ORDER BY Services.startDate",[date])
         jobs = cur.fetchall()
-        print(jobs)
     return render_template('administrator/filter.html', jobs=jobs)
 
 @app.route('/jobs/assigned', methods=['POST', 'GET'])
@@ -1037,18 +1047,15 @@ def sizes_update():
         cur = conn.cursor()
         cur.execute("SELECT id, name FROM DogSizes WHERE id=%s", [reqSizeID])
         size_details = cur.fetchone()
-        print(size_details)
         return render_template('administrator/update_dog_size.html', size=size_details)
 
     elif request.method == 'POST':
-        print('update dog size')
         conn = mysql.connect
         cur = conn.cursor()
         size_id = request.form['id']
-        print(size_id)
+
         name = request.form['name']
 
-        print(request.form)
         cur.execute("UPDATE DogSizes SET name=%s WHERE id=%s", ([name], [size_id]))
         conn.commit()
         newurl = '../administrator/dog_sizes'
@@ -1077,7 +1084,6 @@ def all_vaccines():
     sql = "SELECT id, name FROM Vaccines"
     cur.execute(sql)
     vaccines = cur.fetchall()
-    print(vaccines)
     return render_template('administrator/all_vaccines.html',
                            vaccines=vaccines)
 
@@ -1116,7 +1122,6 @@ def vaccines_update():
         cur = conn.cursor()
         cur.execute("SELECT id, name FROM Vaccines WHERE id=%s", [reqVaccID])
         vacc_details = cur.fetchone()
-        print(vacc_details)
         return render_template('administrator/update_vaccines.html', vaccines=vacc_details)
 
     elif request.method == 'POST':
@@ -1140,7 +1145,7 @@ def all_dogs():
     cur = None
     conn = mysql.connect
     cur = conn.cursor()
-    sql = "SELECT Dogs.id,Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName FROM Dogs\
+    sql = "SELECT Dogs.id,Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName, PetOwners.lastName FROM Dogs\
            INNER JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
            INNER JOIN PetOwners on Dogs.petOwnersId=PetOwners.id\
            ORDER BY Dogs.petOwnersId"
@@ -1160,7 +1165,7 @@ def all_owners():
     cur.execute(sql)
     owners = cur.fetchall()
     return render_template('administrator/all_owners.html', owners=owners)
-    
+
 
 
 if __name__ == '__main__':
