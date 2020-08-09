@@ -164,10 +164,11 @@ VALUES
 ('Very Large >85lbs');''')
         cur.execute('''INSERT INTO ServiceTypes (`name`)
 VALUES
-('Walk'),
-('Watch'),
-('Groom'),
-('Train');''')
+('Boarding'),
+('House sitting'),
+('Drop-in visit'),
+('Day care'),
+('Walk');''')
 
         cur.execute('''INSERT INTO FrequencyOfServices(`name`)
         VALUES
