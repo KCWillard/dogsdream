@@ -398,12 +398,20 @@ def add_dog():
         age = request.form['age']
         size = request.form['size']
         owner = request.form['owner']
-        cur.execute(
+        if size == 'NULL':
+            cur.execute(
+                "INSERT INTO Dogs(name,age,petOwnersId) VALUES(%s,%s,%s)",
+                ([name], [age], [owner]))
+            conn.commit()
+            newurl = '../administrator/all_dogs'
+            return redirect(newurl)
+        else:
+            cur.execute(
             "INSERT INTO Dogs(name,age,dogSizesId,petOwnersId) VALUES(%s,%s,%s,%s)",
             ([name], [age], [size], [owner]))
-        conn.commit()
-        newurl = '../administrator/all_dogs'
-        return redirect(newurl)
+            conn.commit()
+            newurl = '../administrator/all_dogs'
+            return redirect(newurl)
 
 
 
@@ -480,7 +488,7 @@ def owner_dogs_update():
         dogId = request.args.get("dogId")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, name,age, dogSizesId FROM Dogs WHERE id=%s", [dogId])
+        cur.execute("SELECT id, name,age, dogSizesId, petOwnersId FROM Dogs WHERE id=%s", [dogId])
         dogDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM DogSizes")
         sizesDetail = cur.fetchall()
@@ -497,11 +505,20 @@ def owner_dogs_update():
         age = request.form['age']
         dogSizesId = request.form['size']
         petOwnersId = request.form['owner']
-        cur.execute("UPDATE Dogs SET name=%s, age=%s, dogSizesId=%s, petOwnersId=%s WHERE id=%s",
+        if dogSizesId == 'NULL':
+            cur.execute("UPDATE Dogs SET dogSizesId=null WHERE id=%s",[dogId])
+            conn.commit()
+            cur.execute("UPDATE Dogs SET name=%s, age=%s, petOwnersId=%s WHERE id=%s",
+                        ([name], [age], [petOwnersId], [dogId]))
+            conn.commit()
+            newurl = '/administrator/all_dogs'
+            return redirect(newurl)
+        else:
+            cur.execute("UPDATE Dogs SET name=%s, age=%s, dogSizesId=%s, petOwnersId=%s WHERE id=%s",
                     ([name], [age], [dogSizesId], [petOwnersId], [dogId]))
-        conn.commit()
-        newurl = '/administrator/all_dogs'
-        return redirect(newurl)
+            conn.commit()
+            newurl = '/administrator/all_dogs'
+            return redirect(newurl)
 
 
 @app.route('/dogs/delete', methods=['GET', 'POST'])
@@ -853,12 +870,20 @@ def jobs_add():
         frequency = request.form['frequency']
         sitter = request.form['sitter']
 
-        cur.execute(
-            "INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId) VALUES(%s,%s,%s,%s,%s,%s)",
-            ([startDate], [endDate], [serviceType], [frequency], [sitter], [dog]))
-        conn.commit()
-        newurl = '../administrator/all_jobs'
-        return redirect(newurl)
+        if sitter == 'NULL':
+            cur.execute(
+            "INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, dogsId) VALUES(%s,%s,%s,%s,%s)",
+            ([startDate], [endDate], [serviceType], [frequency], [dog]))
+            conn.commit()
+            newurl = '../administrator/all_jobs'
+            return redirect(newurl)
+        else:
+            cur.execute(
+                "INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId) VALUES(%s,%s,%s,%s,%s,%s)",
+                ([startDate], [endDate], [serviceType], [frequency], [sitter], [dog]))
+            conn.commit()
+            newurl = '../administrator/all_jobs'
+            return redirect(newurl)
 
 @app.route('/jobs/filter', methods=['POST', 'GET'])
 def jobs_filter():
@@ -1176,7 +1201,7 @@ def all_dogs():
     conn = mysql.connect
     cur = conn.cursor()
     sql = "SELECT Dogs.id,Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName, PetOwners.lastName FROM Dogs\
-           INNER JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
+           LEFT JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
            INNER JOIN PetOwners on Dogs.petOwnersId=PetOwners.id\
            ORDER BY Dogs.petOwnersId"
     cur.execute(sql)

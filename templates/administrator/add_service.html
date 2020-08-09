@@ -39,6 +39,7 @@
             <div class="form-group">
                 <label for="sitter">Sitter</label>
                 <select class="form-control" id="sitter" name="sitter">
+                <option value="NULL">NULL</option>
                     {% for sitter in sitters %}
                         <option value="{{ sitter.0 }}">{{ sitter.1 }} {{ sitter.2 }}</option>
                     {% endfor %}

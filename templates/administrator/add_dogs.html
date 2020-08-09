@@ -10,11 +10,12 @@
             </div>
             <div class="form-group">
                 <label for="age" >Age</label>
-                <input type="text" class="form-control" id="age" name="age" value="Please enter 0-99">
+                <input type="text" class="form-control" id="age" name="age" placeholder="0 for puppy, 1-25 for adult dog" >
             </div>
             <div>
                 <label for="size">Dog Size</label>
                 <select class="form-control" id="size" name="size">
+                <option value="NULL">NULL</option>
                     {% for dogSize in dogSizes %}
                         <option value="{{ dogSize.0 }}">{{ dogSize.1 }}</option>
                     {% endfor %}
