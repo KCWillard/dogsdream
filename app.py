@@ -4,8 +4,8 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 # DB login info to connect to pythonanywhere db
-app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
-# app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
+# app.config['MYSQL_HOST'] = 'dogsdream.mysql.pythonanywhere-services.com'
+app.config['MYSQL_HOST'] = 'localhost' #for Gosia local db
 app.config['MYSQL_USER'] = 'dogsdream'
 app.config['MYSQL_PASSWORD'] = 'group3osu'
 app.config['MYSQL_DB'] = 'dogsdream$dogsdream'
@@ -315,7 +315,31 @@ def add_user():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    if request.method == 'POST':
+        form = request.form
+        email = form['email']
+        password = form['password']
+        firstName = form['firstName']
+        lastName = form['lastName']
+        phoneNumber = form['phoneNumber']
+        streetAddress = form['streetAddress']
+        city = form['city']
+        state = form['state']
+        zipCode = form['zipCode']
+        reg_type = form['reg_type']
+        cur = mysql.connection.cursor()
+        if reg_type == 'sitter':
+            cur.execute("INSERT INTO Sitters(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
+            mysql.connection.commit()
+            newurl = 'login'
+            return redirect(newurl)
+        else:
+            cur.execute("INSERT INTO PetOwners(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
+            mysql.connection.commit()
+            newurl = 'login'
+            return redirect(newurl)
+    else:
+        return render_template('register.html')
 
 
 @app.route('/owner', methods=['POST', 'GET'])
