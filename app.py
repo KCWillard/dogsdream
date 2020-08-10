@@ -585,8 +585,6 @@ def owner_vaccine_delete():
     return redirect(newurl)
 
 
-
-
 @app.route('/sitter/view_jobs', methods=['GET'])
 def view_jobs():
     return render_template('sitter/view_jobs.html')
