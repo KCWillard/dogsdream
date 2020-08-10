@@ -544,7 +544,47 @@ def owner_dogs_delete():
 
 @app.route('/owner/vaccines', methods=['POST', 'GET'])
 def vaccines():
-    return render_template('owner/vaccines.html')
+    if request.method == 'GET':
+        dogsId = request.args.get("dogsID")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT Vaccines.id, Vaccines.name FROM Dogs_Vaccines\
+             INNER JOIN Vaccines on Dogs_Vaccines.vaccinesId = Vaccines.id\
+              WHERE dogsId=%s", [dogsId])
+        dogs_vaccines = cur.fetchall()
+
+        cur.execute("SELECT c.id, c.name  FROM Vaccines c LEFT JOIN (SELECT vaccinesId FROM\
+             Dogs_Vaccines WHERE dogsId=%s) as sc on c.id = sc.vaccinesId WHERE\
+              sc.vaccinesId IS NULL", [dogsId])
+        all_vaccines = cur.fetchall()
+        return render_template('owner/vaccines.html', dog_id=dogsId, vaccines=dogs_vaccines,
+                               all_vaccines=all_vaccines)
+    else:
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Dogs_Vaccines(dogsId, vaccinesId) VALUES(%s,%s)",
+            ([request.form['dogsId']], [request.form['newvaccines']]))
+        conn.commit()
+
+        newurl = '/owner/vaccines?dogsID=' + request.form['dogsId']
+        return redirect(newurl)
+
+@app.route('/owner/vaccines/delete', methods=['GET'])
+def owner_vaccine_delete():
+    dogsId = request.args.get("dogsID")
+    vaccineID = request.args.get("vaccineID")
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Dogs_Vaccines WHERE dogsId=%s AND vaccinesId=%s",
+        ([dogsId], [vaccineID]))
+    conn.commit()
+
+    newurl = '/owner/vaccines?dogsID=' + dogsId
+    return redirect(newurl)
+
+
 
 
 @app.route('/sitter/view_jobs', methods=['GET'])
@@ -565,9 +605,6 @@ def sitter_profile():
 def sitter_certification_delete():
     reqSitterID = request.args.get("sitterID")
     reqCertificateID = request.args.get("certificateID")
-    print(reqSitterID)
-    print(reqCertificateID)
-
     conn = mysql.connect
     cur = conn.cursor()
     cur.execute(
