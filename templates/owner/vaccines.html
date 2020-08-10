@@ -1,38 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Vaccines for specific dog</h1>
+<h1>Vaccines</h1>
 <table border="1px solid black">
     <tr>
         <th>Name</th>
     </tr>
+    {% for vaccine in vaccines %}
     <tr>
-        <td>Vaccine 1</td>
-<td>
-            <a href="/owner/vaccines"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+        <td>{{ vaccine.1 }}</td>
+        <td>
+            <a href="/owner/vaccines/delete?dogsID={{dog_id}}&vaccineID={{ vaccine.0 }}">
+                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+            </a>
         </td>
     </tr>
-<tr>
-        <td>Vaccine 2</td>
-<td>
-            <a href="/owner/vaccines"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>    </tr>
-<tr>
-        <td>Vaccine 3</td>
-<td>
-            <a href="/owner/vaccines"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-        </td>    </tr>
+    {% endfor %}
 </table>
     <br>
     <form action='/owner/vaccines' method='POST'>
-        <select class='custom-select' placeholder='Please select an option'>
-            <option value='schedule' name='schedule'>Vaccine 4</option>
-            <option value='view_appointments' name='view_appointments'>Vaccine 5</option>
-            <option value='add_dogs' name='add_dogs'>Vaccine 6</option>
+    <input type="hidden" id="dogsId" name="dogsId" value="{{dog_id}}">
+        <select class='form-control' id="newvaccines" name="newvaccines">
+            {% for all_vaccine in all_vaccines %}
+                <option value="{{ all_vaccine.0 }}">{{ all_vaccine.1 }}</option>
+            {% endfor %}
         </select>
-    <a href="/owner/vaccines"><button type="button" class="btn btn-primary">Add</button></a>
+            <button type="submit" class="btn btn-primary">Add</button>
     </form>
-
 
 
 {% endblock %}

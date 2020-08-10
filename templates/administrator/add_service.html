@@ -6,11 +6,11 @@
         <form method="POST" action="/jobs/add">
             <div class="form-group">
                 <label for="startdate">Start Date</label>
-                <input type="date" class="form-control" id="startdate"  name="startdate">
+                <input type="date" class="form-control" id="startdate"  name="startdate" required>
             </div>
             <div class="form-group">
                 <label for="enddate">End Date</label>
-                <input type="date" class="form-control" id="enddate" name="enddate">
+                <input type="date" class="form-control" id="enddate" name="enddate" required>
             </div>
             <div>
                 <label for="type">Service Type</label>
@@ -39,6 +39,7 @@
             <div class="form-group">
                 <label for="sitter">Sitter</label>
                 <select class="form-control" id="sitter" name="sitter">
+                <option value="NULL">NULL</option>
                     {% for sitter in sitters %}
                         <option value="{{ sitter.0 }}">{{ sitter.1 }} {{ sitter.2 }}</option>
                     {% endfor %}

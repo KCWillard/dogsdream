@@ -3,10 +3,10 @@
     <div class="container">
         <h1>Register</h1>
         <br>
-        <form>
+        <form method="post">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="username" , name="username" placeholder="Username/Email">
+                <input type="email" class="form-control" id="username" name="email" placeholder="Username/Email">
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
@@ -14,14 +14,14 @@
             </div>
             <div>
                 <label for="fname">First Name</label>
-                <input type="text" class="form-control" id="fname" , name="fname" placeholder="First Name">
+                <input type="text" class="form-control" id="fname" name="firstName" placeholder="First Name">
             </div>
             <div>
                 <label for="lname">Last Name</label>
-                <input type="text" class="form-control" id="lname" , name="lname" placeholder="Last Name">
+                <input type="text" class="form-control" id="lname" , name="lastName" placeholder="Last Name">
             </div>
-            <input type="number" class="form-control" id="phone" , name="phone" placeholder="Phone Number">
-            <input type="text" class="form-control" id="address" , name="address" placeholder="Street address">
+            <input type="number" class="form-control" id="phone" , name="phoneNumber" placeholder="Phone Number">
+            <input type="text" class="form-control" id="address" , name="streetAddress" placeholder="Street address">
             <input type="text" class="form-control" id="city" , name="city" placeholder="City">
             <select class="form-control" id="state" name="state">
                 <option value="AL">AL</option>
@@ -76,7 +76,7 @@
                 <option value="WV">WV</option>
                 <option value="WY">WY</option>
             </select>
-            <input type='number' class="form-control" id='zip' name='zip' placeholder='ZIP Code' maxlength='5'>
+            <input type='number' class="form-control" id='zip' name='zipCode' placeholder='ZIP Code' maxlength='5'>
             <br>
             <br>
             <select class="form-control" id='reg_type' name='reg_type' placeholder='Registration type'>

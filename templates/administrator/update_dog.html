@@ -4,18 +4,19 @@
         <h1>Update {{dog.1}}</h1>
         <br>
         <form method="POST" action="/dogs/update">
-            <input type="hidden" id="id" name="id" value="{{dog.0}}">
+            <input type="hidden" id="id" name="id" value="{{dog.0}}" >
             <div class="form-group">
                 <label for="startdate">Name</label>
-                <input type="text" class="form-control" id="name"  name="name" value="{{ dog.1 }}">
+                <input type="text" class="form-control" id="name"  name="name" value="{{ dog.1 }}" required>
             </div>
             <div class="form-group">
                 <label for="enddate">Age</label>
-                <input type="text" class="form-control" id="age" name="age" value="{{ dog.2 }}">
+                <input type="text" class="form-control" id="age" name="age" value="{{ dog.2 }}" required>
             </div>
             <div>
                 <label for="type">Size</label>
                 <select class="form-control" id="size" name="size">
+                <option value="NULL">Unknown</option>
                     {% for size in sizes %}
                         {{ size[0] }}
                         {{ dog[3] }}

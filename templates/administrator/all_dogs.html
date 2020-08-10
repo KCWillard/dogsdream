@@ -20,7 +20,8 @@
         <td>{{dog.2}}</td>
         <td>{{dog.3}}</td>
         <td>{{dog.4}} {{ dog.5 }}</td>
-{#        <td><a href="../owner/vaccines">Vaccines</a></td>#}
+
+        <td><a href="../owner/vaccines?dogsID={{ dog.0 }}">Vaccines</a></td>
         <td>
             <a href="/dogs/update?dogId={{ dog.0 }}"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
             <a href="/dogs/delete?dogId={{ dog.0 }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>

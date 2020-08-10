@@ -164,10 +164,11 @@ VALUES
 ('Very Large >85lbs');''')
         cur.execute('''INSERT INTO ServiceTypes (`name`)
 VALUES
-('Walk'),
-('Watch'),
-('Groom'),
-('Train');''')
+('Boarding'),
+('House sitting'),
+('Drop-in visit'),
+('Day care'),
+('Walk');''')
 
         cur.execute('''INSERT INTO FrequencyOfServices(`name`)
         VALUES
@@ -301,16 +302,45 @@ def add_user():
         cur = mysql.connection.cursor()
         if reg_type == 'sitter':
             cur.execute("INSERT INTO Sitters(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
+            mysql.connection.commit()
+            newurl = '../administrator/all_sitters'
+            return redirect(newurl)
         else:
             cur.execute("INSERT INTO PetOwners(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
-
-        mysql.connection.commit()
-    return render_template('administrator/add_user.html')
+            mysql.connection.commit()
+            newurl = '../administrator/all_owners'
+            return redirect(newurl)
+    else:
+        return render_template('administrator/add_user.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    if request.method == 'POST':
+        form = request.form
+        email = form['email']
+        password = form['password']
+        firstName = form['firstName']
+        lastName = form['lastName']
+        phoneNumber = form['phoneNumber']
+        streetAddress = form['streetAddress']
+        city = form['city']
+        state = form['state']
+        zipCode = form['zipCode']
+        reg_type = form['reg_type']
+        cur = mysql.connection.cursor()
+        if reg_type == 'sitter':
+            cur.execute("INSERT INTO Sitters(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
+            mysql.connection.commit()
+            newurl = 'login'
+            return redirect(newurl)
+        else:
+            cur.execute("INSERT INTO PetOwners(firstName, lastName, phoneNumber, streetAddress, city, state, zipCode,email, password) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", ([firstName], [lastName], [phoneNumber], [streetAddress], [city], [state], [zipCode], [email], [password]))
+            mysql.connection.commit()
+            newurl = 'login'
+            return redirect(newurl)
+    else:
+        return render_template('register.html')
 
 
 @app.route('/owner', methods=['POST', 'GET'])
@@ -368,12 +398,20 @@ def add_dog():
         age = request.form['age']
         size = request.form['size']
         owner = request.form['owner']
-        cur.execute(
+        if size == 'NULL':
+            cur.execute(
+                "INSERT INTO Dogs(name,age,petOwnersId) VALUES(%s,%s,%s)",
+                ([name], [age], [owner]))
+            conn.commit()
+            newurl = '../administrator/all_dogs'
+            return redirect(newurl)
+        else:
+            cur.execute(
             "INSERT INTO Dogs(name,age,dogSizesId,petOwnersId) VALUES(%s,%s,%s,%s)",
             ([name], [age], [size], [owner]))
-        conn.commit()
-        newurl = '../administrator/all_dogs'
-        return redirect(newurl)
+            conn.commit()
+            newurl = '../administrator/all_dogs'
+            return redirect(newurl)
 
 
 
@@ -450,7 +488,7 @@ def owner_dogs_update():
         dogId = request.args.get("dogId")
         conn = mysql.connect
         cur = conn.cursor()
-        cur.execute("SELECT id, name,age, dogSizesId FROM Dogs WHERE id=%s", [dogId])
+        cur.execute("SELECT id, name,age, dogSizesId, petOwnersId FROM Dogs WHERE id=%s", [dogId])
         dogDetails = cur.fetchone()
         cur.execute("SELECT id, name FROM DogSizes")
         sizesDetail = cur.fetchall()
@@ -467,11 +505,20 @@ def owner_dogs_update():
         age = request.form['age']
         dogSizesId = request.form['size']
         petOwnersId = request.form['owner']
-        cur.execute("UPDATE Dogs SET name=%s, age=%s, dogSizesId=%s, petOwnersId=%s WHERE id=%s",
+        if dogSizesId == 'NULL':
+            cur.execute("UPDATE Dogs SET dogSizesId=null WHERE id=%s",[dogId])
+            conn.commit()
+            cur.execute("UPDATE Dogs SET name=%s, age=%s, petOwnersId=%s WHERE id=%s",
+                        ([name], [age], [petOwnersId], [dogId]))
+            conn.commit()
+            newurl = '/administrator/all_dogs'
+            return redirect(newurl)
+        else:
+            cur.execute("UPDATE Dogs SET name=%s, age=%s, dogSizesId=%s, petOwnersId=%s WHERE id=%s",
                     ([name], [age], [dogSizesId], [petOwnersId], [dogId]))
-        conn.commit()
-        newurl = '/administrator/all_dogs'
-        return redirect(newurl)
+            conn.commit()
+            newurl = '/administrator/all_dogs'
+            return redirect(newurl)
 
 
 @app.route('/dogs/delete', methods=['GET', 'POST'])
@@ -497,7 +544,45 @@ def owner_dogs_delete():
 
 @app.route('/owner/vaccines', methods=['POST', 'GET'])
 def vaccines():
-    return render_template('owner/vaccines.html')
+    if request.method == 'GET':
+        dogsId = request.args.get("dogsID")
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute("SELECT Vaccines.id, Vaccines.name FROM Dogs_Vaccines\
+             INNER JOIN Vaccines on Dogs_Vaccines.vaccinesId = Vaccines.id\
+              WHERE dogsId=%s", [dogsId])
+        dogs_vaccines = cur.fetchall()
+
+        cur.execute("SELECT c.id, c.name  FROM Vaccines c LEFT JOIN (SELECT vaccinesId FROM\
+             Dogs_Vaccines WHERE dogsId=%s) as sc on c.id = sc.vaccinesId WHERE\
+              sc.vaccinesId IS NULL", [dogsId])
+        all_vaccines = cur.fetchall()
+        return render_template('owner/vaccines.html', dog_id=dogsId, vaccines=dogs_vaccines,
+                               all_vaccines=all_vaccines)
+    else:
+        conn = mysql.connect
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO Dogs_Vaccines(dogsId, vaccinesId) VALUES(%s,%s)",
+            ([request.form['dogsId']], [request.form['newvaccines']]))
+        conn.commit()
+
+        newurl = '/owner/vaccines?dogsID=' + request.form['dogsId']
+        return redirect(newurl)
+
+@app.route('/owner/vaccines/delete', methods=['GET'])
+def owner_vaccine_delete():
+    dogsId = request.args.get("dogsID")
+    vaccineID = request.args.get("vaccineID")
+    conn = mysql.connect
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM Dogs_Vaccines WHERE dogsId=%s AND vaccinesId=%s",
+        ([dogsId], [vaccineID]))
+    conn.commit()
+
+    newurl = '/owner/vaccines?dogsID=' + dogsId
+    return redirect(newurl)
 
 
 @app.route('/sitter/view_jobs', methods=['GET'])
@@ -518,9 +603,6 @@ def sitter_profile():
 def sitter_certification_delete():
     reqSitterID = request.args.get("sitterID")
     reqCertificateID = request.args.get("certificateID")
-    print(reqSitterID)
-    print(reqCertificateID)
-
     conn = mysql.connect
     cur = conn.cursor()
     cur.execute(
@@ -823,12 +905,20 @@ def jobs_add():
         frequency = request.form['frequency']
         sitter = request.form['sitter']
 
-        cur.execute(
-            "INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId) VALUES(%s,%s,%s,%s,%s,%s)",
-            ([startDate], [endDate], [serviceType], [frequency], [sitter], [dog]))
-        conn.commit()
-        newurl = '../administrator/all_jobs'
-        return redirect(newurl)
+        if sitter == 'NULL':
+            cur.execute(
+            "INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, dogsId) VALUES(%s,%s,%s,%s,%s)",
+            ([startDate], [endDate], [serviceType], [frequency], [dog]))
+            conn.commit()
+            newurl = '../administrator/all_jobs'
+            return redirect(newurl)
+        else:
+            cur.execute(
+                "INSERT INTO Services(startDate, endDate, serviceTypesId, frequencyOfServicesId, sittersId, dogsId) VALUES(%s,%s,%s,%s,%s,%s)",
+                ([startDate], [endDate], [serviceType], [frequency], [sitter], [dog]))
+            conn.commit()
+            newurl = '../administrator/all_jobs'
+            return redirect(newurl)
 
 @app.route('/jobs/filter', methods=['POST', 'GET'])
 def jobs_filter():
@@ -1146,7 +1236,7 @@ def all_dogs():
     conn = mysql.connect
     cur = conn.cursor()
     sql = "SELECT Dogs.id,Dogs.name,Dogs.age,DogSizes.name,PetOwners.firstName, PetOwners.lastName FROM Dogs\
-           INNER JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
+           LEFT JOIN DogSizes on Dogs.dogSizesId=DogSizes.id\
            INNER JOIN PetOwners on Dogs.petOwnersId=PetOwners.id\
            ORDER BY Dogs.petOwnersId"
     cur.execute(sql)

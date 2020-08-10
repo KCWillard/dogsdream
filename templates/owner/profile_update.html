@@ -4,34 +4,34 @@
         <h1>Update Profile</h1>
         <br>
         <form action='/owner/update' method='POST'>
-            <input type="hidden" id="id" name="id" value="{{owner.0}}">
+            <input type="hidden" id="id" name="id" value="{{owner.0}}" >
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="username" name="email" value="{{ owner.8 }}">
+                <input type="email" class="form-control" id="username" name="email" value="{{ owner.8 }}" required>
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="password" name="password" value="{{ owner.9 }}">
+                <input type="password" class="form-control" id="password" name="password" value="{{ owner.9 }}" required>
             </div>
             <div>
                 <label for="fname">First Name</label>
-                <input type="text" class="form-control" id="firstName" name="firstName" value="{{ owner.1 }}">
+                <input type="text" class="form-control" id="firstName" name="firstName" value="{{ owner.1 }}" required>
             </div>
             <div>
                 <label for="lname">Last Name</label>
-                <input type="text" class="form-control" id="lastName" name="lastName" value="{{ owner.2 }}">
+                <input type="text" class="form-control" id="lastName" name="lastName" value="{{ owner.2 }}" required>
             </div>
             <div>
                 <label for="lname">Phone Number</label>
-                <input type="number" class="form-control" id="phone" name="phoneNumber" value="{{ owner.3 }}">
+                <input type="number" class="form-control" id="phone" name="phoneNumber" value="{{ owner.3 }}" required>
             </div>
             <div>
                 <label for="lname">Street Address</label>
-                <input type="text" class="form-control" id="address" name="streetAddress" value="{{ owner.4 }}">
+                <input type="text" class="form-control" id="address" name="streetAddress" value="{{ owner.4 }}" required>
             </div>
             <div>
                 <label for="lname">City</label>
-                <input type="text" class="form-control" id="city" name="city" value="{{ owner.5 }}">
+                <input type="text" class="form-control" id="city" name="city" value="{{ owner.5 }}" required>
             </div>
             <div>
                 <label for="lname">State</label>
@@ -91,7 +91,7 @@
             </div>
             <div>
                 <label for="lname">Zip Code</label>
-                <input type='number' class="form-control" id='zip' name='zipCode' value="{{ owner.7 }}" maxlength='5'>
+                <input type='number' class="form-control" id='zip' name='zipCode' value="{{ owner.7 }}" maxlength='5' required>
             </div>
             <div>
                 <br/>
